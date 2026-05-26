@@ -3,22 +3,38 @@ layout: default
 ---
 
 <div class="hero">
-  <h1>yuleAI-Hub</h1>
-  <p>AI Agent 协同的知识沉淀与分享站。记录 OpenClaw、Hermes、QoderCLI 等 Agent 工具的实践 Know-How。</p>
-  <div class="stats">
-    <div class="stats-item">
-      <span class="num" id="articleCount">-</span>
-      <span class="label">篇文章</span>
+  <div class="hero-inner">
+    <h1>yuleAI-Hub</h1>
+    <p class="hero-sub">AI Agent 协同的知识沉淀与分享站。探索 OpenClaw、Hermes、QoderCLI 等 Agent 工具的实践 Know-How。</p>
+    <div class="hero-search">
+      <span class="hero-search-icon">⌕</span>
+      <input type="text" id="heroSearchInput" placeholder="搜索文章、工具、项目..." autocomplete="off">
+      <div class="search-dropdown" id="heroSearchDropdown"></div>
     </div>
-    <div class="stats-item">
-      <span class="num" id="toolCount">-</span>
-      <span class="label">个工具</span>
-    </div>
-    <div class="stats-item">
-      <span class="num" id="projectCount">-</span>
-      <span class="label">个项目</span>
+    <div class="hero-stats">
+      <div class="hs-item">
+        <span class="num" id="articleCount">-</span>
+        <span class="label">篇文章</span>
+      </div>
+      <div class="hs-item">
+        <span class="num" id="toolCount">-</span>
+        <span class="label">个工具</span>
+      </div>
+      <div class="hs-item">
+        <span class="num" id="projectCount">-</span>
+        <span class="label">个项目</span>
+      </div>
     </div>
   </div>
+</div>
+
+<div class="page-container">
+
+<div class="category-pills" id="categoryPills">
+  <a href="/" class="pill active">全部</a>
+  <a href="/know-how/" class="pill">📖 Know-How</a>
+  <a href="/tools/" class="pill">🛠 工具</a>
+  <a href="/projects/" class="pill">📁 项目</a>
 </div>
 
 <div class="tag-cloud" id="tagCloud"></div>
@@ -26,7 +42,7 @@ layout: default
 <div class="section">
   <div class="section-header">
     <h2>📖 最新 Know-How</h2>
-    <a href="/know-how/" class="more">查看全部 →</a>
+    <a href="/know-how/" class="more">查看全部</a>
   </div>
   <div class="card-grid" id="recentArticles"></div>
 </div>
@@ -34,51 +50,102 @@ layout: default
 <div class="section">
   <div class="section-header">
     <h2>🛠 工具配置</h2>
-    <a href="/tools/" class="more">查看全部 →</a>
+    <a href="/tools/" class="more">查看全部</a>
   </div>
   <div class="card-grid" id="toolsList"></div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <h2>📁 项目</h2>
+    <a href="/projects/" class="more">查看全部</a>
+  </div>
+  <div class="card-grid" id="projectsList"></div>
+</div>
+
 </div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   // Stats
-  document.getElementById('articleCount').textContent = data.filter(d=>d.type==='know-how').length;
-  document.getElementById('toolCount').textContent = data.filter(d=>d.type==='tool').length;
-  document.getElementById('projectCount').textContent = data.filter(d=>d.type==='project').length;
+  const articles = data.filter(d => d.type==='know-how');
+  const tools = data.filter(d => d.type==='tool');
+  const projects = data.filter(d => d.type==='project');
+  document.getElementById('articleCount').textContent = articles.length;
+  document.getElementById('toolCount').textContent = tools.length;
+  document.getElementById('projectCount').textContent = projects.length;
 
   // Tags
   const tagMap = new Map();
   data.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]).slice(0,24);
   document.getElementById('tagCloud').innerHTML = tags.map(([t,c]) =>
-    `<a href="/know-how/?tag=${t}" style="font-size:${12 + Math.min(c, 6)}px">${t}</a>`
+    `<a href="/know-how/?tag=${encodeURIComponent(t)}" style="font-size:${12 + Math.min(c, 4)}px">${t} (${c})</a>`
   ).join('');
 
-  // Articles
-  const articles = data.filter(d => d.type==='know-how').slice(0, 3);
-  document.getElementById('recentArticles').innerHTML = articles.length ? articles.map(a => `
-    <a href="${a.url}" class="card">
-      <div class="card-icon">📄</div>
-      <h3>${a.title}</h3>
-      <div class="desc">${a.desc||''}</div>
-      <div class="card-footer">
-        ${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
-        <span class="tag-count">${a.date||''}</span>
-      </div>
-    </a>
-  `).join('') : '<div class="empty-state"><p>暂无文章</p></div>';
+  function renderCards(containerId, items, icon) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = items.length ? items.map(a => `
+      <a href="${a.url}" class="card">
+        <div class="card-icon">${icon}</div>
+        <h3>${a.title}</h3>
+        <div class="card-desc">${a.desc||''}</div>
+        <div class="card-footer">
+          ${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+          ${a.date ? `<span class="card-date">${a.date}</span>` : ''}
+        </div>
+      </a>
+    `).join('') : '<div class="empty-state"><p>暂无内容</p></div>';
+  }
 
-  // Tools
-  const tools = data.filter(d => d.type==='tool').slice(0, 3);
-  document.getElementById('toolsList').innerHTML = tools.length ? tools.map(t => `
-    <a href="${t.url}" class="card">
-      <div class="card-icon">⚙️</div>
-      <h3>${t.title}</h3>
-      <div class="desc">${t.desc||''}</div>
-      <div class="card-footer">
-        ${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}
-      </div>
+  renderCards('recentArticles', articles.slice(0, 6), '📄');
+  renderCards('toolsList', tools.slice(0, 3), '⚙️');
+  renderCards('projectsList', projects.slice(0, 3), '📁');
+});
+
+// Hero search integration
+document.getElementById('heroSearchInput').addEventListener('input', async function() {
+  if (typeof searchData === 'undefined' || !searchLoaded) {
+    try {
+      const r = await fetch('/search.json');
+      const data = await r.json();
+      window.searchData = data;
+      window.searchLoaded = true;
+    } catch(e) { return; }
+  }
+  const q = this.value.trim().toLowerCase();
+  const dropdown = document.getElementById('heroSearchDropdown');
+
+  if (q.length < 1) {
+    dropdown.classList.remove('show');
+    return;
+  }
+
+  const results = window.searchData.filter(item =>
+    item.title.toLowerCase().includes(q) ||
+    (item.desc && item.desc.toLowerCase().includes(q)) ||
+    (item.tags && item.tags.some(t => t.toLowerCase().includes(q)))
+  ).slice(0, 8);
+
+  if (results.length === 0) {
+    dropdown.innerHTML = '<div class="sd-empty">未找到相关结果</div>';
+    dropdown.classList.add('show');
+    return;
+  }
+
+  dropdown.innerHTML = results.map(r => `
+    <a href="${r.url}">
+      ${r.title}
+      <div class="sd-desc">${(r.desc||'').slice(0,60)}</div>
     </a>
-  `).join('') : '<div class="empty-state"><p>暂无工具</p></div>';
+  `).join('');
+  dropdown.classList.add('show');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.hero-search')) {
+    const dd = document.getElementById('heroSearchDropdown');
+    if (dd) dd.classList.remove('show');
+  }
 });
 </script>

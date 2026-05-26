@@ -4,25 +4,30 @@ title: 工具集
 desc: Agent 工具配置和最佳实践
 ---
 
+<div class="page-container">
+
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> 工具</div>
   <h1>🛠 工具</h1>
   <p class="page-meta">Agent 工具配置、MCP 集成和最佳实践</p>
 </div>
 
-<div id="toolList"></div>
+<div class="card-grid" id="toolList"></div>
+
+</div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'tool');
   document.getElementById('toolList').innerHTML = items.length ? items.map(t => `
-    <div class="article-item">
-      <a href="${t.url}">
-        <h3>${t.title}</h3>
-        <div class="meta">${t.desc||''}</div>
-        <div class="tags">${(t.tags||[]).map(tg => `<span class="tag">${tg}</span>`).join('')}</div>
-      </a>
-    </div>
+    <a href="${t.url}" class="card">
+      <div class="card-icon">⚙️</div>
+      <h3>${t.title}</h3>
+      <div class="card-desc">${t.desc||''}</div>
+      <div class="card-footer">
+        ${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}
+      </div>
+    </a>
   `).join('') : '<div class="empty-state"><div class="icon">🛠</div><p>暂无工具文档</p></div>';
 });
 </script>

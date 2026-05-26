@@ -11,7 +11,7 @@
 <body>
 
 <nav>
-  <div class="container">
+  <div class="nav-inner">
     <a href="/" class="logo">
       <span class="logo-icon">Y</span>
       yuleAI-Hub
@@ -27,7 +27,7 @@
       <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">项目</a>
       <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">关于</a>
     </div>
-    <div class="search-wrapper">
+    <div class="nav-search">
       <span class="search-icon">⌕</span>
       <input type="text" id="searchInput" placeholder="搜索..." autocomplete="off">
       <div class="search-dropdown" id="searchDropdown"></div>
@@ -35,12 +35,12 @@
   </div>
 </nav>
 
-<main class="container">
+<main>
 {{ content }}
 </main>
 
 <footer>
-  <div class="container">
+  <div class="footer-inner">
     <div class="copyright">© 2026 yuleAI-Hub · AI Agent 知识沉淀与分享</div>
     <div class="footer-links">
       <a href="/about/">关于</a>
@@ -97,7 +97,7 @@ document.getElementById('searchInput').addEventListener('input', async function(
 });
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrapper')) {
+  if (!e.target.closest('.nav-search')) {
     document.getElementById('searchDropdown').classList.remove('show');
   }
 });

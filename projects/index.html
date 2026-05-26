@@ -4,25 +4,30 @@ title: 项目
 desc: 相关项目文档和架构
 ---
 
+<div class="page-container">
+
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> 项目</div>
   <h1>📁 项目</h1>
   <p class="page-meta">相关项目架构、部署和开发笔记</p>
 </div>
 
-<div id="projectList"></div>
+<div class="card-grid" id="projectList"></div>
+
+</div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'project');
   document.getElementById('projectList').innerHTML = items.length ? items.map(p => `
-    <div class="article-item">
-      <a href="${p.url}">
-        <h3>${p.title}</h3>
-        <div class="meta">${p.desc||''}</div>
-        <div class="tags">${(p.tags||[]).map(t => `<span class="tag">${t}</span>`).join('')}</div>
-      </a>
-    </div>
+    <a href="${p.url}" class="card">
+      <div class="card-icon">📁</div>
+      <h3>${p.title}</h3>
+      <div class="card-desc">${p.desc||''}</div>
+      <div class="card-footer">
+        ${(p.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>
+    </a>
   `).join('') : '<div class="empty-state"><div class="icon">📁</div><p>暂无项目文档</p></div>';
 });
 </script>

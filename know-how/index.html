@@ -4,28 +4,40 @@ title: Know-How 知识库
 desc: AI Agent 相关的实践经验和技巧
 ---
 
+<div class="page-container">
+
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> Know-How</div>
   <h1>📖 Know-How</h1>
   <p class="page-meta">AI Agent 相关的实践经验、技巧和踩坑记录</p>
-  <div class="page-tags" id="pageTags"></div>
 </div>
 
-<div id="articleList"></div>
+<div class="page-layout">
+  <aside class="tag-sidebar">
+    <h3>标签分类</h3>
+    <div class="tag-cloud" id="sidebarTags"></div>
+  </aside>
+  <div class="page-main">
+    <div id="articleList"></div>
+  </div>
+</div>
+
+</div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'know-how');
 
-  // Tags
+  // Build tag cloud
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
   const currentTag = new URLSearchParams(location.search).get('tag');
-  document.getElementById('pageTags').innerHTML =
-    '<span class="tag" style="cursor:pointer' + (!currentTag ? ';background:var(--primary);color:#fff' : '') + '" onclick="location.href=\'/know-how/\'">全部</span>' +
+
+  document.getElementById('sidebarTags').innerHTML =
+    `<a href="/know-how/" class="${!currentTag ? 'active-tag' : ''}">全部 (${items.length})</a>` +
     tags.map(([t,c]) =>
-      `<span class="tag" style="cursor:pointer${t === currentTag ? ';background:var(--primary);color:#fff' : ''}" onclick="location.href='/know-how/?tag=${encodeURIComponent(t)}'">${t} ${c}</span>`
+      `<a href="/know-how/?tag=${encodeURIComponent(t)}" class="${t === currentTag ? 'active-tag' : ''}">${t} (${c})</a>`
     ).join('');
 
   // Filter by tag
