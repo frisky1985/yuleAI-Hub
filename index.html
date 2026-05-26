@@ -27,14 +27,14 @@ layout: default
 </div>
 
 <div class="container">
-  <div class="category-bar" id="categoryBar">
-    <a href="/" class="cat-btn active">✨ 全部</a>
-    <a href="/knowledge/" class="cat-btn">📚 知识库</a>
-    <a href="/know-how/" class="cat-btn">📖 Know-How</a>
-    <a href="/skills/" class="cat-btn">⚡ Skills</a>
-    <a href="/rules/" class="cat-btn">📋 规则</a>
-    <a href="/tools/" class="cat-btn">🔧 工具</a>
-    <a href="/projects/" class="cat-btn">📁 项目</a>
+  <div class="category-bar">
+    <a href="/yuleAI-Hub/" class="cat-btn active">✨ 全部</a>
+    <a href="/yuleAI-Hub/knowledge/" class="cat-btn">📚 知识库</a>
+    <a href="/yuleAI-Hub/know-how/" class="cat-btn">📖 Know-How</a>
+    <a href="/yuleAI-Hub/skills/" class="cat-btn">⚡ Skills</a>
+    <a href="/yuleAI-Hub/rules/" class="cat-btn">📋 规则</a>
+    <a href="/yuleAI-Hub/tools/" class="cat-btn">🔧 工具</a>
+    <a href="/yuleAI-Hub/projects/" class="cat-btn">📁 项目</a>
   </div>
 
   <div class="card-grid" id="contentGrid"></div>
@@ -43,151 +43,112 @@ layout: default
 </div>
 
 <script>
-(function() {
-  // Load search data and render
-  function loadData() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/yuleAI-Hub/search.json', true);
-    xhr.onload = function() {
-      if (xhr.status !== 200) return;
-      try {
-        var data = JSON.parse(xhr.responseText);
-        renderAll(data);
-      } catch(e) { /* ignore parse errors */ }
-    };
-    xhr.send();
+// Inline search data
+var SEARCH_DATA = [
+  {"title":"MCP 协议基础","url":"/yuleAI-Hub/knowledge/mcp-protocol-basics/","desc":"Model Context Protocol 核心概念与工作原理：Tools、Resources、JSON-RPC 通信流程","type":"knowledge","tags":["MCP","协议","入门","JSON-RPC"],"date":"2026-05-26"},
+  {"title":"Agent Mesh 架构","url":"/yuleAI-Hub/knowledge/agent-mesh-architecture/","desc":"Agent Mesh 系统架构设计文档：组件关系、数据流、设计决策","type":"knowledge","tags":["架构","Agent Mesh","设计","MCP"],"date":"2026-05-26"},
+  {"title":"Agent Mesh — 跨 Agent 协同网络搭建","url":"/yuleAI-Hub/know-how/agent-mesh/","desc":"OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作的完整方案","type":"know-how","tags":["MCP","Agent协同","OpenClaw","Hermes","QoderCLI"],"date":"2026-05-26"},
+  {"title":"跨 Agent 上下文共享方案","url":"/yuleAI-Hub/know-how/context-sharing/","desc":"通过 context-read/write 实现跨 Agent 信息共享","type":"know-how","tags":["上下文","MCP","协同"],"date":"2026-05-24"},
+  {"title":"Hermes Agent 使用技巧","url":"/yuleAI-Hub/know-how/hermes-tips/","desc":"Hermes 日常使用技巧、Web搜索、代码执行和踩坑记录","type":"know-how","tags":["Hermes","技巧","AI"],"date":"2026-05-25"},
+  {"title":"DeepSeek API 性能优化","url":"/yuleAI-Hub/know-how/deepseek-optimization/","desc":"DeepSeek API 调用优化、超时处理和 fallback 配置","type":"know-how","tags":["DeepSeek","API","优化","性能"],"date":"2026-05-23"},
+  {"title":"OpenClaw 入门指南","url":"/yuleAI-Hub/know-how/openclaw-getting-started/","desc":"OpenClaw 基本概念、配置和日常使用","type":"know-how","tags":["OpenClaw","入门","MCP"],"date":"2026-05-24"},
+  {"title":"上下文共享技巧","url":"/yuleAI-Hub/skills/context-sharing/","desc":"跨 Agent 上下文读写的最佳实践：context-write/read 速查","type":"skill","tags":["上下文","MCP","协同","技巧"],"date":"2026-05-24"},
+  {"title":"Hermes 快速操作技巧","url":"/yuleAI-Hub/skills/hermes-tips/","desc":"Hermes Agent 高频使用的命令和操作速查表","type":"skill","tags":["Hermes","技巧","CLI"],"date":"2026-05-25"},
+  {"title":"Agent 协同规则","url":"/yuleAI-Hub/rules/agent-collaboration/","desc":"多 Agent 协作的基本约定和最佳实践","type":"rule","tags":["协同","规范","MCP","Agent Mesh"],"date":"2026-05-26"},
+  {"title":"Git 提交规范","url":"/yuleAI-Hub/rules/git-commit-convention/","desc":"yuleAI-Hub 项目的 Git 提交信息规范（Conventional Commits）","type":"rule","tags":["Git","规范","提交"],"date":"2026-05-26"},
+  {"title":"MCP Bridge 配置指南","url":"/yuleAI-Hub/tools/mcp-bridge/","desc":"MCP Bridge v2 的安装、配置和故障排查（附源码）","type":"tool","tags":["MCP","Bridge","配置","源码"],"date":"2026-05-26"},
+  {"title":"Warp Agent 集成指南","url":"/yuleAI-Hub/tools/warp-agent/","desc":"在 Warp 终端中配置 AI Agent 和解决常见问题","type":"tool","tags":["Warp","终端","配置"],"date":"2026-05-26"},
+  {"title":"QoderCLI 配置与使用","url":"/yuleAI-Hub/tools/qodercli-setup/","desc":"QoderCLI 的安装、MCP 配置和权限管理","type":"tool","tags":["QoderCLI","CLI","配置","MCP"],"date":"2026-05-25"},
+  {"title":"Agent Mesh 架构","url":"/yuleAI-Hub/projects/agent-mesh-architecture/","desc":"Agent Mesh 项目架构设计文档（已迁移至知识库）","type":"project","tags":["架构","Agent Mesh","设计","MCP"],"date":"2026-05-26"}
+];
+
+(function(data) {
+  if (!data || !data.length) return;
+
+  // Stats
+  function count(type) {
+    var n = 0;
+    for (var i = 0; i < data.length; i++) { if (data[i].type === type) n++; }
+    return n;
+  }
+  document.getElementById('statK').textContent = count('knowledge');
+  document.getElementById('statH').textContent = count('know-how');
+  document.getElementById('statS').textContent = count('skill');
+  document.getElementById('statR').textContent = count('rule');
+  document.getElementById('statT').textContent = count('tool');
+  document.getElementById('statP').textContent = count('project');
+
+  // Tags
+  var tagMap = {};
+  for (var i = 0; i < data.length; i++) {
+    var tags = data[i].tags || [];
+    for (var j = 0; j < tags.length; j++) {
+      tagMap[tags[j]] = (tagMap[tags[j]] || 0) + 1;
+    }
+  }
+  var tagList = Object.keys(tagMap).sort(function(a,b) { return tagMap[b] - tagMap[a]; }).slice(0, 24);
+  var tagHtml = '';
+  for (var i = 0; i < tagList.length; i++) {
+    tagHtml += '<a href="/yuleAI-Hub/know-how/?tag=' + encodeURIComponent(tagList[i]) + '" style="font-size:' + (10 + Math.min(tagMap[tagList[i]], 5)) + 'px">' + tagList[i] + '</a>';
+  }
+  document.getElementById('homeTagCloud').innerHTML = tagHtml;
+
+  // Cards
+  var typeCfg = {
+    knowledge: { icon: '📚', cls: 'purple', label: '知识库' },
+    'know-how':  { icon: '📖', cls: 'green',  label: 'KnowHow' },
+    skill:     { icon: '⚡', cls: 'gold',   label: 'Skill' },
+    tool:      { icon: '🔧', cls: 'red',    label: '工具' },
+    project:   { icon: '📁', cls: 'blue',   label: '项目' },
+    rule:      { icon: '📋', cls: 'purple', label: '规则' }
+  };
+
+  var sorted = data.slice().sort(function(a,b) { return (b.date||'').localeCompare(a.date||''); });
+
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function renderAll(data) {
-    if (!data || !data.length) return;
-
-    // Stats
-    function count(type) {
-      var n = 0;
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].type === type) n++;
-      }
-      return n;
+  var html = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var item = sorted[i];
+    var cfg = typeCfg[item.type] || { icon: '📄', cls: 'purple', label: item.type };
+    var tagItems = (item.tags || []).slice(0, 3);
+    var tagsStr = '';
+    for (var j = 0; j < tagItems.length; j++) {
+      tagsStr += '<span class="tag">' + esc(tagItems[j]) + '</span>';
     }
-    document.getElementById('statK').textContent = count('knowledge');
-    document.getElementById('statH').textContent = count('know-how');
-    document.getElementById('statS').textContent = count('skill');
-    document.getElementById('statR').textContent = count('rule');
-    document.getElementById('statT').textContent = count('tool');
-    document.getElementById('statP').textContent = count('project');
-
-    // Tags
-    var tagMap = {};
-    for (var i = 0; i < data.length; i++) {
-      var tags = data[i].tags || [];
-      for (var j = 0; j < tags.length; j++) {
-        var t = tags[j];
-        tagMap[t] = (tagMap[t] || 0) + 1;
-      }
-    }
-    var tagEntries = Object.keys(tagMap).map(function(k) { return [k, tagMap[k]]; });
-    tagEntries.sort(function(a, b) { return b[1] - a[1]; });
-    tagEntries = tagEntries.slice(0, 24);
-    var tagHtml = '';
-    for (var i = 0; i < tagEntries.length; i++) {
-      var size = 10 + Math.min(tagEntries[i][1], 5);
-      tagHtml += '<a href="/know-how/?tag=' + encodeURIComponent(tagEntries[i][0]) + '" style="font-size:' + size + 'px">' + tagEntries[i][0] + '</a>';
-    }
-    document.getElementById('homeTagCloud').innerHTML = tagHtml;
-
-    // Cards
-    var typeConfig = {
-      'knowledge': { icon: '📚', cls: 'purple', label: '知识库' },
-      'know-how':  { icon: '📖', cls: 'green',  label: 'KnowHow' },
-      'skill':     { icon: '⚡', cls: 'gold',   label: 'Skill' },
-      'tool':      { icon: '🔧', cls: 'red',    label: '工具' },
-      'project':   { icon: '📁', cls: 'blue',   label: '项目' },
-      'rule':      { icon: '📋', cls: 'purple', label: '规则' }
-    };
-
-    // Sort by date descending
-    var sorted = data.slice().sort(function(a, b) {
-      return (b.date || '').localeCompare(a.date || '');
-    });
-
-    var grid = document.getElementById('contentGrid');
-    var html = '';
-    for (var i = 0; i < sorted.length; i++) {
-      var item = sorted[i];
-      var cfg = typeConfig[item.type] || { icon: '📄', cls: 'purple', label: item.type };
-      var tagsHtml = '';
-      var itemTags = (item.tags || []).slice(0, 3);
-      for (var j = 0; j < itemTags.length; j++) {
-        tagsHtml += '<span class="tag">' + escapeHtml(itemTags[j]) + '</span>';
-      }
-      html += '<a href="' + item.url + '" class="card">' +
-        '<div class="card-top">' +
-          '<div class="card-icon ' + cfg.cls + '">' + cfg.icon + '</div>' +
-          '<div class="card-top-info">' +
-            '<span class="card-type ' + cfg.cls + '">' + cfg.label + '</span>' +
-            '<h3>' + escapeHtml(item.title) + '</h3>' +
-          '</div>' +
+    html += '<a href="' + item.url + '" class="card">' +
+      '<div class="card-top">' +
+        '<div class="card-icon ' + cfg.cls + '">' + cfg.icon + '</div>' +
+        '<div class="card-top-info">' +
+          '<span class="card-type ' + cfg.cls + '">' + cfg.label + '</span>' +
+          '<h3>' + esc(item.title) + '</h3>' +
         '</div>' +
-        '<div class="card-desc">' + escapeHtml(item.desc || '') + '</div>' +
-        '<div class="card-bottom">' +
-          '<div class="card-tags">' + tagsHtml + '</div>' +
-          (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
-        '</div>' +
-      '</a>';
-    }
-    grid.innerHTML = html;
-
-    // Store data for search
-    window._searchData = data;
-    window._searchLoaded = true;
+      '</div>' +
+      '<div class="card-desc">' + esc(item.desc || '') + '</div>' +
+      '<div class="card-bottom">' +
+        '<div class="card-tags">' + tagsStr + '</div>' +
+        (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
+      '</div>' +
+    '</a>';
   }
+  document.getElementById('contentGrid').innerHTML = html;
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  loadData();
-})();
+  // Store for search
+  window._searchData = data;
+})(SEARCH_DATA);
 
 // Hero search
 document.getElementById('heroSearchInput').addEventListener('input', function() {
-  var _this = this;
-  var q = _this.value.trim().toLowerCase();
+  var q = this.value.trim().toLowerCase();
   var dd = document.getElementById('heroSearchDropdown');
-
-  if (q.length < 1) {
-    dd.classList.remove('show');
-    return;
-  }
-
-  // Ensure data is loaded
-  if (!window._searchLoaded) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/yuleAI-Hub/search.json', true);
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        try {
-          window._searchData = JSON.parse(xhr.responseText);
-          window._searchLoaded = true;
-          doSearch(q, dd);
-        } catch(e) {}
-      }
-    };
-    xhr.send();
-    return;
-  }
-
-  doSearch(q, dd);
-});
-
-function doSearch(q, dd) {
-  var data = window._searchData;
-  if (!data) return;
+  if (q.length < 1) { dd.classList.remove('show'); return; }
 
   var results = [];
-  for (var i = 0; i < data.length; i++) {
-    var item = data[i];
+  for (var i = 0; i < SEARCH_DATA.length; i++) {
+    var item = SEARCH_DATA[i];
     if (item.title.toLowerCase().indexOf(q) !== -1 ||
         (item.desc && item.desc.toLowerCase().indexOf(q) !== -1) ||
         (item.tags && item.tags.some(function(t) { return t.toLowerCase().indexOf(q) !== -1; }))) {
@@ -202,29 +163,21 @@ function doSearch(q, dd) {
     return;
   }
 
-  var typeMap = {
-    'knowledge': '📚 知识库', 'know-how': '📖 KnowHow', 'skill': '⚡ Skill',
-    'tool': '🔧 工具', 'project': '📁 项目', 'rule': '📋 规则'
-  };
-  var clsMap = {
-    'knowledge': 'sd-type-knowledge', 'know-how': 'sd-type-knowhow', 'skill': 'sd-type-skill',
-    'tool': 'sd-type-tool', 'project': 'sd-type-project', 'rule': 'sd-type-knowledge'
-  };
+  var typeMap = { knowledge:'📚 知识库', 'know-how':'📖 KnowHow', skill:'⚡ Skill', tool:'🔧 工具', project:'📁 项目', rule:'📋 规则' };
+  var clsMap = { knowledge:'sd-type-knowledge', 'know-how':'sd-type-knowhow', skill:'sd-type-skill', tool:'sd-type-tool', project:'sd-type-project', rule:'sd-type-knowledge' };
 
   var html = '';
   for (var i = 0; i < results.length; i++) {
     var r = results[i];
-    var label = typeMap[r.type] || r.type;
-    var cls = clsMap[r.type] || 'sd-type-knowledge';
     html += '<a href="' + r.url + '">' +
-      '<span class="sd-type ' + cls + '">' + label + '</span>' +
+      '<span class="sd-type ' + (clsMap[r.type]||'sd-type-knowledge') + '">' + (typeMap[r.type]||r.type) + '</span>' +
       '<span class="sd-title">' + r.title + '</span>' +
-      '<div class="sd-desc">' + (r.desc || '').slice(0, 60) + '</div>' +
+      '<div class="sd-desc">' + (r.desc||'').slice(0, 60) + '</div>' +
     '</a>';
   }
   dd.innerHTML = html;
   dd.classList.add('show');
-}
+});
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.hero-search-wrap')) {
