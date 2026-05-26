@@ -225,6 +225,20 @@
     "date": "2026-05-26"
   },
   {
+    "title": "Agent Mesh DevFlow — 三Agent协同开发工作流",
+    "url": "/skills/agent-mesh-devflow/",
+    "desc": "Agent Mesh DevFlow — 三Agent协同开发工作流\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--",
+    "type": "skills",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Agent Mesh Keepalive — 跨 Agent 对话保活技能",
     "url": "/skills/agent-mesh-keepalive/",
     "desc": "Agent Mesh Keepalive — 跨 Agent 对话保活技能\n\n\n:root {\n  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;\n  -",
@@ -332,22 +346,6 @@
       "OpenClaw",
       "Warp",
       "API"
-    ],
-    "date": "2026-05-26"
-  },
-  {
-    "title": "Agent Mesh DevFlow — 三 Agent 协同开发工作流",
-    "url": "/skills/agent-mesh-devflow/",
-    "desc": "OpenClaw编排，Hermes需求+测试，QoderCLI架构+编码。8阶段流水线：需求分析→排期→架构→编码→测试→部署",
-    "type": "skills",
-    "tags": [
-      "技能",
-      "DevFlow",
-      "工作流",
-      "协同",
-      "OpenClaw",
-      "Hermes",
-      "QoderCLI"
     ],
     "date": "2026-05-26"
   }
