@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案A · 紫色知识家园</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=LXGW+WenKai&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #6C5CE7;
+  --primary-light: #a29bfe;
+  --primary-bg: #f0edff;
+  --accent: #00B894;
+  --gold: #FDCB6E;
+  --bg: #FBF9F5;
+  --bg-card: #ffffff;
+  --fg: #2d3436;
+  --fg2: #636e72;
+  --border: #e8e4dd;
+  --radius: 16px;
+  --font: "LXGW WenKai", "Noto Sans SC", "PingFang SC", serif;
+  --sans: "Noto Sans SC", -apple-system, sans-serif;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--fg); line-height: 1.7; }
+
+/* nav */
+.nav { background: rgba(255,255,255,.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 32px; }
+.logo { font-size: 20px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), #a29bfe); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 800; letter-spacing: -1px; }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a { padding: 6px 14px; border-radius: 8px; color: var(--fg2); text-decoration: none; font-size: 14px; font-family: var(--sans); transition: all .2s; }
+.nav-links a:hover, .nav-links a.active { background: var(--primary-bg); color: var(--primary); }
+.nav-search { margin-left: auto; }
+.nav-search input { padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); font-family: var(--sans); font-size: 13px; width: 200px; outline: none; }
+
+/* hero */
+.hero { background: linear-gradient(135deg, var(--primary) 0%, #a29bfe 50%, #81ecec 100%); padding: 64px 0; text-align: center; color: white; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: rgba(255,255,255,.08); top: -100px; right: -100px; }
+.hero::after { content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,.05); bottom: -80px; left: -80px; }
+.hero h1 { font-size: 44px; font-weight: 700; position: relative; letter-spacing: -1px; }
+.hero p { font-size: 16px; opacity: .85; margin: 12px auto 0; max-width: 500px; position: relative; font-family: var(--sans); font-weight: 300; }
+.hero-search { margin: 28px auto 0; max-width: 480px; position: relative; }
+.hero-search input { width: 100%; padding: 14px 20px 14px 48px; border: none; border-radius: 30px; font-size: 15px; font-family: var(--sans); outline: none; box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.hero-search::before { content: '🔍'; position: absolute; left: 18px; top: 13px; font-size: 16px; z-index: 1; }
+.hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 28px; position: relative; }
+.hero-stats-item { text-align: center; }
+.hero-stats-item .num { font-size: 28px; font-weight: 700; display: block; }
+.hero-stats-item .label { font-size: 12px; opacity: .7; font-family: var(--sans); }
+
+/* container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+/* knowledge map */
+.kmap { display: grid; grid-template-columns: 240px 1fr; gap: 32px; margin: 40px 0; }
+.kmap-sidebar { }
+.kmap-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 8px; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 12px; }
+.kmap-card:hover { border-color: var(--primary); background: var(--primary-bg); transform: translateX(4px); }
+.kmap-card.active { border-color: var(--primary); background: var(--primary-bg); }
+.kmap-card .emoji { font-size: 22px; }
+.kmap-card .info { }
+.kmap-card .info .title { font-size: 14px; font-weight: 500; }
+.kmap-card .info .count { font-size: 12px; color: var(--fg2); font-family: var(--sans); }
+
+.kmap-main { }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-header h2 { font-size: 18px; font-weight: 500; }
+.section-header .more { font-size: 13px; color: var(--primary); text-decoration: none; font-family: var(--sans); }
+
+/* cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--fg); transition: all .25s; display: block; }
+.card:hover { border-color: var(--primary); box-shadow: 0 8px 24px rgba(108,92,231,.1); transform: translateY(-2px); }
+.card-tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 11px; font-family: var(--sans); font-weight: 500; margin-bottom: 8px; }
+.card-tag.purple { background: var(--primary-bg); color: var(--primary); }
+.card-tag.green { background: #e8f8f5; color: var(--accent); }
+.card-tag.gold { background: #fef5e7; color: #d4a017; }
+.card h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+.card p { font-size: 13px; color: var(--fg2); line-height: 1.5; font-family: var(--sans); font-weight: 300; }
+.card-footer { margin-top: 12px; font-size: 12px; color: var(--fg2); font-family: var(--sans); display: flex; gap: 8px; }
+
+/* timeline */
+.timeline { margin: 40px 0; }
+.timeline-title { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+.timeline-item { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; }
+.timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.timeline-date { font-size: 12px; color: var(--fg2); font-family: var(--sans); min-width: 70px; }
+.timeline-text { font-size: 14px; }
+.timeline-text a { color: var(--fg); text-decoration: none; }
+.timeline-text a:hover { color: var(--primary); }
+
+/* tags */
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+.tag-cloud a { padding: 4px 14px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border); color: var(--fg2); text-decoration: none; font-size: 12px; font-family: var(--sans); transition: all .2s; }
+.tag-cloud a:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-bg); }
+
+/* footer */
+footer { border-top: 1px solid var(--border); padding: 32px 0; margin-top: 48px; text-align: center; font-size: 13px; color: var(--fg2); font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a>
+    <div class="nav-links">
+      <a href="#" class="active">首页</a>
+      <a href="#">知识库</a>
+      <a href="#">Know-How</a>
+      <a href="#">技能</a>
+      <a href="#">规则</a>
+      <a href="#">关于</a>
+    </div>
+    <div class="nav-search"><input placeholder="搜索知识..."></div>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>yuleAI-Hub</h1>
+  <p>一个人的 AI 知识花园，开放给同好的交流站</p>
+  <div class="hero-search"><input placeholder="搜索文章、技能、工具..."></div>
+  <div class="hero-stats">
+    <div class="hero-stats-item"><span class="num">12</span><span class="label">篇文章</span></div>
+    <div class="hero-stats-item"><span class="num">5</span><span class="label">个技能</span></div>
+    <div class="hero-stats-item"><span class="num">3</span><span class="label">个工具</span></div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 知识地图 -->
+  <div class="kmap">
+    <div class="kmap-sidebar">
+      <div class="kmap-card active"><span class="emoji">📚</span><div class="info"><div class="title">知识库</div><div class="count">4 篇 · 系统性知识</div></div></div>
+      <div class="kmap-card"><span class="emoji">📖</span><div class="info"><div class="title">Know-How</div><div class="count">5 篇 · 实践指南</div></div></div>
+      <div class="kmap-card"><span class="emoji">⚡</span><div class="info"><div class="title">技能</div><div class="count">3 个 · 即插即用</div></div></div>
+      <div class="kmap-card"><span class="emoji">📋</span><div class="info"><div class="title">规则集</div><div class="count">2 个 · 公约规范</div></div></div>
+      <div class="kmap-card"><span class="emoji">🔧</span><div class="info"><div class="title">工具</div><div class="count">3 个 · 配置指南</div></div></div>
+      <div class="kmap-card"><span class="emoji">📁</span><div class="info"><div class="title">项目</div><div class="count">1 个 · 架构文档</div></div></div>
+    </div>
+    <div class="kmap-main">
+      <div class="section-header"><h2>📚 知识库精选</h2><a href="#" class="more">查看全部 →</a></div>
+      <div class="card-grid">
+        <a href="#" class="card"><span class="card-tag purple">MCP · 入门</span><h3>MCP 协议详解</h3><p>AI Agent 通信标准的核心概念、消息格式和传输协议</p><div class="card-footer">📅 2026-05-26 · ☕ 8 分钟</div></a>
+        <a href="#" class="card"><span class="card-tag green">Agent · 进阶</span><h3>Agent 架构模式</h3><p>单 Agent、多 Agent、编排器-工作器模式的对比与选择</p><div class="card-footer">📅 2026-05-24 · ☕ 12 分钟</div></a>
+        <a href="#" class="card"><span class="card-tag gold">DeepSeek · 优化</span><h3>API 性能优化指南</h3><p>超时配置、Fallback 策略、费用控制最佳实践</p><div class="card-footer">📅 2026-05-23 · ☕ 6 分钟</div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标签云 -->
+  <div class="tag-cloud">
+    <a href="#">MCP</a><a href="#">Agent协同</a><a href="#">Hermes</a><a href="#">OpenClaw</a>
+    <a href="#">QoderCLI</a><a href="#">DeepSeek</a><a href="#">API</a><a href="#">Warp</a>
+    <a href="#">入门</a><a href="#">进阶</a><a href="#">踩坑</a><a href="#">配置</a>
+  </div>
+
+  <!-- 时间线 -->
+  <div class="timeline">
+    <div class="timeline-title">📅 最近更新</div>
+    <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">今天</span><span class="timeline-text"><a href="#">Agent Mesh — 跨 Agent 协同网络搭建</a></span></div>
+    <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">昨天</span><span class="timeline-text"><a href="#">MCP Bridge 配置指南</a></span></div>
+    <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">3天前</span><span class="timeline-text"><a href="#">DeepSeek API 性能优化</a></span></div>
+    <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">5天前</span><span class="timeline-text"><a href="#">OpenClaw 入门指南</a></span></div>
+  </div>
+</div>
+
+<footer>
+  <p>yuleAI-Hub — 用 AI 构建，为 AI 构建 🌱</p>
+  <p style="margin-top:4px;color:#b2bec3">紫 · 绿松 · 暖金 — 知识的花园</p>
+</footer>
+
+</body>
+</html>

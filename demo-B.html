@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案B · 卡片市场风</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #0052d9;
+  --primary-hover: #0035a0;
+  --primary-bg: #e8f0fe;
+  --primary-gradient: linear-gradient(135deg, #0052d9 0%, #366ef4 50%, #6c5ce7 100%);
+  --bg: #f5f7fa;
+  --bg-card: #ffffff;
+  --fg: #1d2129;
+  --fg2: #6b7785;
+  --border: #e5e8ed;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,.08);
+  --font: "Noto Sans SC", -apple-system, "PingFang SC", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", monospace;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+/* nav */
+.nav { background: rgba(255,255,255,.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 60px; display: flex; align-items: center; gap: 24px; }
+.logo { font-size: 17px; font-weight: 700; text-decoration: none; color: var(--fg); display: flex; align-items: center; gap: 8px; }
+.logo-badge { background: var(--primary-gradient); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+.nav-links { display: flex; gap: 2px; }
+.nav-links a { padding: 6px 12px; border-radius: 6px; color: var(--fg2); text-decoration: none; font-size: 13px; transition: all .15s; font-weight: 500; }
+.nav-links a:hover, .nav-links a.active { color: var(--primary); background: var(--primary-bg); }
+.nav-search { margin-left: auto; }
+.nav-search input { padding: 6px 12px 6px 32px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-size: 13px; width: 200px; outline: none; transition: all .2s; }
+.nav-search input:focus { border-color: var(--primary); width: 240px; }
+.nav-search-wrap { position: relative; }
+.nav-search-wrap .icon { position: absolute; left: 10px; top: 7px; font-size: 12px; opacity: .4; }
+
+/* hero banner compact */
+.hero { background: var(--primary-gradient); padding: 0; border-radius: 0; margin: 0; }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 48px 32px; display: flex; align-items: center; justify-content: space-between; }
+.hero-text { color: white; }
+.hero-text h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+.hero-text p { font-size: 14px; opacity: .8; margin-top: 6px; max-width: 400px; }
+.hero-stats { display: flex; gap: 32px; color: white; }
+.hero-stats-item { text-align: center; }
+.hero-stats-item .num { font-size: 24px; font-weight: 700; display: block; line-height: 1.2; }
+.hero-stats-item .label { font-size: 12px; opacity: .7; }
+
+/* container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+/* section */
+.section { margin: 36px 0; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-header h2 { font-size: 16px; font-weight: 600; }
+.section-header .more { font-size: 12px; color: var(--primary); text-decoration: none; font-weight: 500; }
+
+/* category pills */
+.pills { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.pill { padding: 6px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg-card); color: var(--fg2); font-size: 13px; cursor: pointer; transition: all .2s; text-decoration: none; font-weight: 500; }
+.pill:hover { border-color: var(--primary); color: var(--primary); }
+.pill.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+/* card grid */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-decoration: none; color: var(--fg); transition: all .2s; display: block; }
+.card:hover { border-color: transparent; box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.card .meta { font-size: 11px; color: var(--primary); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+.card p { font-size: 12px; color: var(--fg2); line-height: 1.5; }
+.card .tags { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+.card .tag { padding: 2px 8px; border-radius: 4px; background: var(--primary-bg); color: var(--primary); font-size: 11px; font-weight: 500; }
+
+/* list view */
+.list-view { }
+.list-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 8px; transition: all .2s; display: flex; align-items: center; gap: 12px; }
+.list-item:hover { border-color: transparent; box-shadow: var(--shadow-hover); }
+.list-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.list-item .content { flex: 1; }
+.list-item .content h4 { font-size: 13px; font-weight: 600; }
+.list-item .content p { font-size: 12px; color: var(--fg2); margin-top: 2px; }
+.list-item .list-tags { display: flex; gap: 4px; flex-shrink: 0; }
+.list-item .ltag { padding: 2px 8px; border-radius: 4px; background: var(--primary-bg); color: var(--primary); font-size: 11px; }
+
+/* two column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+/* footer */
+footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 48px; text-align: center; font-size: 12px; color: var(--fg2); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">yuleAI-Hub <span class="logo-badge">BETA</span></a>
+    <div class="nav-links">
+      <a href="#" class="active">发现</a>
+      <a href="#">Know-How</a>
+      <a href="#">工具</a>
+      <a href="#">项目</a>
+    </div>
+    <div class="nav-search">
+      <div class="nav-search-wrap">
+        <span class="icon">🔍</span>
+        <input placeholder="搜索文章、工具...">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>yuleAI-Hub</h1>
+      <p>AI Agent 协同的知识库 — 发现、学习、分享</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stats-item"><span class="num">12</span><span class="label">文章</span></div>
+      <div class="hero-stats-item"><span class="num">5</span><span class="label">技能</span></div>
+      <div class="hero-stats-item"><span class="num">3</span><span class="label">工具</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 分类 -->
+  <div class="section">
+    <div class="pills">
+      <a href="#" class="pill active">全部</a>
+      <a href="#" class="pill">📖 Know-How</a>
+      <a href="#" class="pill">🛠 工具</a>
+      <a href="#" class="pill">📁 项目</a>
+      <a href="#" class="pill">📚 知识库</a>
+      <a href="#" class="pill">⚡ 技能</a>
+    </div>
+  </div>
+
+  <!-- 双栏推荐区 -->
+  <div class="two-col">
+    <div class="section">
+      <div class="section-header"><h2>🔥 热门文章</h2><a href="#" class="more">View all →</a></div>
+      <div class="list-view">
+        <div class="list-item"><span class="dot"></span><div class="content"><h4>Agent Mesh — 跨 Agent 协同网络搭建</h4><p>OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作</p></div><div class="list-tags"><span class="ltag">MCP</span><span class="ltag">协同</span></div></div>
+        <div class="list-item"><span class="dot"></span><div class="content"><h4>MCP Bridge 配置指南</h4><p>安装、配置和故障排查</p></div><div class="list-tags"><span class="ltag">MCP</span><span class="ltag">配置</span></div></div>
+        <div class="list-item"><span class="dot"></span><div class="content"><h4>DeepSeek API 性能优化</h4><p>超时、Fallback、费用控制</p></div><div class="list-tags"><span class="ltag">DeepSeek</span><span class="ltag">优化</span></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><h2>📌 最新工具</h2><a href="#" class="more">View all →</a></div>
+      <div class="card-grid" style="grid-template-columns:1fr">
+        <a href="#" class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:40px;height:40px;border-radius:8px;background:var(--primary-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔧</div><div><h3>MCP Bridge</h3><p>跨 Agent 协同核心组件</p></div></a>
+        <a href="#" class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:40px;height:40px;border-radius:8px;background:var(--primary-bg);display:none;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div><div><h3>QoderCLI</h3><p>MCP 集成与权限配置</p></div></a>
+        <a href="#" class="card" style="display:flex;align-items:center;gap:12px;"><div style="width:40px;height:40px;border-radius:8px;background:var(--primary-bg);display:none;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🖥</div><div><h3>Warp Agent</h3><p>终端内置 AI 配置指南</p></div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全部文章 -->
+  <div class="section">
+    <div class="section-header"><h2>📄 全部文章</h2></div>
+    <div class="card-grid">
+      <a href="#" class="card"><div class="meta">KNOW-HOW</div><h3>Agent Mesh — 跨 Agent 协同</h3><p>MCP Bridge 实现 OpenClaw、Hermes、QoderCLI 协作</p><div class="tags"><span class="tag">MCP</span><span class="tag">Agent协同</span><span class="tag">OpenClaw</span></div></a>
+      <a href="#" class="card"><div class="meta">KNOW-HOW</div><h3>上下文共享方案</h3><p>context-read/write 实现跨 Agent 信息共享</p><div class="tags"><span class="tag">上下文</span><span class="tag">MCP</span></div></a>
+      <a href="#" class="card"><div class="meta">KNOW-HOW</div><h3>Hermes 使用技巧</h3><p>日常使用技巧和踩坑记录</p><div class="tags"><span class="tag">Hermes</span><span class="tag">技巧</span></div></a>
+      <a href="#" class="card"><div class="meta">TOOL</div><h3>MCP Bridge 配置指南</h3><p>安装、配置、故障排查（附源码）</p><div class="tags"><span class="tag">MCP</span><span class="tag">配置</span></div></a>
+      <a href="#" class="card"><div class="meta">TOOL</div><h3>QoderCLI 配置</h3><p>MCP 集成和权限管理</p><div class="tags"><span class="tag">QoderCLI</span><span class="tag">CLI</span></div></a>
+      <a href="#" class="card"><div class="meta">PROJECT</div><h3>Agent Mesh 架构</h3><p>项目架构设计文档</p><div class="tags"><span class="tag">架构</span><span class="tag">设计</span></div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>yuleAI-Hub — AI Agent 知识库 · 发现 · 学习 · 分享</p>
+</footer>
+
+</body>
+</html>
