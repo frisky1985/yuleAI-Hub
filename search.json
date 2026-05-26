@@ -1,0 +1,11 @@
+[
+  {"title":"Agent Mesh — 跨 Agent 协同网络搭建","url":"/know-how/agent-mesh/","desc":"OpenClaw、Hermes、QoderCLI 三 agent 通过 MCP Bridge 协作","type":"know-how","tags":["MCP","Agent协同","OpenClaw","Hermes","QoderCLI"],"date":"2026-05-26"},
+  {"title":"MCP Bridge 配置指南","url":"/tools/mcp-bridge/","desc":"MCP Bridge v2 的安装、配置和故障排查","type":"tool","tags":["MCP","Bridge","配置"],"date":"2026-05-26"},
+  {"title":"Warp Agent 集成指南","url":"/tools/warp-agent/","desc":"在 Warp 终端中配置和使用 AI Agent","type":"tool","tags":["Warp","终端","配置"],"date":"2026-05-26"},
+  {"title":"Hermes Agent 使用技巧","url":"/know-how/hermes-tips/","desc":"Hermes Agent 日常使用技巧和踩坑记录","type":"know-how","tags":["Hermes","技巧"],"date":"2026-05-25"},
+  {"title":"QoderCLI 配置与使用","url":"/tools/qodercli-setup/","desc":"QoderCLI 的安装、MCP 配置和权限管理","type":"tool","tags":["QoderCLI","CLI","配置"],"date":"2026-05-25"},
+  {"title":"OpenClaw 入门指南","url":"/know-how/openclaw-getting-started/","desc":"OpenClaw 基本概念、配置和日常使用","type":"know-how","tags":["OpenClaw","入门"],"date":"2026-05-24"},
+  {"title":"跨 Agent 上下文共享方案","url":"/know-how/context-sharing/","desc":"通过 MCP Bridge 的 context-read/write 实现跨 Agent 信息共享","type":"know-how","tags":["上下文","MCP","协同"],"date":"2026-05-24"},
+  {"title":"DeepSeek API 性能优化","url":"/know-how/deepseek-optimization/","desc":"DeepSeek API 调用优化、超时处理和 fallback 配置","type":"know-how","tags":["DeepSeek","API","优化","性能"],"date":"2026-05-23"},
+  {"title":"Agent Mesh 架构","url":"/projects/agent-mesh-architecture/","desc":"Agent Mesh 项目架构设计文档","type":"project","tags":["架构","Agent Mesh","设计"],"date":"2026-05-26"}
+]

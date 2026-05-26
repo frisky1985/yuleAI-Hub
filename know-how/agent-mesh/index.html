@@ -1,0 +1,51 @@
+---
+layout: default
+title: Agent Mesh — 跨 Agent 协同网络搭建
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/know-how/">Know-How</a> / Agent Mesh</div>
+  <h1>Agent Mesh — 跨 Agent 协同网络搭建</h1>
+  <p style="color:var(--fg2);margin-top:4px">2026-05-26 · #MCP #Agent协同 #OpenClaw #Hermes #QoderCLI</p>
+</div>
+
+<div class="content">
+  <p>让 OpenClaw、Hermes、QoderCLI 三个 Agent 通过 MCP Bridge 互相协作。</p>
+
+  <h2>架构</h2>
+  <pre>
+                ┌──────────────────────┐
+                │    MCP Bridge v2     │
+                │  (mcp_bridge_server) │
+                └────┬──────┬──────┬───┘
+                     │      │      │
+               ┌─────┘  ┌───┴───┐  └──────┐
+               ▼        ▼       ▼         ▼
+         ┌─────────┐ ┌──────┐ ┌────────┐ ┌─────────┐
+         │OpenClaw │ │Hermes│ │QoderCLI│ │  共享    │
+         │         │ │      │ │        │ │ 工作区   │
+         └─────────┘ └──────┘ └────────┘ └─────────┘
+  </pre>
+
+  <h2>MCP 工具一览</h2>
+  <table>
+    <tr><th>工具</th><th>说明</th><th>响应</th></tr>
+    <tr><td><code>agent-status</code></td><td>检查所有 agent 状态</td><td>&lt;1s</td></tr>
+    <tr><td><code>agent-chat</code></td><td>快速对话</td><td>≤8s</td></tr>
+    <tr><td><code>agent-delegate</code></td><td>委派异步任务</td><td>即时返回 task_id</td></tr>
+    <tr><td><code>task-result</code></td><td>查询任务结果</td><td>即时</td></tr>
+    <tr><td><code>task-list</code></td><td>查看最近任务</td><td>即时</td></tr>
+    <tr><td><code>context-read</code></td><td>读取共享上下文</td><td>即时</td></tr>
+    <tr><td><code>context-write</code></td><td>写入共享上下文</td><td>即时</td></tr>
+  </table>
+
+  <h2>安装</h2>
+  <pre><code># 配置 OpenClaw
+openclaw mcp set mcp-bridge '{
+  "command": "python3",
+  "args": ["/path/to/mcp_bridge_server.py"]
+}'
+
+# 验证
+openclaw mcp list</code></pre>
+</div>

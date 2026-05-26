@@ -1,0 +1,27 @@
+---
+layout: default
+title: Know-How 知识库
+desc: AI Agent 相关的实践经验和技巧
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> / Know-How</div>
+  <h1>📖 Know-How</h1>
+  <p style="color:var(--fg2);margin-top:8px">AI Agent 相关的实践经验、技巧和踩坑记录</p>
+</div>
+
+<ul class="article-list" id="articleList"></ul>
+
+<script>
+fetch('/search.json').then(r=>r.json()).then(data => {
+  const items = data.filter(d => d.type === 'know-how');
+  document.getElementById('articleList').innerHTML = items.map(a => `
+    <li>
+      <a href="${a.url}">
+        <h3>${a.title}</h3>
+        <div class="meta">${a.desc||''}${a.date ? ' · '+a.date : ''}</div>
+      </a>
+    </li>
+  `).join('');
+});
+</script>

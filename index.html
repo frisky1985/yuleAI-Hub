@@ -1,0 +1,64 @@
+---
+layout: default
+---
+
+<div class="hero">
+  <h1>yule<span>AI</span>-Hub</h1>
+  <p>AI Agent 协同的知识沉淀与分享站。<br>关于 OpenClaw、Hermes、QoderCLI 的一切 Know-How。</p>
+  <div class="stats">
+    <div><strong id="articleCount">0</strong>篇文章</div>
+    <div><strong id="toolCount">0</strong>个工具</div>
+    <div><strong id="projectCount">0</strong>个项目</div>
+  </div>
+</div>
+
+<div class="tag-cloud" id="tagCloud"></div>
+
+<h2 class="section-title">📖 最新 Know-How</h2>
+<div class="cards" id="recentArticles"></div>
+
+<h2 class="section-title">🛠 工具配置</h2>
+<div class="cards" id="toolsList"></div>
+
+<script>
+const DATA_URL = '/search.json';
+let allData = [];
+
+fetch(DATA_URL).then(r=>r.json()).then(data => {
+  allData = data;
+
+  // Count
+  document.getElementById('articleCount').textContent = data.filter(d=>d.type==='know-how').length;
+  document.getElementById('toolCount').textContent = data.filter(d=>d.type==='tool').length;
+  document.getElementById('projectCount').textContent = data.filter(d=>d.type==='project').length;
+
+  // Tags
+  const tags = new Map();
+  data.forEach(d => (d.tags||[]).forEach(t => tags.set(t, (tags.get(t)||0)+1)));
+  document.getElementById('tagCloud').innerHTML =
+    [...tags.entries()].sort((a,b)=>b[1]-a[1]).slice(0,20).map(([t,c]) =>
+      `<a href="/tags/#${t}" style="font-size:${12+Math.min(c,8)}px">${t}</a>`
+    ).join('');
+
+  // Recent articles
+  const articles = data.filter(d=>d.type==='know-how').slice(0,3);
+  document.getElementById('recentArticles').innerHTML = articles.map(a => `
+    <a href="${a.url}" class="card">
+      <h3>${a.title}</h3>
+      <p>${a.desc||''}</p>
+      ${(a.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}
+      <div class="meta">${a.date||''}</div>
+    </a>
+  `).join('');
+
+  // Tools
+  const tools = data.filter(d=>d.type==='tool').slice(0,3);
+  document.getElementById('toolsList').innerHTML = tools.map(t => `
+    <a href="${t.url}" class="card">
+      <h3>${t.title}</h3>
+      <p>${t.desc||''}</p>
+      ${(t.tags||[]).slice(0,3).map(tg=>`<span class="tag">${tg}</span>`).join('')}
+    </a>
+  `).join('');
+});
+</script>

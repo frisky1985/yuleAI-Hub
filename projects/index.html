@@ -1,0 +1,27 @@
+---
+layout: default
+title: 项目
+desc: 相关项目文档和架构
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> / 项目</div>
+  <h1>📁 项目</h1>
+  <p style="color:var(--fg2);margin-top:8px">相关项目架构、部署和开发笔记</p>
+</div>
+
+<ul class="article-list" id="projectList"></ul>
+
+<script>
+fetch('/search.json').then(r=>r.json()).then(data => {
+  const items = data.filter(d => d.type === 'project');
+  document.getElementById('projectList').innerHTML = items.map(p => `
+    <li>
+      <a href="${p.url}">
+        <h3>${p.title}</h3>
+        <div class="meta">${p.desc||''}</div>
+      </a>
+    </li>
+  `).join('');
+});
+</script>
