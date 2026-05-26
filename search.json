@@ -390,5 +390,18 @@
       "部署"
     ],
     "date": "2026-05-26"
+  },
+  {
+    "title": "OpenClaw Gateway 部署指南",
+    "url": "/know-how/gateway-deployment/",
+    "desc": "Gateway 一键部署、架构说明、Keepalive 整合、运维命令大全",
+    "type": "knowhow",
+    "tags": [
+      "Gateway",
+      "运维",
+      "基础架构",
+      "部署"
+    ],
+    "date": "2026-05-26"
   }
 ]
