@@ -57,22 +57,32 @@ for cmd in openclaw hermes qodercli python3; do
   fi
 done
 
-# ── Step 2: 启动 MCP Bridge ─────────────────────────────────
-title "2/5 MCP Bridge"
-BPID=$(pgrep -f "mcp_bridge_server.py" 2>/dev/null | head -1)
-if [ -n "$BPID" ]; then
-  ok "已在运行 (PID $BPID)"
-else
-  info "正在启动..."
-  nohup python3 "$BRIDGE_DIR/mcp_bridge_server.py" \
-    > "$LOG_DIR/bridge.log" 2>&1 &
-  echo $! > "$PID_DIR/bridge.pid"
-  sleep 2
-  if pgrep -f "mcp_bridge_server.py" &>/dev/null; then
-    ok "已启动 (PID $(cat "$PID_DIR/bridge.pid"))"
-  else
-    fail "启动失败，请检查日志: $LOG_DIR/bridge.log"
-  fi
+# ── Step 2: MCP Bridge ─────────────────────────────────────
+# MCP Bridge 是 stdio 模式，由 OpenClaw 按需自动启动
+# 这里只做快速连通性测试
+BRIDGE_TEST=$(python3 -c "
+import subprocess, json, time
+p = subprocess.Popen(
+    ['python3', '$BRIDGE_DIR/mcp_bridge_server.py'],
+    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    text=True, bufsize=0
+)
+time.sleep(0.2)
+body = json.dumps({'jsonrpc':'2.0','id':1,'method':'tools/list','params':{}})
+req = f'Content-Length: {len(body)}\
+\
+\
+\
+{body}'
+try:
+    out, _ = p.communicate(input=req, timeout=5)
+    if 'tools' in out: print('ok')
+except:
+    pass
+" 2>/dev/null)
+if [ "$BRIDGE_TEST" = "ok" ]; then
+  title "2/5 MCP Bridge"
+  ok "就绪"
 fi
 
 # ── Step 3: 启动 Gateway ────────────────────────────────────
@@ -132,7 +142,8 @@ while true; do
   if [ "$key" = "r" ] || [ "$key" = "R" ]; then
     echo ""
     echo -e "${CYAN}→ 进入 OpenClaw 对话...${NC}\n"
-    openclaw tui --session main
+    GW_TOKEN=$(python3 -c "import json; print(json.load(open('$HOME/.openclaw/openclaw.json'))['gateway']['auth']['token'])" 2>/dev/null)
+    openclaw tui --session main ${GW_TOKEN:+--token "$GW_TOKEN"}
     # TUI 退出后关闭窗口
     echo ""
     echo -e "${CYAN}对话已结束，关闭窗口...${NC}"
