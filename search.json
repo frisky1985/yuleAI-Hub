@@ -71,6 +71,31 @@
     "date": "2026-05-26"
   },
   {
+    "title": "OpenClaw Gateway 部署 — Know-How",
+    "url": "/know-how/gateway-deployment/",
+    "desc": "OpenClaw Gateway 部署 — Know-How\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--accent-hover:#00a381;",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "GitHub Pages 部署实战 — Know-How",
+    "url": "/know-how/gh-pages-deploy/",
+    "desc": "GitHub Pages 部署实战 — Know-How\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--accent-hover:#00a381;--",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Hermes Agent 使用技巧",
     "url": "/know-how/hermes-tips/",
     "desc": "Hermes Agent 使用技巧 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d343",
@@ -167,6 +192,38 @@
     "date": "2026-05-26"
   },
   {
+    "title": "记忆",
+    "url": "/memory/",
+    "desc": "记忆 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "项目核心记忆",
+    "url": "/memory/project-context/",
+    "desc": "项目核心记忆 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#63",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "用户画像",
+    "url": "/memory/user-profile/",
+    "desc": "用户画像 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Agent Mesh 架构设计",
     "url": "/projects/agent-mesh-architecture/",
     "desc": "Agent Mesh 架构设计 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
@@ -185,6 +242,16 @@
     "title": "项目",
     "url": "/projects/",
     "desc": "项目 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--rad",
+    "type": "project",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "yuleASR-Configurator 项目概览",
+    "url": "/projects/yuleASR-Configurator/",
+    "desc": "yuleASR-Configurator 项目概览 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--f",
     "type": "project",
     "tags": [
       "API"
@@ -229,9 +296,39 @@
     "date": "2026-05-26"
   },
   {
+    "title": "Git 提交规范",
+    "url": "/rules/git-convention/",
+    "desc": "Git 提交规范 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "规则集",
     "url": "/rules/",
     "desc": "规则集 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "导航栏设计模式",
+    "url": "/rules/navbar-design-pattern/",
+    "desc": "导航栏设计模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "工作流核心原则",
+    "url": "/rules/workflow-principles/",
+    "desc": "工作流核心原则 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
     "type": "rules",
     "tags": [
       "API"
@@ -282,6 +379,26 @@
     "date": "2026-05-26"
   },
   {
+    "title": "设计驱动开发工作流",
+    "url": "/skills/design-driven-dev/",
+    "desc": "设计驱动开发工作流 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "双模式数据持久化模式",
+    "url": "/skills/dual-mode-persistence/",
+    "desc": "双模式数据持久化模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Hermes 快速操作技巧",
     "url": "/skills/hermes-tips/",
     "desc": "Hermes 快速操作技巧 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--",
@@ -303,6 +420,76 @@
     "type": "skills",
     "tags": [
       "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "React 动态实例容器模式",
+    "url": "/skills/react-dynamic-instances/",
+    "desc": "React 动态实例容器模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;-",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "yuleASR Configurator UI",
+    "url": "/skills/yuleasr-configurator-ui/",
+    "desc": "yuleASR Configurator UI — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "React 复制按钮模式",
+    "url": "/skills/yuleasr-copy-button/",
+    "desc": "React 复制按钮模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Dark Mode 实现",
+    "url": "/skills/yuleasr-dark-mode/",
+    "desc": "Dark Mode 实现 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh 一键启动器 — 工具",
+    "url": "/tools/agent-mesh-starter/",
+    "desc": "Agent Mesh 一键启动器 — 工具\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--bg:#FBF9F5;--bg-card:#fff;--fg",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "Warp"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Ping",
+    "url": "/tools/agent-ping/",
+    "desc": "Agent Ping — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
       "API"
     ],
     "date": "2026-05-26"
@@ -377,45 +564,5 @@
       "API"
     ],
     "date": "2026-05-26"
-  },
-  {
-    "title": "GitHub Pages 部署实战手册",
-    "url": "/know-how/gh-pages-deploy/",
-    "desc": "GitHub Pages 部署最佳实践，含导航栏标准、工作流配置、快速排查清单",
-    "type": "knowhow",
-    "tags": [
-      "CI/CD",
-      "GitHub Pages",
-      "踩坑",
-      "部署"
-    ],
-    "date": "2026-05-26"
-  },
-  {
-    "title": "OpenClaw Gateway 部署指南",
-    "url": "/know-how/gateway-deployment/",
-    "desc": "Gateway 一键部署、架构说明、Keepalive 整合、运维命令大全",
-    "type": "knowhow",
-    "tags": [
-      "Gateway",
-      "运维",
-      "基础架构",
-      "部署"
-    ],
-    "date": "2026-05-26"
-  },
-  {
-    "title": "Agent Mesh 一键启动器",
-    "url": "/tools/agent-mesh-starter/",
-    "desc": "双击自动拉起 MCP Bridge、Gateway、所有 Agent，并进入 OpenClaw 对话",
-    "type": "tool",
-    "tags": [
-      "Agent Mesh",
-      "macOS",
-      "Warp",
-      "Gateway",
-      "启动器"
-    ],
-    "date": "2026-05-27"
   }
 ]

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# agent-ping — Agent Mesh 保活脚本
+# 检查三个 Agent 在线状态，保持上下文同步
+# 建议 crontab 每 30 分钟执行一次
+
+set -euo pipefail
+
+BRIDGE_DIR="$HOME/.openclaw/mcp-bridge"
+CONTEXT_FILE="$BRIDGE_DIR/workspace/context.json"
+TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+
+echo "[$TIMESTAMP] Agent Ping — 检查在线状态"
+
+all_ok=true
+for cmd in openclaw hermes qodercli; do
+  if command -v "$cmd" &>/dev/null; then
+    ver=$($cmd --version 2>&1 | head -1)
+    echo "  ✓ $cmd: $ver"
+  else
+    echo "  ✗ $cmd: NOT FOUND"
+    all_ok=false
+  fi
+done
+
+# 更新上下文保活时间戳
+mkdir -p "$(dirname "$CONTEXT_FILE")"
+if [ -f "$CONTEXT_FILE" ]; then
+  python3 -c "
+import json
+try:
+  with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+except:
+  ctx = {}
+ctx['last_ping'] = '$TIMESTAMP'
+ctx['all_online'] = $all_ok
+with open('$CONTEXT_FILE', 'w') as f:
+  json.dump(ctx, f, ensure_ascii=False, indent=2)
+" 2>/dev/null
+fi
+
+echo "  ✓ 上下文已更新"
+echo ""

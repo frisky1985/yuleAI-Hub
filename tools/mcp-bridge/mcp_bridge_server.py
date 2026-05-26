@@ -241,20 +241,14 @@ class MCPServer:
             return json.dumps({"error": f"{agent} not found"})
 
     def _handle_delegate(self, agent: str, task: str) -> str:
-        task_id = f"task_{uuid.uuid4().hex[:8]}"
-        # Write initial pending state
-        _write_json(TASKS_DIR / f"{task_id}.json", {
-            "task_id": task_id, "agent": agent, "status": "queued",
-            "prompt": task, "started_at": _now()})
-        # Launch background thread
-        t = threading.Thread(target=_run_agent, args=(agent, task, task_id), daemon=True)
-        t.start()
-        return json.dumps({
-            "status": "queued",
-            "task_id": task_id,
-            "agent": agent,
-            "message": f"Task submitted to {agent}. Check with: task-result task_id={task_id}",
-        }, ensure_ascii=False)
+        import secrets
+        task_id = f"task_{secrets.token_hex(4)}"
+        task_file = TASKS_DIR / f"{task_id}.json"
+        _write_json(task_file, {"task_id": task_id, "agent": agent, "status": "running", "started_at": _now()})
+        runner = "/Users/ingeek/.local/bin/agent-runner"
+        subprocess.Popen(["nohup", runner, agent, task_id, task],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        return json.dumps({"status": "queued","task_id": task_id,"agent": agent}, ensure_ascii=False)
 
     def _handle_task_result(self, task_id: str) -> str:
         data = _read_json(TASKS_DIR / f"{task_id}.json")
