@@ -204,6 +204,20 @@
     "date": "2026-05-26"
   },
   {
+    "title": "DevFlow 执行规则",
+    "url": "/rules/agent-mesh-devflow/",
+    "desc": "DevFlow 执行规则 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "rules",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Git 提交规范",
     "url": "/rules/git-commit-convention/",
     "desc": "Git 提交规范 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#",
