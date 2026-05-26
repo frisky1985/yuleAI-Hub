@@ -33,8 +33,17 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); line-h
 .nav-links a { padding: 6px 14px; border-radius: 8px; color: var(--fg2); text-decoration: none; font-size: 14px; font-family: var(--sans); transition: all .2s; }
 .nav-links a:hover, .nav-links a.active { background: var(--primary-bg); color: var(--primary); }
 .auth-section { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.auth-section .publish-btn { padding: 6px 16px; border-radius: 8px; background: var(--accent); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; font-family: var(--sans); transition: all .15s; }
+.auth-section .publish-btn:hover { background: #00a381; }
 .auth-section .login-btn { padding: 6px 16px; border-radius: 8px; background: var(--primary); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; font-family: var(--sans); transition: all .15s; }
 .auth-section .login-btn:hover { background: #5b4ed4; }
+
+/* publish card */
+.publish-card { margin: 32px 0; padding: 32px; background: linear-gradient(135deg, var(--accent), #55efc4); border-radius: var(--radius); color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.publish-card-text h3 { font-size: 20px; font-weight: 600; }
+.publish-card-text p { font-size: 14px; opacity: .9; margin-top: 4px; font-family: var(--sans); }
+.publish-card-btn { padding: 12px 28px; border-radius: 100px; background: #fff; color: var(--accent); text-decoration: none; font-weight: 700; font-size: 14px; font-family: var(--sans); transition: all .2s; white-space: nowrap; }
+.publish-card-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
 
 /* hero */
 .hero { background: linear-gradient(135deg, var(--primary) 0%, #a29bfe 50%, #81ecec 100%); padding: 64px 0; text-align: center; color: white; position: relative; overflow: hidden; }
@@ -117,6 +126,7 @@ footer { border-top: 1px solid var(--border); padding: 32px 0; margin-top: 48px;
       <div id="userMenu" style="display:none;position:relative">
         <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
       </div>
+      <a href="/publish.html" class="publish-btn">✏️ 发布</a>
       <a href="/auth/login.html" id="loginBtn" class="login-btn">登录</a>
       <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
         <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
@@ -172,6 +182,15 @@ document.addEventListener('click',function(e){if(!e.target.closest('.auth-sectio
     <a href="/know-how/?tag=MCP">MCP</a><a href="/know-how/?tag=Agent协同">Agent协同</a><a href="/know-how/?tag=Hermes">Hermes</a><a href="/know-how/?tag=OpenClaw">OpenClaw</a>
     <a href="/know-how/?tag=QoderCLI">QoderCLI</a><a href="/know-how/?tag=DeepSeek">DeepSeek</a><a href="/know-how/?tag=API">API</a><a href="/know-how/?tag=Warp">Warp</a>
     <a href="/know-how/?tag=入门">入门</a><a href="/know-how/?tag=进阶">进阶</a><a href="/know-how/?tag=踩坑">踩坑</a><a href="/know-how/?tag=配置">配置</a>
+  </div>
+
+  <!-- 发布引导卡片 -->
+  <div class="publish-card">
+    <div class="publish-card-text">
+      <h3>✏️ 分享你的知识</h3>
+      <p>发布技能、规则、知识文档、工具指南到 yuleAI-Hub，与同好一起成长</p>
+    </div>
+    <a href="/publish.html" class="publish-card-btn">开始发布 →</a>
   </div>
 
   <!-- 时间线 -->

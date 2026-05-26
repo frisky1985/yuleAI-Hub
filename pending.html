@@ -31,10 +31,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.
 .nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
 .nav-links a:hover,.nav-links a.active{background:var(--primary-light);color:var(--primary)}
 .auth-section{margin-left:auto;display:flex;align-items:center;gap:6px}
-.auth-section .btn-login{padding:6px 16px;border-radius:8px;color:var(--primary);text-decoration:none;font-size:13px;font-weight:500;transition:all .15s}
-.auth-section .btn-login:hover{background:var(--primary-light)}
-.auth-section .btn-register{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff;text-decoration:none;font-size:13px;font-weight:500;transition:all .15s}
-.auth-section .btn-register:hover{background:var(--primary-hover)}
+
+
+
+
 .user-menu{position:relative}
 .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s}
 .user-avatar:hover{border-color:var(--primary-light)}
@@ -72,6 +72,7 @@ footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-al
   .container{padding:0 16px}
   .nav-links{display:none}
 }
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;transition:all .15s}.publish-btn:hover{background:#00a381}.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;transition:all .15s}.login-btn:hover{background:#5b4ed4}
 </style>
 </head>
 <body>
@@ -83,10 +84,29 @@ footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-al
       <a href="/knowledge/">知识库</a>
       <a href="/skills/">技能</a>
       <a href="/pending.html" class="active">我的发布</a>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+      <div id="userMenu" style="display:none;position:relative">
+        <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+      </div>
+      <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+      <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+      <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+        <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+        <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+        <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+        <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+        <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+      </div>
     </div>
-    
-
+  </div>
+</nav>
 <script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script>
+
 (function(){
   const c = document.getElementById('content');
   const user = JSON.parse(localStorage.getItem('yule_current_user') || 'null');
