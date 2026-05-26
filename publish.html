@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>发布内容 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#6C5CE7;--primary-hover:#5a4bd1;--primary-light:#f0edff;--accent:#00B894;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--fg3:#9ba3af;--border:#e5e8ed;--radius:12px;--shadow:0 2px 8px rgba(0,0,0,.06);--font:"Noto Sans SC",-apple-system,sans-serif;--mono:"JetBrains Mono",monospace}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);min-height:100vh}
+.nav{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1000px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font-weight:700;font-size:15px}
+.logo .yl{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6C5CE7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
+.nav-links a:hover{background:var(--primary-light);color:var(--primary)}
+.container{max-width:800px;margin:0 auto;padding:0 32px 48px}
+.page-hd{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.page-hd h1{font-size:22px;font-weight:600}
+.page-hd p{font-size:14px;color:var(--fg2);margin-top:4px}
+.form-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px}
+.publish-types{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.pub-type{padding:8px 20px;border-radius:100px;border:1px solid var(--border);background:var(--bg-card);color:var(--fg2);font-size:13px;cursor:pointer;font-weight:500;transition:all .15s;display:flex;align-items:center;gap:6px}
+.pub-type:hover{border-color:var(--primary);color:var(--primary)}
+.pub-type.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:13px;font-weight:500;color:var(--fg2);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--font);outline:none;transition:all .2s;background:var(--bg)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,92,231,.08)}
+.form-group textarea{min-height:200px;resize:vertical;line-height:1.7;font-family:var(--mono);font-size:13px}
+.form-group .hint{font-size:12px;color:var(--fg3);margin-top:4px}
+.tag-area{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--bg);min-height:42px}
+.tag-area .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;background:var(--primary-light);color:var(--primary);font-size:12px}
+.tag-area .tag .del{cursor:pointer;opacity:.5;font-size:13px}.tag-area .tag .del:hover{opacity:1}
+.tag-area input{border:none;outline:none;background:transparent;font-size:13px;font-family:var(--font);flex:1;min-width:80px}
+.actions{display:flex;gap:12px;margin-top:28px}
+.actions .btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s}
+.actions .btn-primary{flex:1;background:var(--primary);color:#fff}
+.actions .btn-primary:hover{background:var(--primary-hover)}
+.actions .btn-ghost{padding:10px 20px;border:1px solid var(--border);background:transparent;color:var(--fg2)}
+.actions .btn-ghost:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
+.preview-box{display:none;border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:20px;background:var(--bg-card)}
+.preview-box h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.preview-box .tags{display:flex;gap:4px;margin-bottom:12px}
+.preview-box .tags span{padding:2px 8px;border-radius:4px;background:var(--primary-light);color:var(--primary);font-size:11px}
+.preview-box .body{font-size:14px;color:var(--fg2);line-height:1.7;font-family:var(--font)}
+.success-msg{display:none;text-align:center;padding:40px}
+.success-msg .icon{font-size:48px;margin-bottom:12px}
+.success-msg h3{font-size:18px;margin-bottom:4px}
+.success-msg p{color:var(--fg2);font-size:14px}
+.success-msg a{color:var(--primary);text-decoration:none;font-weight:500}
+.need-login{text-align:center;padding:80px 0}
+.need-login .icon{font-size:48px;margin-bottom:16px}
+.need-login h2{font-size:20px;margin-bottom:8px}
+.need-login p{color:var(--fg2);margin-bottom:20px}
+.need-login .btn{display:inline-block;padding:10px 28px;border-radius:10px;background:var(--primary);color:#fff;text-decoration:none;font-weight:600}
+footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:12px;color:var(--fg3)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="yl">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a></div></div></nav>
+<div class="container"><div id="app"></div></div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+<script>
+(function(){
+  const user = JSON.parse(localStorage.getItem('yule_current_user') || 'null');
+  const app = document.getElementById('app');
+  if (!user) {
+    app.innerHTML = '<div class="page-hd"><h1>✏️ 发布内容</h1></div><div class="need-login"><div class="icon">🔒</div><h2>登录后即可发布</h2><p>分享你的技能、规则、知识文档到 yuleAI-Hub</p><a href="/auth/login.html?redirect=/publish.html" class="btn">去登录</a><p style="margin-top:12px;font-size:13px">还没有账号？<a href="/auth/register.html?redirect=/publish.html" style="color:var(--primary);text-decoration:none">注册</a></p></div>';
+    return;
+  }
+  let tags = [];
+  const TYPES = {skill:'⚡技能',rule:'📋规则',knowledge:'📚知识库',knowhow:'📖Know-How',tool:'🔧工具'};
+  let selType = 'skill';
+
+  function render() {
+    app.innerHTML = `
+      <div class="page-hd"><h1>✏️ 发布内容</h1><p>分享你的技能、规则或知识文档</p></div>
+      <div class="form-card">
+        <div class="publish-types" id="typeList">${Object.entries(TYPES).map(([k,v]) => `<div class="pub-type ${k===selType?'active':''}" onclick="setType('${k}')">${v}</div>`).join('')}</div>
+        <div class="form-group"><label>标题</label><input id="fTitle" placeholder="给你的内容起个名字" maxlength="60"></div>
+        <div class="form-group"><label>简介</label><input id="fDesc" placeholder="简要描述内容（将显示在卡片上）" maxlength="120"></div>
+        <div class="form-group"><label>标签</label><div class="tag-area" id="tagArea"><input id="tagInput" placeholder="输入后回车添加" onkeydown="addTag(event)"></div><div class="hint">回车添加，最多 6 个</div></div>
+        <div class="form-group"><label>正文</label><textarea id="fContent" placeholder="支持 Markdown 格式&#10;&#10;## 标题&#10;正文..."></textarea></div>
+        <div class="actions">
+          <button class="btn btn-ghost" onclick="preview()">预览</button>
+          <button class="btn btn-primary" onclick="submit()" id="pubBtn">提交发布</button>
+        </div>
+        <div class="preview-box" id="previewBox"><h3 id="pvTitle"></h3><div class="tags" id="pvTags"></div><div class="body" id="pvBody"></div></div>
+        <div class="success-msg" id="successBox"><div class="icon">🎉</div><h3>发布成功！</h3><p>内容已提交，审核通过后将展示在站点上</p><p style="margin-top:16px"><a href="/">返回首页</a> · <a href="/pending.html">我的发布</a></p></div>
+      </div>`;
+  }
+  window.setType = function(t) { selType = t; document.querySelectorAll('.pub-type').forEach(el => el.classList.toggle('active', el.textContent.includes(TYPES[t]))); };
+  window.addTag = function(e) { if(e.key!=='Enter') return; e.preventDefault(); const v=document.getElementById('tagInput').value.trim(); if(v&&!tags.includes(v)&&tags.length<6){tags.push(v);document.getElementById('tagInput').value='';renderTags()}};
+  function renderTags() { const area=document.getElementById('tagArea'),inp=document.getElementById('tagInput'); area.innerHTML=tags.map(t=>`<span class="tag">${t}<span class="del" onclick="delTag('${t}')">×</span></span>`).join(''); area.appendChild(inp); inp.focus(); }
+  window.delTag = function(t) { tags=tags.filter(x=>x!==t); renderTags(); };
+  window.preview = function() { const box=document.getElementById('previewBox'); box.style.display='block'; document.getElementById('pvTitle').textContent=document.getElementById('fTitle').value||'(无标题)'; document.getElementById('pvTags').innerHTML=tags.map(t=>`<span>${t}</span>`).join(''); document.getElementById('pvBody').innerHTML=document.getElementById('fContent').value.replace(/\n/g,'<br>').replace(/## (.+)/g,'<strong>$1</strong>'); box.scrollIntoView({behavior:'smooth'}); };
+  window.submit = function() {
+    const t=document.getElementById('fTitle').value.trim(),d=document.getElementById('fDesc').value.trim(),c=document.getElementById('fContent').value.trim();
+    if(!t||!d||!c) return alert('请填写标题、简介和正文');
+    const p={id:Date.now().toString(36),type:selType,title:t,desc:d,tags:tags,content:c,author:user.name||user.email,authorAvatar:(user.name||user.email)[0].toUpperCase(),date:new Date().toISOString().slice(0,10),status:'pending'};
+    const ps=JSON.parse(localStorage.getItem('yule_posts')||'[]'); ps.unshift(p); localStorage.setItem('yule_posts',JSON.stringify(ps));
+    document.getElementById('pubBtn').disabled=true; document.getElementById('pubBtn').textContent='✓ 已提交';
+    document.getElementById('successBox').style.display='block'; document.getElementById('successBox').scrollIntoView({behavior:'smooth'});
+  };
+  render();
+})();
+</script>
+</body>
+</html>
