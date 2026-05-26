@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>React 动态实例容器模式 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:28px 0 8px;font-size:20px;border-bottom:1px solid var(--border);padding-bottom:4px}
+h3{margin:20px 0 4px;font-size:16px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px;font-family:var(--sans)}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+.breadcrumb{font-size:13px;margin-bottom:16px;font-family:var(--sans);color:var(--fg2)}
+.breadcrumb a{color:var(--fg2);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.page-meta{font-size:12px;color:var(--fg2);margin:8px 0;font-family:var(--sans);display:flex;gap:16px}
+.page-tags{display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap}
+.page-tags .tag{padding:2px 10px;border-radius:4px;background:var(--primary-bg);color:var(--primary);font-size:11px;font-family:var(--sans)}
+blockquote{border-left:3px solid var(--primary);background:var(--primary-bg);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:13px}
+strong{color:var(--fg)}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/skills/">⚡ Skills</a> <span>/</span> React 动态实例容器</div>
+  <h1>⚡ React 动态实例容器模式 — 多实例 CRUD 完整生命周期管理</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-27</span>
+    <span>⏱️ 即用型技能</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">多实例</span><span class="tag">CRUD</span><span class="tag">动态容器</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>React 组件中父容器可以有多个运行时动态创建的子"实例"，用户可以在运行时创建、重命名、复制、删除、排序这些实例。适用于 AUTOSAR 配置器、资产管理器、或任何层级配置 UI。</p>
+
+  <h2>适用场景</h2>
+  <ul>
+    <li>树形界面需要多实例容器支持（+ / × 按钮）</li>
+    <li>在配置器中实现动态列表 CRUD</li>
+    <li>构建类似 Vector DaVinci 的配置器树组件</li>
+    <li>嵌套动态容器（实例内的子容器也是动态的）</li>
+  </ul>
+
+  <h2>数据模型</h2>
+
+  <h3>模板与实例分离</h3>
+
+  <p>静态数据定义模板（每个实例有哪些字段）。实例在运行时作为模板的数据副本创建。</p>
+
+  <pre><code>// 静态数据（配置 JSON）
+interface ConfigContainer {
+  id: string; name: string;
+  parameters: ConfigParameter[];
+  subContainers?: ConfigContainer[];   // 静态子容器
+  multiple?: boolean;                   // true = 动态实例容器
+  minInstances?: number;                // 默认 0
+  // subContainers[0] = 新实例的模板
+}
+
+// 运行时状态
+interface InstanceData {
+  name: string;
+  parameterValues: Record&lt;string, any&gt;;  // 每个实例独立的参数值
+}</code></pre>
+
+  <p>关键规则：当 <code>multiple: true</code> 时，<code>subContainers[0]</code> 是模板，不是预先创建的实例。</p>
+
+  <h2>实例路径约定</h2>
+
+  <p>嵌套动态容器的路径格式：</p>
+  <pre><code>layer:.../container:parent/instance:child_0/container:subContainer/instance:sub_0</code></pre>
+
+  <p><strong>⚠️ 路径匹配陷阱</strong>：当路径中包含 <code>instance:xxx</code> 段时，不能用完整路径匹配静态树。正确做法是用容器 <strong>ID 匹配</strong>（而非路径匹配），提取最后一个 <code>container:id</code> 段，在模块的容器树中递归搜索。</p>
+
+  <h2>实例 CRUD 生命周期</h2>
+
+  <h3>创建（添加）</h3>
+  <p>从模板名称 + 数字后缀生成实例名。新实例深拷贝模板的默认参数值。</p>
+
+  <h3>删除</h3>
+  <p>从实例列表移除，始终先弹出确认对话框。</p>
+
+  <h3>重命名</h3>
+  <p>双击名称或右键菜单 → 内联编辑。</p>
+
+  <h3>复制（含参数继承）</h3>
+  <p>深拷贝源实例的所有参数值，生成新名称。</p>
+
+  <h3>排序（拖拽）</h3>
+  <p>使用 HTML5 原生拖放 API，用 <code>findIndex</code> 而非 <code>indexOf</code>。</p>
+
+  <h2>UI 控件</h2>
+
+  <pre><code>ContainerName [+]           ← 绿色 + 按钮
+  Instance_0 [⎘] [×]        ← 蓝色复制 + 红色删除
+  Instance_1 [⎘] [×]</code></pre>
+
+  <h3>右键菜单</h3>
+  <blockquote>
+    ✎ 重命名<br>
+    ⧉ 复制<br>
+    ─────────────<br>
+    🗑 删除（红色）
+  </blockquote>
+
+  <h2>forwardRef + useImperativeHandle</h2>
+
+  <p>当树组件内部管理实例状态，但父组件（Editor）需要从右键面板触发实例操作时：</p>
+
+  <pre><code>export interface ConfigTreeHandle {
+  addInstance: (containerPath: string) => string | undefined
+}
+
+export const ConfigTree = forwardRef&lt;ConfigTreeHandle, ConfigTreeProps&gt;(
+  function ConfigTree(props, ref) {
+    // ... 内部逻辑 ...
+    useImperativeHandle(ref, () => ({
+      addInstance: (containerPath: string) => {
+        // 同步计算实例名，返回给父组件自动选中
+        const newName = computeNextName(containerPath)
+        addInstance(containerPath)
+        return newName
+      },
+    }), [addInstance, dynamicInstances, config])
+  }
+)</code></pre>
+
+  <p>父组件拿到实例名后立即 <code>setSelectedPath(...)</code> 实现自动选中。</p>
+
+  <h2>嵌套动态容器</h2>
+
+  <p>实例的子容器自身也可能是动态的，需要：</p>
+  <ul>
+    <li><code>collectDynamicContainers</code> 递归遍历模板子容器</li>
+    <li><code>seedNestedDynamics</code> 在父实例被添加时创建嵌套实例条目</li>
+    <li><code>findTemplateContainer</code> 使用 ID 匹配（而非路径匹配）</li>
+    <li><strong>Self-template 模式</strong>：某些 <code>multiple: true</code> 容器无 subContainers，自身即是模板</li>
+  </ul>
+
+  <h2>相关技能</h2>
+  <ul>
+    <li><a href="/skills/yuleasr-configurator-ui/">⚡ yuleASR Configurator UI</a> — 完整的配置器 UI 实现</li>
+    <li><a href="/skills/yuleasr-copy-button/">⚡ React Copy Button</a> — 复制按钮模式</li>
+  </ul>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

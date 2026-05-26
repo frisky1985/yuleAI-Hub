@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>React 复制按钮模式 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:28px 0 8px;font-size:20px;border-bottom:1px solid var(--border);padding-bottom:4px}
+h3{margin:20px 0 4px;font-size:16px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px;font-family:var(--sans)}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+.breadcrumb{font-size:13px;margin-bottom:16px;font-family:var(--sans);color:var(--fg2)}
+.breadcrumb a{color:var(--fg2);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.page-meta{font-size:12px;color:var(--fg2);margin:8px 0;font-family:var(--sans);display:flex;gap:16px}
+.page-tags{display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap}
+.page-tags .tag{padding:2px 10px;border-radius:4px;background:var(--primary-bg);color:var(--primary);font-size:11px;font-family:var(--sans)}
+blockquote{border-left:3px solid var(--primary);background:var(--primary-bg);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:13px}
+strong{color:var(--fg)}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/skills/">⚡ Skills</a> <span>/</span> React 复制按钮模式</div>
+  <h1>⚡ React 复制按钮模式 — 永久绿色指示器 + 内容变更自动重置</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-27</span>
+    <span>⏱️ 即用型技能</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">React</span><span class="tag">Clipboard</span><span class="tag">UX</span><span class="tag">Button</span><span class="tag">yuleASR</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>React 组件中"复制到剪贴板"按钮的交互模式。核心设计：复制成功后绿色勾永久显示，直到复制的内容发生变化才自动重置。</p>
+
+  <h2>适用场景</h2>
+  <ul>
+    <li>代码片段、配置文本、生成结果的复制按钮</li>
+    <li>需要明确告知用户"已复制"状态的交互</li>
+    <li>表单生成内容、API 返回数据的复制场景</li>
+  </ul>
+
+  <h2>三个状态的状态机</h2>
+
+  <pre><code>            ┌─────────┐
+            │  idle   │ ─── click ──→ ┌─────────┐
+            │ [Copy]  │               │ loading │
+            └─────────┘               │ spinner │
+                 ↑                     └────┬────┘
+                 │                   success │
+                 │          ┌──────────┐      │
+                 │          │  copied  │ ←────┘
+                 │          │  ✓ 已复制 │
+                 │          └──────────┘
+                 │ content changes │
+                 └─────────────────┘</code></pre>
+
+  <ul>
+    <li><code>idle → loading</code>: 用户点击</li>
+    <li><code>loading → copied</code>: 剪贴板写入成功</li>
+    <li><code>loading → idle</code>: 写入失败（显示错误，不显示绿色）</li>
+    <li><code>copied → idle</code>: 复制的内容发生变化（useEffect 依赖）</li>
+  </ul>
+
+  <h2>核心实现</h2>
+
+  <pre><code>import { useState, useEffect } from 'react'
+import { Copy, Check, Loader2 } from 'lucide-react'
+
+function CopyButton({ content, onContentChange }) {
+  const [state, setState] = useState('idle')
+
+  // 内容变更自动重置
+  useEffect(() => {
+    if (state === 'copied') setState('idle')
+  }, [onContentChange])
+
+  const handleCopy = async () => {
+    setState('loading')
+    try {
+      await navigator.clipboard.writeText(content)
+      setState('copied')
+    } catch {
+      // Fallback: document.execCommand('copy')
+      const textarea = document.createElement('textarea')
+      textarea.value = content
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setState('copied')
+    }
+  }
+
+  return (
+    &lt;button onClick={handleCopy}&gt;
+      {state === 'loading' ? &lt;Loader2 className="animate-spin" /&gt; :
+       state === 'copied' ? &lt;Check className="text-green-500" /&gt; :
+       &lt;Copy /&gt;}
+      {state === 'copied' ? '已复制' : '复制'}
+    &lt;/button&gt;
+  )
+}</code></pre>
+
+  <h2>各状态的 UI 样式</h2>
+
+  <table>
+    <thead><tr><th>状态</th><th>按钮样式</th><th>图标</th><th>文字</th></tr></thead>
+    <tbody>
+      <tr><td>idle</td><td>默认 outline</td><td><code>Copy</code></td><td>复制</td></tr>
+      <tr><td>loading</td><td>灰色、禁用</td><td><code>Loader2 spin</code></td><td>生成中...</td></tr>
+      <tr><td>copied</td><td><code>bg-green-100 text-green-700 border-green-200</code></td><td><code>Check</code></td><td>已复制</td></tr>
+    </tbody>
+  </table>
+
+  <h2>重置触发器的选择</h2>
+
+  <table>
+    <thead><tr><th>内容类型</th><th>重置触发变量</th></tr></thead>
+    <tbody>
+      <tr><td>表单生成内容</td><td>驱动内容生成的表单状态变量</td></tr>
+      <tr><td>API 获取内容</td><td>数据/请求 key（如 config.id）</td></tr>
+      <tr><td>静态内容</td><td>无需重置 — 文本永不变化</td></tr>
+      <tr><td>代码编辑器内容</td><td>代码文本或哈希值</td></tr>
+    </tbody>
+  </table>
+
+  <h2>⚠️ 注意事项</h2>
+
+  <ul>
+    <li><strong>不要用 setTimeout 自动重置</strong> — 绿色勾永久显示，直到内容变化才重置</li>
+    <li><strong>别忘了 fallback</strong> — <code>navigator.clipboard</code> 在非 HTTPS 或部分移动浏览器中不可用，必须有 <code>document.execCommand('copy')</code> 后备方案</li>
+    <li><strong>watch useEffect 依赖</strong> — 使用实际内容来源变量，而不是纯文本字符串。如果每次渲染都重新创建的字符串，effect 会过于频繁触发</li>
+  </ul>
+
+  <h2>相关技能</h2>
+  <ul>
+    <li><a href="/skills/yuleasr-configurator-ui/">⚡ yuleASR Configurator UI</a> — 在配置编辑器中使用复制按钮</li>
+  </ul>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

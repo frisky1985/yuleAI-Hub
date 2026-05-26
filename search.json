@@ -297,6 +297,54 @@
     "date": "2026-05-26"
   },
   {
+    "title": "Dark Mode 实现 — Tailwind React 主题切换方案",
+    "url": "/skills/yuleasr-dark-mode/",
+    "desc": "为 Tailwind React 项目添加暗色模式支持，使用 CSS 自定义属性和非冲突的颜色 token 体系",
+    "type": "skills",
+    "tags": ["Dark Mode", "Tailwind", "React", "CSS", "yuleASR"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "React 复制按钮模式 — 永久绿色指示器",
+    "url": "/skills/yuleasr-copy-button/",
+    "desc": "复制到剪贴板按钮的交互模式，永久绿色勾 + 内容变更自动重置",
+    "type": "skills",
+    "tags": ["React", "Clipboard", "UX", "Button", "yuleASR"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "AUTOSAR Configurator UI 模式 — React/Vite 配置工具",
+    "url": "/skills/yuleasr-configurator-ui/",
+    "desc": "构建 AUTOSAR ECU 配置 Web 工具的模式集合，动态多实例容器、ARXML 对齐、三列布局",
+    "type": "skills",
+    "tags": ["AUTOSAR", "React", "TypeScript", "Zustand", "yuleASR"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "设计驱动开发（DDD）工作流 — 文档先行",
+    "url": "/skills/design-driven-dev/",
+    "desc": "文档先行、代码次之的开发方法论，用户确认后编码，适用于所有设计变更",
+    "type": "skills",
+    "tags": ["DDD", "工作流", "方法论", "文档驱动"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "双模式数据持久化 — 离线 local + 云端同步",
+    "url": "/skills/dual-mode-persistence/",
+    "desc": "离线 localStorage 与在线 API 无缝同步的模式，登录时合并云端数据",
+    "type": "skills",
+    "tags": ["离线优先", "localStorage", "云端同步", "React", "Hook"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "React 动态实例容器模式 — 多实例 CRUD",
+    "url": "/skills/react-dynamic-instances/",
+    "desc": "React 组件中父容器运行时创建/复制/删除/排序子实例的完整生命周期",
+    "type": "skills",
+    "tags": ["React", "TypeScript", "多实例", "CRUD", "动态容器"],
+    "date": "2026-05-27"
+  },
+  {
     "title": "技能库",
     "url": "/skills/",
     "desc": "技能库 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72",
@@ -403,5 +451,53 @@
       "部署"
     ],
     "date": "2026-05-26"
+  },
+  {
+    "title": "工作流核心原则",
+    "url": "/rules/workflow-principles/",
+    "desc": "文档先行、代码后行，UI demo 确认，构建通过才提交",
+    "type": "rules",
+    "tags": ["yuleASR", "工作流", "规范"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "Git 提交规范（yuleASR）",
+    "url": "/rules/git-convention/",
+    "desc": "Conventional Commits 格式，pnpm build 前置检查",
+    "type": "rules",
+    "tags": ["yuleASR", "Git", "规范"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "导航栏设计模式",
+    "url": "/rules/navbar-design-pattern/",
+    "desc": "两行布局方案，链接类型区分，4 种方案对比",
+    "type": "rules",
+    "tags": ["yuleASR", "UI", "导航栏"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "项目核心记忆",
+    "url": "/memory/project-context/",
+    "desc": "yuleASR-Configurator 核心上下文、3 列布局、37 BSW 模块、Editor 动态实例",
+    "type": "memory",
+    "tags": ["yuleASR", "项目上下文", "架构"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "用户画像",
+    "url": "/memory/user-profile/",
+    "desc": "老板，yuleASR 产品/开发负责人，工作风格偏好",
+    "type": "memory",
+    "tags": ["yuleASR", "用户画像", "老板"],
+    "date": "2026-05-27"
+  },
+  {
+    "title": "yuleASR-Configurator 项目概览",
+    "url": "/projects/yuleASR-Configurator/",
+    "desc": "React 19 + Vite 7 + Tailwind 3 + zustand，37 BSW 模块，monorepo 架构",
+    "type": "project",
+    "tags": ["yuleASR", "AUTOSAR", "React", "配置工具"],
+    "date": "2026-05-27"
   }
 ]
