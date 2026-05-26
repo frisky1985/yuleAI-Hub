@@ -69,7 +69,7 @@ let searchLoaded = false;
 async function ensureSearchData() {
   if (searchLoaded) return;
   try {
-    const r = await fetch('/search.json');
+    const r = await fetch('/yuleAI-Hub/search.json');
     const data = await r.json();
     searchData.push(...data);
     searchLoaded = true;

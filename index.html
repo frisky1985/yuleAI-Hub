@@ -47,7 +47,7 @@ layout: default
   // Load search data and render
   function loadData() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json', true);
+    xhr.open('GET', '/yuleAI-Hub/search.json', true);
     xhr.onload = function() {
       if (xhr.status !== 200) return;
       try {
@@ -164,7 +164,7 @@ document.getElementById('heroSearchInput').addEventListener('input', function() 
   // Ensure data is loaded
   if (!window._searchLoaded) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json', true);
+    xhr.open('GET', '/yuleAI-Hub/search.json', true);
     xhr.onload = function() {
       if (xhr.status === 200) {
         try {
