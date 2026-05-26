@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Agent Mesh 一键启动器 — 工具</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8}
+.nav{background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:32px}
+.logo{font-size:20px;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800}
+.nav-links{display:flex;gap:4px}
+.nav-links a{padding:6px 14px;border-radius:8px;color:var(--fg2);text-decoration:none;font-size:14px;font-family:var(--sans);transition:all .15s}
+.nav-links a:hover,.nav-links a.active{background:var(--primary-bg);color:var(--primary)}
+.container{max-width:860px;margin:0 auto;padding:0 32px}
+.page-header{padding:40px 0 20px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.page-header h1{font-size:26px;font-weight:600}
+.page-header .meta{font-size:13px;color:var(--fg2);margin-top:4px;font-family:var(--sans)}
+.content h2{font-size:20px;font-weight:600;margin:32px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.content p{margin:12px 0}
+.content pre{background:#1a1a2e;color:#e2e8f0;border-radius:var(--radius);padding:16px;overflow-x:auto;margin:16px 0;font-size:13px;line-height:1.5}
+.content code{font-family:var(--mono);font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+.content pre code{background:0 0;padding:0;color:inherit}
+.content ul{margin:12px 0;padding-left:24px}
+.content li{margin:4px 0}
+.content blockquote{border-left:3px solid var(--primary);padding:8px 16px;margin:16px 0;background:var(--primary-bg);border-radius:0 8px 8px 0;color:var(--fg2)}
+.content .tag{padding:2px 10px;border-radius:4px;font-size:11px;font-family:var(--sans);font-weight:500;display:inline-block;margin-right:4px}
+.tag-purple{background:var(--primary-bg);color:var(--primary)}
+.tag-green{background:#e8f8f5;color:var(--accent)}
+.tag-gold{background:#fef5e7;color:#d4a017}
+.content .dl-box{background:var(--bg-card);border:2px solid var(--primary);border-radius:var(--radius);padding:24px;margin:20px 0;text-align:center}
+.content .dl-box .dl-btn{display:inline-block;padding:12px 32px;border-radius:12px;background:var(--primary);color:#fff!important;text-decoration:none;font-weight:600;font-size:15px;transition:all .2s}
+.content .dl-box .dl-btn:hover{background:#5b4ed4;transform:translateY(-2px)}
+.content .dl-box .info{font-size:12px;color:var(--fg2);margin-top:8px;font-family:var(--sans)}
+.content .use-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.content .use-box .step{display:flex;gap:12px;padding:8px 0;align-items:flex-start}
+.content .use-box .num{width:24px;height:24px;border-radius:50%;background:var(--primary-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--sans)}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:var(--fg2);font-family:var(--sans)}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a>
+  <div class="nav-links"><a href="/">首页</a><a href="/tools/">工具</a></div>
+<div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="container">
+<div class="page-header">
+  <h1>🚀 Agent Mesh 一键启动器</h1>
+  <p class="meta"><span class="tag tag-purple">工具</span><span class="tag tag-green">Agent Mesh</span><span class="tag tag-gold">macOS</span> · 2026-05-27</p>
+</div>
+<div class="content">
+
+<p>双击即用的一键启动脚本。自动在 Warp 终端中拉起 MCP Bridge、Gateway 和所有 Agent，并进入 OpenClaw 对话界面。</p>
+
+<div class="dl-box">
+  <p style="margin-bottom:12px">📥 下载脚本</p>
+  <a href="/tools/agent-mesh-starter/start-agent-mesh.sh" class="dl-btn" download>⬇ 下载 Start-Agent-Mesh.sh</a>
+  <p class="info">macOS · 需安装 Warp 终端、OpenClaw、Hermes、QoderCLI</p>
+</div>
+
+<h2>安装方式</h2>
+
+<div class="use-box">
+  <div class="step"><span class="num">1</span><div>下载后打开「终端」运行：<br><code>chmod +x ~/Downloads/start-agent-mesh.sh</code></div></div>
+  <div class="step"><span class="num">2</span><div>移动到常用位置：<br><code>mv ~/Downloads/start-agent-mesh.sh ~/Desktop/</code></div></div>
+  <div class="step"><span class="num">3</span><div><strong>双击</strong> <code>start-agent-mesh.sh</code> → 自动在 Warp 中打开并执行</div></div>
+</div>
+
+<p>或直接通过命令行运行：</p>
+<pre><code>bash ~/Desktop/start-agent-mesh.sh</code></pre>
+
+<h2>启动流程</h2>
+
+<pre>
+╔══════════════════════════════════════╗
+║      🤖 Agent Mesh 一键启动          ║
+╚══════════════════════════════════════╝
+
+── 1/5 检测环境 ──
+  ✓ openclaw → /opt/homebrew/bin/openclaw
+  ✓ hermes → ~/.local/bin/hermes
+  ✓ qodercli → /opt/homebrew/bin/qodercli
+
+── 2/5 MCP Bridge ──
+  ✓ 已在运行 (PID 12428)
+
+── 3/5 Gateway ──
+  ✓ 已在运行 (PID 33030)
+
+── 4/5 Agent 状态 ──
+  ✓ OpenClaw → 就绪
+  ✓ Hermes → 就绪
+  ✓ QoderCLI → 就绪
+
+── 5/5 最终验证 ──
+  Runtime: running (pid 33030)
+  Dashboard: http://127.0.0.1:18789/
+
+✅ Agent Mesh 已就绪
+
+  [r] 刷新状态 → 进入对话
+  [q] 退出
+</pre>
+
+<h2>交互菜单</h2>
+<ul>
+  <li><strong>r</strong> — 刷新所有 Agent 状态，然后自动进入 OpenClaw TUI 对话</li>
+  <li><strong>q</strong> — 退出脚本，关闭窗口（后台进程继续运行）</li>
+</ul>
+
+<h2>依赖</h2>
+<ul>
+  <li><strong>Warp 终端</strong> — 自动唤起，提供更好的 TUI 体验</li>
+  <li><strong>OpenClaw</strong> — 主 Agent + Gateway</li>
+  <li><strong>Hermes</strong> — 子 Agent（需求分析、排期、测试）</li>
+  <li><strong>QoderCLI</strong> — 子 Agent（架构设计、编码）</li>
+  <li><strong>MCP Bridge</strong> — Agent 间通信桥梁</li>
+</ul>
+
+<blockquote>双击 → 全部就绪 → 进入对话，就这么简单。</blockquote>
+
+</div>
+</div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+</body>
+</html>
