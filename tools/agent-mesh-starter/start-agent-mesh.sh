@@ -139,7 +139,8 @@ while true; do
     break
   elif [ "$key" = "q" ] || [ "$key" = "Q" ]; then
     echo ""
-    break
+    echo -e "  ${CYAN}退出启动器${NC}"
+    exit 0
   fi
 done
 
