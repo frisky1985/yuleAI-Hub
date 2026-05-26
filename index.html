@@ -1,48 +1,121 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yuleAI-Hub — AI Agent 知识花园</title>
+<meta name="description" content="yuleAI-Hub — AI Agent 知识花园。知识库、Know-How、技能、规则集">
+<meta property="og:title" content="yuleAI-Hub">
+<meta property="og:description" content="个人AI学习知识家园。知识库、Know-How、技能、规则集">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://frisky1985.github.io/yuleAI-Hub/">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+</head>
+<body>
 
-<div class="hero">
-  <h1>yuleAI-Hub</h1>
-  <p>AI Agent 协同的知识花园 — 发现、学习、分享</p>
-  <div class="hero-stats">
-    <div class="hero-stats-item"><span class="num" id="h-articles">-</span><span class="label">篇文章</span></div>
-    <div class="hero-stats-item"><span class="num" id="h-skills">-</span><span class="label">个技能</span></div>
-    <div class="hero-stats-item"><span class="num" id="h-tools">-</span><span class="label">个工具</span></div>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a href="/" class="sidebar-logo"><span class="logo-icon">YL</span> yuleAI-Hub</a>
+    <div class="sidebar-search">
+      <div class="ss-wrap">
+        <span class="icon">🔍</span>
+        <input type="text" id="sidebarSearch" placeholder="搜索知识..." autocomplete="off">
+        <div class="search-dd" id="searchDropdown"></div>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">📖 内容</div>
+      <a href="/knowledge/" class="nav-item"><span class="icon">📚</span> 知识库 <span class="count">4</span></a>
+      <a href="/know-how/" class="nav-item"><span class="icon">📖</span> Know-How <span class="count">5</span></a>
+      <a href="/skills/" class="nav-item"><span class="icon">⚡</span> 技能 <span class="count">3</span></a>
+      <a href="/rules/" class="nav-item"><span class="icon">📋</span> 规则集 <span class="count">2</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">🔧 参考</div>
+      <a href="/tools/" class="nav-item"><span class="icon">🛠</span> 工具 <span class="count">3</span></a>
+      <a href="/projects/" class="nav-item"><span class="icon">📁</span> 项目 <span class="count">1</span></a>
+    </div>
+    <div class="nav-group" style="margin-top:24px">
+      <a href="/about/" class="nav-item"><span class="icon">💬</span> 关于</a>
+      <a href="https://github.com/frisky1985/yuleAI-Hub" class="nav-item" target="_blank"><span class="icon">⭐</span> GitHub</a>
+    </div>
   </div>
-</div>
+</aside>
 
-<div class="pills">
-  <a href="#" class="pill active" data-filter="all">✨ 全部</a>
-  <a href="#" class="pill" data-filter="knowledge">📚 知识库</a>
-  <a href="#" class="pill" data-filter="knowhow">📖 Know-How</a>
-  <a href="#" class="pill" data-filter="skills">⚡ 技能</a>
-  <a href="#" class="pill" data-filter="tools">🛠 工具</a>
-  <a href="#" class="pill" data-filter="rules">📋 规则</a>
-</div>
-
-<div class="two-col">
-  <div>
-    <div class="section-header"><h2>🔥 热门精选</h2><a href="/knowledge/" class="more">浏览全部 →</a></div>
-    <div id="hot-list"></div>
+<!-- Main -->
+<div class="main">
+  <div class="topnav">
+    <div class="nav-links">
+      <a href="/" class="active">发现</a>
+      <a href="/knowledge/">知识库</a>
+      <a href="/know-how/">Know-How</a>
+      <a href="/skills/">技能</a>
+      <a href="/tools/">工具</a>
+    </div>
+    <div class="topnav-right">
+      <input type="text" id="topSearch" placeholder="快速搜索..." autocomplete="off">
+    </div>
   </div>
-  <div>
-    <div class="section-header"><h2>🛠 最新工具</h2><a href="/tools/" class="more">查看全部 →</a></div>
-    <div id="tool-list"></div>
-  </div>
-</div>
 
-<div class="section-header"><h2>📄 全部内容</h2></div>
-<div class="card-grid" id="all-cards"></div>
+  <div class="main-inner">
 
-<div class="two-col">
-  <div>
-    <div class="section-header"><h2>🏷 热门标签</h2></div>
-    <div class="tag-cloud" id="tag-cloud"></div>
-  </div>
-  <div>
-    <div class="section-header"><h2>📅 最近更新</h2></div>
-    <div class="timeline" id="timeline"></div>
+    <!-- Hero -->
+    <div class="hero">
+      <h1>yuleAI-Hub</h1>
+      <p>AI Agent 协同的知识花园 — 发现、学习、分享</p>
+      <div class="hero-stats">
+        <div class="hero-stats-item"><span class="num" id="h-articles">-</span><span class="label">篇文章</span></div>
+        <div class="hero-stats-item"><span class="num" id="h-skills">-</span><span class="label">个技能</span></div>
+        <div class="hero-stats-item"><span class="num" id="h-tools">-</span><span class="label">个工具</span></div>
+      </div>
+    </div>
+
+    <!-- Pills -->
+    <div class="pills">
+      <a href="#" class="pill active" data-filter="all">✨ 全部</a>
+      <a href="#" class="pill" data-filter="knowledge">📚 知识库</a>
+      <a href="#" class="pill" data-filter="knowhow">📖 Know-How</a>
+      <a href="#" class="pill" data-filter="skills">⚡ 技能</a>
+      <a href="#" class="pill" data-filter="tools">🛠 工具</a>
+      <a href="#" class="pill" data-filter="rules">📋 规则</a>
+    </div>
+
+    <!-- Two col: hot + tools -->
+    <div class="two-col">
+      <div>
+        <div class="section-header"><h2>🔥 热门精选</h2><a href="/knowledge/" class="more">浏览全部 →</a></div>
+        <div id="hot-list"></div>
+      </div>
+      <div>
+        <div class="section-header"><h2>🛠 最新工具</h2><a href="/tools/" class="more">查看全部 →</a></div>
+        <div id="tool-list"></div>
+      </div>
+    </div>
+
+    <!-- All cards -->
+    <div class="section-header"><h2>📄 全部内容</h2></div>
+    <div class="card-grid" id="all-cards"></div>
+
+    <!-- Tags + Timeline -->
+    <div class="two-col">
+      <div>
+        <div class="section-header"><h2>🏷 热门标签</h2></div>
+        <div class="tag-cloud" id="tag-cloud"></div>
+      </div>
+      <div>
+        <div class="section-header"><h2>📅 最近更新</h2></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </div>
+
+    <footer>
+      <span>yuleAI-Hub — 紫 · 绿松 · 暖金</span>
+      <span>Built with ❤️</span>
+    </footer>
+
   </div>
 </div>
 
@@ -68,12 +141,14 @@ fetch('/search.json').then(r=>r.json()).then(data => {
   ).join('') || '<p style="color:var(--fg3)">暂无工具</p>';
 
   // All cards
-  const all = data.slice(0, 12);
-  document.getElementById('all-cards').innerHTML = all.map(a => {
-    const isTool = a.type === 'tool';
-    const tagClass = isTool ? 'green' : '';
-    return `<a href="${a.url}" class="card"><div class="card-kind">${a.type.toUpperCase()}</div><h3>${a.title}</h3><p>${a.desc||''}</p><div class="card-tags">${(a.tags||[]).slice(0,3).map(t => `<span class="card-tag ${tagClass}">${t}</span>`).join('')}</div></a>`;
-  }).join('') || '<p style="color:var(--fg3)">暂无内容</p>';
+  function renderAll(filter) {
+    const items = filter === 'all' ? data : data.filter(d => d.type === filter);
+    document.getElementById('all-cards').innerHTML = items.slice(0,12).map(a => {
+      const isTool = a.type === 'tool';
+      return `<a href="${a.url}" class="card"><div class="card-kind">${a.type.toUpperCase()}</div><h3>${a.title}</h3><p>${a.desc||''}</p><div class="card-tags">${(a.tags||[]).slice(0,3).map(t => `<span class="card-tag ${isTool?'green':''}">${t}</span>`).join('')}</div></a>`;
+    }).join('') || '<p style="color:var(--fg3)">暂无内容</p>';
+  }
+  renderAll('all');
 
   // Pill filter
   document.querySelectorAll('.pill[data-filter]').forEach(pill => {
@@ -81,11 +156,7 @@ fetch('/search.json').then(r=>r.json()).then(data => {
       e.preventDefault();
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
       this.classList.add('active');
-      const filter = this.dataset.filter;
-      document.getElementById('all-cards').innerHTML = (filter === 'all' ? data : data.filter(d => d.type === filter)).slice(0,12).map(a => {
-        const isTool = a.type === 'tool';
-        return `<a href="${a.url}" class="card"><div class="card-kind">${a.type.toUpperCase()}</div><h3>${a.title}</h3><p>${a.desc||''}</p><div class="card-tags">${(a.tags||[]).slice(0,3).map(t => `<span class="card-tag ${isTool?'green':''}">${t}</span>`).join('')}</div></a>`;
-      }).join('') || '<p style="color:var(--fg3)">暂无内容</p>';
+      renderAll(this.dataset.filter);
     });
   });
 
@@ -99,8 +170,46 @@ fetch('/search.json').then(r=>r.json()).then(data => {
 
   // Timeline
   const sorted = [...data].sort((a,b) => (b.date||'').localeCompare(a.date||'')).slice(0,5);
+  const labels = ['今天','昨天','3天前','5天前','1周前'];
   document.getElementById('timeline').innerHTML = sorted.map((a,i) =>
-    `<div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">${['今天','昨天','3天前','5天前','1周前'][i]||a.date||''}</span><span class="timeline-text"><a href="${a.url}">${a.title}</a></span></div>`
+    `<div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">${labels[i]||a.date||''}</span><span class="timeline-text"><a href="${a.url}">${a.title}</a></span></div>`
   ).join('');
 });
+
+// Search
+const SEARCH_DATA = [];
+fetch('/search.json').then(r=>r.json()).then(d => { SEARCH_DATA.push(...d); });
+
+function doSearch(input, dd) {
+  const q = input.value.trim().toLowerCase();
+  if (q.length < 1) { dd.classList.remove('show'); return; }
+  const results = SEARCH_DATA.filter(i =>
+    i.title.toLowerCase().includes(q) ||
+    (i.desc||'').toLowerCase().includes(q) ||
+    (i.tags||[]).some(t => t.toLowerCase().includes(q))
+  ).slice(0,8);
+  dd.innerHTML = results.length
+    ? results.map(r => `<a href="${r.url}">${r.title}<div class="sd-desc">${(r.desc||'').slice(0,60)}</div></a>`).join('')
+    : '<a style="color:var(--fg3);cursor:default">未找到</a>';
+  dd.classList.add('show');
+}
+
+document.getElementById('sidebarSearch')?.addEventListener('input', function() {
+  doSearch(this, document.getElementById('searchDropdown'));
+});
+document.getElementById('topSearch')?.addEventListener('input', function() {
+  let dd = document.getElementById('searchDropdown');
+  if (!dd) {
+    dd = document.createElement('div'); dd.id = 'searchDropdown'; dd.className = 'search-dd';
+    this.parentElement.style.position = 'relative';
+    this.parentElement.appendChild(dd);
+  }
+  doSearch(this, dd);
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ss-wrap') && !e.target.closest('.topnav-right'))
+    document.getElementById('searchDropdown')?.classList.remove('show');
+});
 </script>
+</body>
+</html>
