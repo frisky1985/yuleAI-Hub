@@ -126,7 +126,7 @@ echo -e "${GREEN}${BOLD}✅ Agent Mesh 已就绪${NC}"
 echo ""
 
 # ── 提示进入对话 ────────────────────────────────────────────
-echo -e "  按 ${BOLD}r${NC} 进入 OpenClaw 对话 · 直接关闭窗口退出"
+echo -e "  ${BOLD}[r]${NC} 进入 OpenClaw 对话   ${BOLD}[q]${NC} 退出"
 while true; do
   read -r -n 1 key
   if [ "$key" = "r" ] || [ "$key" = "R" ]; then
@@ -136,6 +136,9 @@ while true; do
     # TUI 退出后关闭窗口
     echo ""
     echo -e "${CYAN}对话已结束，关闭窗口...${NC}"
+    break
+  elif [ "$key" = "q" ] || [ "$key" = "Q" ]; then
+    echo ""
     break
   fi
 done
