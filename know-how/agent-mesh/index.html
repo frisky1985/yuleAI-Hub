@@ -3,25 +3,19 @@ layout: default
 title: Agent Mesh — 跨 Agent 协同网络搭建
 ---
 
-<div class="page-container">
-
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> Agent Mesh</div>
   <h1>Agent Mesh — 跨 Agent 协同网络搭建</h1>
   <p class="page-meta">2026-05-26</p>
   <div class="page-tags">
-    <span class="tag">MCP</span>
-    <span class="tag">Agent协同</span>
-    <span class="tag">OpenClaw</span>
-    <span class="tag">Hermes</span>
-    <span class="tag">QoderCLI</span>
+    <span class="tag">MCP</span><span class="tag">Agent协同</span><span class="tag">OpenClaw</span><span class="tag">Hermes</span><span class="tag">QoderCLI</span>
   </div>
 </div>
 
 <div class="content">
-  <p>让 OpenClaw、Hermes、QoderCLI 三个 Agent 通过 MCP Bridge 互相协作。</p>
+  <p>让 OpenClaw、Hermes、QoderCLI 三个 Agent 通过 MCP Bridge 互相协作。任意一个 Agent 都可以把任务委派给其他 Agent，共享上下文。</p>
 
-  <h2>架构</h2>
+  <h2>架构概览</h2>
   <pre>
                 ┌──────────────────────┐
                 │    MCP Bridge v2     │
@@ -33,29 +27,70 @@ title: Agent Mesh — 跨 Agent 协同网络搭建
          ┌─────────┐ ┌──────┐ ┌────────┐ ┌─────────┐
          │OpenClaw │ │Hermes│ │QoderCLI│ │  共享    │
          │         │ │      │ │        │ │ 工作区   │
-         └─────────┘ └──────┘ └────────┘ └─────────┘</pre>
+         └─────────┘ └──────┘ └────────┘ └─────────┘
+  </pre>
+
+  <h2>安装</h2>
+  <pre><code># 1. 确认三个 agent 都已安装
+openclaw --version
+hermes --version
+qodercli --version
+
+# 2. 下载 MCP Bridge
+mkdir -p ~/.openclaw/mcp-bridge
+curl -sL https://raw.githubusercontent.com/frisky1985/yuleAI-Hub/main/tools/mcp-bridge/mcp_bridge_server.py \
+  -o ~/.openclaw/mcp-bridge/mcp_bridge_server.py
+
+# 3. 注册到 OpenClaw
+openclaw mcp set mcp-bridge '{
+  "command": "python3",
+  "args": ["~/.openclaw/mcp-bridge/mcp_bridge_server.py"]
+}'
+
+# 4. 验证
+openclaw mcp list</code></pre>
 
   <h2>MCP 工具一览</h2>
   <table>
     <tr><th>工具</th><th>说明</th><th>响应</th></tr>
     <tr><td><code>agent-status</code></td><td>检查所有 agent 状态</td><td>&lt;1s</td></tr>
-    <tr><td><code>agent-chat</code></td><td>快速对话</td><td>≤8s</td></tr>
-    <tr><td><code>agent-delegate</code></td><td>委派异步任务</td><td>即时返回 task_id</td></tr>
-    <tr><td><code>task-result</code></td><td>查询任务结果</td><td>即时</td></tr>
-    <tr><td><code>task-list</code></td><td>查看最近任务</td><td>即时</td></tr>
+    <tr><td><code>agent-chat</code></td><td>快速对话（同步，适合快问快答）</td><td>≤8s</td></tr>
+    <tr><td><code>agent-delegate</code></td><td>委派异步任务（立即返回 task_id）</td><td>即时</td></tr>
+    <tr><td><code>task-result</code></td><td>查询异步任务结果</td><td>即时</td></tr>
+    <tr><td><code>task-list</code></td><td>查看最近委派的任务</td><td>即时</td></tr>
     <tr><td><code>context-read</code></td><td>读取共享上下文</td><td>即时</td></tr>
     <tr><td><code>context-write</code></td><td>写入共享上下文</td><td>即时</td></tr>
   </table>
 
-  <h2>安装</h2>
-  <pre><code># 配置 OpenClaw
-openclaw mcp set mcp-bridge '{
-  "command": "python3",
-  "args": ["/path/to/mcp_bridge_server.py"]
-}'
+  <h2>使用流程</h2>
 
-# 验证
-openclaw mcp list</code></pre>
-</div>
+  <h3>方式一：快速问题</h3>
+  <pre><code>"帮我用 agent-chat 问 hermes：现在是几点？"
+→ 8 秒内得到回复</code></pre>
 
+  <h3>方式二：耗时任务</h3>
+  <pre><code>步骤1 - "用 agent-delegate 把任务交给 hermes：查明天航班"
+步骤2 - 几秒后 "用 task-result 查一下结果"</code></pre>
+
+  <h3>方式三：共享上下文</h3>
+  <pre><code>步骤1 - "用 context-write，key=project_root, value=/myapp"
+步骤2 - 其他 agent "用 context-read 查 project_root"</code></pre>
+
+  <h2>协同规则</h2>
+  <ol>
+    <li><strong>谁用都行</strong> — 三个 Agent 任意一个都能通过 Bridge 调用其他 Agent</li>
+    <li><strong>异步优先</strong> — 耗时大于 8 秒的任务用 agent-delegate，不硬等</li>
+    <li><strong>上下文共享</strong> — 重要信息用 context-write 存，其他 Agent 用 context-read 拿</li>
+    <li><strong>状态透明</strong> — task-list 随时查看所有进行中的任务</li>
+    <li><strong>失败重试</strong> — 如果 Agent 超时或报错，换一个 Agent 再试</li>
+  </ol>
+
+  <h2>文件结构</h2>
+  <pre>
+~/.openclaw/mcp-bridge/
+├── mcp_bridge_server.py    # MCP Bridge v2 服务端
+├── workspace/               # 共享工作区
+│   ├── context.json         # 共享上下文
+│   └── tasks/               # 异步任务结果
+└── SKILL.md                 # Skill 文档</pre>
 </div>

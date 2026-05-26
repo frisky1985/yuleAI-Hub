@@ -1,0 +1,57 @@
+---
+layout: default
+title: MCP Bridge 配置指南
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/tools/">工具</a> <span>/</span> MCP Bridge</div>
+  <h1>MCP Bridge 配置指南</h1>
+  <p class="page-meta">2026-05-26</p>
+  <div class="page-tags">
+    <span class="tag">MCP</span><span class="tag">Bridge</span><span class="tag">配置</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>MCP Bridge v2 是 Agent Mesh 网络的核心组件，提供跨 Agent 的 MCP 工具调用和上下文共享。</p>
+
+  <h2>下载</h2>
+  <p>从 GitHub 获取最新版本：</p>
+  <pre><code>mkdir -p ~/.openclaw/mcp-bridge &amp;&amp; cd ~/.openclaw/mcp-bridge
+curl -sL https://raw.githubusercontent.com/frisky1985/yuleAI-Hub/main/tools/mcp-bridge/mcp_bridge_server.py -o mcp_bridge_server.py</code></pre>
+
+  <h2>安装</h2>
+  <pre><code># 注册到 OpenClaw
+openclaw mcp set mcp-bridge '{
+  "command": "python3",
+  "args": ["~/.openclaw/mcp-bridge/mcp_bridge_server.py"]
+}'
+
+# 验证
+openclaw mcp list</code></pre>
+
+  <h2>MCP 工具列表</h2>
+  <table>
+    <tr><th>工具</th><th>说明</th><th>响应时间</th></tr>
+    <tr><td><code>agent-status</code></td><td>检查所有 agent 是否在线</td><td>&lt;1s</td></tr>
+    <tr><td><code>agent-chat</code></td><td>快速对话（同步）</td><td>≤8s</td></tr>
+    <tr><td><code>agent-delegate</code></td><td>委派异步任务</td><td>即时返回 task_id</td></tr>
+    <tr><td><code>task-result</code></td><td>查询任务结果</td><td>即时</td></tr>
+    <tr><td><code>task-list</code></td><td>查看最近任务</td><td>即时</td></tr>
+    <tr><td><code>context-read</code></td><td>读取共享上下文</td><td>即时</td></tr>
+    <tr><td><code>context-write</code></td><td>写入共享上下文</td><td>即时</td></tr>
+  </table>
+
+  <h2>故障排查</h2>
+  <h3>连接失败</h3>
+  <p>检查 MCP 配置是否正确：</p>
+  <pre><code>openclaw mcp show mcp-bridge</code></pre>
+
+  <h3>任务超时</h3>
+  <p>增大 Bridge 的超时设置（编辑 mcp_bridge_server.py 中的 MAX_ASYNC_SEC）：</p>
+  <pre><code>MAX_ASYNC_SEC = 600  # 10 分钟</code></pre>
+
+  <h3>Agent 找不到</h3>
+  <p>确保 agent 在 PATH 中：</p>
+  <pre><code>which hermes qodercli openclaw</code></pre>
+</div>

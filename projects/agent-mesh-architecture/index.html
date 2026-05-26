@@ -1,0 +1,66 @@
+---
+layout: default
+title: Agent Mesh 架构
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/projects/">项目</a> <span>/</span> Agent Mesh</div>
+  <h1>Agent Mesh 架构设计</h1>
+  <p class="page-meta">2026-05-26</p>
+  <div class="page-tags">
+    <span class="tag">架构</span><span class="tag">Agent Mesh</span><span class="tag">设计</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>Agent Mesh 是一个轻量级的跨 Agent 协同网络，通过 MCP Bridge 实现 OpenClaw、Hermes、QoderCLI 三个 Agent 之间的互相调用和上下文共享。</p>
+
+  <h2>核心架构</h2>
+  <pre>
+┌─────────────────────────────────────────┐
+│              MCP Bridge v2              │
+│          (mcp_bridge_server.py)         │
+│                                         │
+│  ┌──────────┐ ┌──────────┐ ┌────────┐  │
+│  │agent-    │ │agent-    │ │context-│  │
+│  │chat      │ │delegate  │ │read/   │  │
+│  │          │ │          │ │write   │  │
+│  └──────────┘ └──────────┘ └────────┘  │
+└────────────────┬────────────────────────┘
+                 │
+    ┌────────────┼────────────┐
+    ▼            ▼            ▼
+┌───────┐  ┌────────┐  ┌──────────┐
+│Hermes │  │QoderCLI│  │ OpenClaw │
+└───────┘  └────────┘  └──────────┘
+  </pre>
+
+  <h2>设计原则</h2>
+  <ol>
+    <li><strong>MCP 优先</strong> — 所有跨 Agent 通信走 MCP 协议，不引入额外依赖</li>
+    <li><strong>异步委派</strong> — 耗时任务异步执行，立即返回 task_id</li>
+    <li><strong>共享上下文</strong> — 通过 context-read/write 实现状态共享</li>
+    <li><strong>零外部依赖</strong> — 纯 Python 标准库，无需 pip install</li>
+    <li><strong>即插即用</strong> — 配置一个 MCP server 即可加入网络</li>
+  </ol>
+
+  <h2>通信流程</h2>
+  <pre>
+  Agent A                    MCP Bridge                  Agent B
+    │                            │                          │
+    │── agent-delegate(task) ──►│                          │
+    │◄── {task_id: "t_abc"} ────│                          │
+    │                            │── hermes -z "task" ────►│
+    │                            │◄── result ──────────────│
+    │── task-result(t_abc) ────►│                          │
+    │◄── {status:"completed"} ──│                          │
+  </pre>
+
+  <h2>技术栈</h2>
+  <ul>
+    <li>Python 3.9+ 标准库</li>
+    <li>MCP stdio 传输协议（JSON-RPC 2.0 + Content-Length 帧）</li>
+    <li>多线程后台任务执行</li>
+    <li>JSON 文件持久化任务状态和共享上下文</li>
+  </ul>
+</div>

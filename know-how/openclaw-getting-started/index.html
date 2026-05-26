@@ -1,0 +1,56 @@
+---
+layout: default
+title: OpenClaw 入门指南
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> OpenClaw 入门</div>
+  <h1>OpenClaw 入门指南</h1>
+  <p class="page-meta">2026-05-24</p>
+  <div class="page-tags">
+    <span class="tag">OpenClaw</span><span class="tag">入门</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>OpenClaw 是一个轻量级的 AI Agent 运行环境。本文介绍基本概念、配置和日常使用。</p>
+
+  <h2>基本概念</h2>
+  <ul>
+    <li><strong>Gateway</strong> — 消息路由层，管理 session/agent 的通信</li>
+    <li><strong>Agent</strong> — AI 模型实例，接收消息并调用工具</li>
+    <li><strong>Session</strong> — 一次对话的上下文容器</li>
+    <li><strong>MCP Server</strong> — 通过 Model Context Protocol 提供的工具集</li>
+    <li><strong>Skill</strong> — 可分享的 Agent 技能包（Markdown 格式）</li>
+  </ul>
+
+  <h2>快速开始</h2>
+  <pre><code># 查看状态
+openclaw --version
+openclaw status
+
+# 列出已配置的 MCP 服务器
+openclaw mcp list
+
+# 添加一个 MCP 服务器
+openclaw mcp set my-server '{
+  "command": "python3",
+  "args": ["/path/to/server.py"]
+}'</code></pre>
+
+  <h2>配置要点</h2>
+  <p>配置文件位于 <code>~/.openclaw/openclaw.json</code>：</p>
+  <ul>
+    <li><code>gateway.port</code> — 网关端口（默认 18789）</li>
+    <li><code>agents.defaults.model</code> — 默认模型配置</li>
+    <li><code>agents.defaults.workspace</code> — 工作目录</li>
+  </ul>
+
+  <h2>集成 MCP Bridge</h2>
+  <p>将 OpenClaw 接入 Agent Mesh 网络：</p>
+  <pre><code>openclaw mcp set mcp-bridge '{
+  "command": "python3",
+  "args": ["~/.openclaw/mcp-bridge/mcp_bridge_server.py"]
+}'</code></pre>
+  <p>配置后即可在对话中调用 Hermes 和 QoderCLI。</p>
+</div>

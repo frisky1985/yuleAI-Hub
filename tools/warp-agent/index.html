@@ -1,0 +1,53 @@
+---
+layout: default
+title: Warp Agent 集成指南
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/tools/">工具</a> <span>/</span> Warp Agent</div>
+  <h1>Warp Agent 集成指南</h1>
+  <p class="page-meta">2026-05-26</p>
+  <div class="page-tags">
+    <span class="tag">Warp</span><span class="tag">终端</span><span class="tag">配置</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>在 Warp 终端中配置和使用 AI Agent，以及解决常见问题。</p>
+
+  <h2>Warp Agent 配置</h2>
+  <p>Warp 的内置 Agent 通过 <code>~/.warp/settings.toml</code> 配置：</p>
+
+  <pre><code>[agents.warp_agent]
+is_any_ai_enabled = true
+
+[agents.warp_agent.input]
+nld_in_terminal_enabled = true
+
+[agents.third_party]
+should_render_cli_agent_toolbar = true</code></pre>
+
+  <h2>在 Warp 中运行 Agent CLI</h2>
+  <p>Warp 支持多种 CLI Agent 的增强工具栏（输入编辑、代码审查等）：</p>
+  <pre><code># 直接运行 hermes
+hermes chat
+
+# 或使用快捷方式
+hermes-warp</code></pre>
+
+  <h2>解决 AI 功能被限制</h2>
+  <p>如果看到 "Your account has been blocked from using AI features" 错误：</p>
+  <ul>
+    <li><strong>使用 BYOK</strong> — Settings → Cloud Platform → Third-Party API Keys，添加你自己的 API Key</li>
+    <li><strong>升级付费</strong> — 或联系 appeals@warp.dev 申诉</li>
+    <li><strong>忽略</strong> — 直接用 hermes 或其他 CLI Agent，不影响 Warp 的终端功能</li>
+  </ul>
+
+  <h2>Agent Mesh 集成</h2>
+  <p>在 Warp 终端中运行 OpenClaw，即可通过 MCP Bridge 调用其他 Agent：</p>
+  <pre><code># 在 Warp 中启动 OpenClaw
+openclaw
+
+# 然后在 OpenClaw 对话中
+"用 agent-status 检查所有 agent 状态"</code></pre>
+</div>

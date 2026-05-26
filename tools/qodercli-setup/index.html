@@ -1,0 +1,51 @@
+---
+layout: default
+title: QoderCLI 配置与使用
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/tools/">工具</a> <span>/</span> QoderCLI</div>
+  <h1>QoderCLI 配置与使用</h1>
+  <p class="page-meta">2026-05-25</p>
+  <div class="page-tags">
+    <span class="tag">QoderCLI</span><span class="tag">CLI</span><span class="tag">配置</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>QoderCLI 是字节跳动出品的 AI 编程助手，支持 MCP 协议集成。</p>
+
+  <h2>基本使用</h2>
+  <pre><code># 交互模式
+qodercli
+
+# 单次查询
+qodercli -p "列出当前目录的文件"
+
+# 跳过权限确认
+qodercli -p "命令" --dangerously-skip-permissions</code></pre>
+
+  <h2>MCP 集成</h2>
+  <p>QoderCLI 原生支持 MCP 服务器配置：</p>
+
+  <pre><code># 添加 MCP 服务器
+qodercli mcp add-json mcp-bridge '{
+  "command": "python3",
+  "args": ["/path/to/mcp_bridge_server.py"]
+}'
+
+# 查看已配置的 MCP 服务器
+qodercli mcp list</code></pre>
+
+  <h2>接入 Agent Mesh</h2>
+  <p>在 QoderCLI 中可以直接调用 OpenClaw 和 Hermes：</p>
+  <pre><code># 在 QoderCLI 对话中
+"帮我用 agent-chat 问一下 hermes 当前系统状态"</code></pre>
+
+  <h2>注意事项</h2>
+  <ul>
+    <li>QoderCLI 交互式使用时会请求权限确认，可用 <code>--dangerously-skip-permissions</code> 跳过</li>
+    <li>MCP 服务器显示 "Disconnected" 是正常的，按需连接</li>
+    <li>插件目录在 <code>~/.qoderwork/plugins/</code></li>
+  </ul>
+</div>

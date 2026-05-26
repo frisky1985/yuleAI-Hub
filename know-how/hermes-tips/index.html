@@ -1,0 +1,50 @@
+---
+layout: default
+title: Hermes Agent 使用技巧
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> Hermes 技巧</div>
+  <h1>Hermes Agent 使用技巧</h1>
+  <p class="page-meta">2026-05-25</p>
+  <div class="page-tags">
+    <span class="tag">Hermes</span><span class="tag">技巧</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>Hermes Agent 的日常使用技巧和踩坑记录。</p>
+
+  <h2>快速启动</h2>
+  <pre><code># 对话模式
+hermes
+
+# 单次查询（one-shot）
+hermes -z "你的问题"</code></pre>
+
+  <h2>关键技巧</h2>
+
+  <h3>1. Web 搜索</h3>
+  <p>Hermes 内置 web 搜索能力，直接问即可：</p>
+  <pre><code>"搜索一下最近的 Python 3.13 新特性"</code></pre>
+
+  <h3>2. 文件读写</h3>
+  <p>Hermes 可以直接读写文件系统中的文件：</p>
+  <pre><code>"读取 ~/project/config.json 的内容"
+"把这份代码保存到 ~/output/result.py"</code></pre>
+
+  <h3>3. 代码执行</h3>
+  <pre><code>"运行 python3 -c 'print(\"hello\")'"
+"帮我写一个快速排序算法并执行测试"</code></pre>
+
+  <h3>4. MCP 工具集成</h3>
+  <p>通过 MCP Bridge 可以调用 OpenClaw 和 QoderCLI：</p>
+  <pre><code>"帮我用 agent-chat 问一下 qodercli 现在几点了"</code></pre>
+
+  <h2>踩坑记录</h2>
+  <ul>
+    <li><strong>One-shot 模式不输出</strong> — 使用 <code>-z</code> 而不是 <code>chat -p</code>，Hermes 不支持 <code>-p</code> 参数</li>
+    <li><strong>API 超时</strong> — DeepSeek API 有时响应慢，增大 <code>timeout</code> 设置，或在 Bridge 中使用异步模式</li>
+    <li><strong>MCP 连接失败</strong> — 确保 Bridge 的 Python 版本与 Hermes 兼容（Hermes 使用 venv 中的 Python 3.11）</li>
+  </ul>
+</div>

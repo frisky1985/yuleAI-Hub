@@ -1,0 +1,52 @@
+---
+layout: default
+title: DeepSeek API 性能优化
+---
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> DeepSeek 优化</div>
+  <h1>DeepSeek API 性能优化</h1>
+  <p class="page-meta">2026-05-23</p>
+  <div class="page-tags">
+    <span class="tag">DeepSeek</span><span class="tag">API</span><span class="tag">优化</span><span class="tag">性能</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>DeepSeek API 调用优化、超时处理和 fallback 配置经验。</p>
+
+  <h2>响应慢的原因</h2>
+  <ul>
+    <li><strong>模型负载</strong> — DeepSeek v4 系列在高峰时段响应可能 >30s</li>
+    <li><strong>长上下文</strong> — 上下文越长首 Token 耗时越久</li>
+    <li><strong>工具调用</strong> — Agent 使用工具时增加了一次往返延迟</li>
+  </ul>
+
+  <h2>优化方案</h2>
+
+  <h3>1. 超时配置</h3>
+  <pre><code># Hermes config.yaml
+agent:
+  gateway_timeout: 1800       # 30 分钟总超时
+  api_max_retries: 3          # 失败重试 3 次</code></pre>
+
+  <h3>2. Fallback 模型</h3>
+  <p>配置备用模型防止主模型不可用：</p>
+  <pre><code># Hermes / OpenClaw 配置
+model:
+  primary: deepseek/deepseek-v4-flash
+  fallbacks:
+    - deepseek/deepseek-v4-pro</code></pre>
+
+  <h3>3. 异步委派（推荐）</h3>
+  <p>通过 MCP Bridge 的异步模式提交任务，不阻塞当前会话：</p>
+  <pre><code>"用 agent-delegate 把任务交给 hermes，task=分析这份代码"
+# 立即返回 task_id，稍后用 task-result 查结果</code></pre>
+
+  <h2>费用优化</h2>
+  <ul>
+    <li>DeepSeek v4-flash 性价比高，日常使用首选</li>
+    <li>v4-pro 精度更高但贵，复杂推理才用</li>
+    <li>启用 Prompt Caching 减少重复计费</li>
+  </ul>
+</div>
