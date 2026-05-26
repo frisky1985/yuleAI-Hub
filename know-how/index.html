@@ -21,16 +21,15 @@ fetch('/search.json').then(r=>r.json()).then(data => {
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
-  document.getElementById('pageTags').innerHTML = 
-    '<span class="tag" style="cursor:pointer" onclick="location.href=\'/know-how/\'">全部</span>' +
+  const currentTag = new URLSearchParams(location.search).get('tag');
+  document.getElementById('pageTags').innerHTML =
+    '<span class="tag" style="cursor:pointer' + (!currentTag ? ';background:var(--primary);color:#fff' : '') + '" onclick="location.href=\'/know-how/\'">全部</span>' +
     tags.map(([t,c]) =>
-      `<span class="tag" style="cursor:pointer" onclick="location.href='/know-how/?tag=${encodeURIComponent(t)}'">${t} ${c}</span>`
+      `<span class="tag" style="cursor:pointer${t === currentTag ? ';background:var(--primary);color:#fff' : ''}" onclick="location.href='/know-how/?tag=${encodeURIComponent(t)}'">${t} ${c}</span>`
     ).join('');
 
   // Filter by tag
-  const params = new URLSearchParams(location.search);
-  const tagFilter = params.get('tag');
-  const filtered = tagFilter ? items.filter(d => (d.tags||[]).includes(tagFilter)) : items;
+  const filtered = currentTag ? items.filter(d => (d.tags||[]).includes(currentTag)) : items;
 
   document.getElementById('articleList').innerHTML = filtered.length ? filtered.map(a => `
     <div class="article-item">

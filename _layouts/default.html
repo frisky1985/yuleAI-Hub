@@ -16,16 +16,20 @@
       <span class="logo-icon">Y</span>
       yuleAI-Hub
     </a>
+    <input type="checkbox" id="navToggle" class="nav-toggle">
+    <label for="navToggle" class="nav-toggle-label">
+      <span></span>
+    </label>
     <div class="nav-links">
       <a href="/" class="{% if page.url == '/' %}active{% endif %}">首页</a>
-      <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">📖 Know-How</a>
-      <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">🛠 工具</a>
-      <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">📁 项目</a>
+      <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">Know-How</a>
+      <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">工具</a>
+      <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">项目</a>
       <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">关于</a>
     </div>
     <div class="search-wrapper">
       <span class="search-icon">⌕</span>
-      <input type="text" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <input type="text" id="searchInput" placeholder="搜索..." autocomplete="off">
       <div class="search-dropdown" id="searchDropdown"></div>
     </div>
   </div>
@@ -96,6 +100,13 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.search-wrapper')) {
     document.getElementById('searchDropdown').classList.remove('show');
   }
+});
+
+// Close mobile nav on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navToggle').checked = false;
+  });
 });
 </script>
 </body>

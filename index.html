@@ -56,7 +56,7 @@ fetch('/search.json').then(r=>r.json()).then(data => {
 
   // Articles
   const articles = data.filter(d => d.type==='know-how').slice(0, 3);
-  document.getElementById('recentArticles').innerHTML = articles.map(a => `
+  document.getElementById('recentArticles').innerHTML = articles.length ? articles.map(a => `
     <a href="${a.url}" class="card">
       <div class="card-icon">📄</div>
       <h3>${a.title}</h3>
@@ -66,11 +66,11 @@ fetch('/search.json').then(r=>r.json()).then(data => {
         <span class="tag-count">${a.date||''}</span>
       </div>
     </a>
-  `).join('') || '<div class="empty-state"><p>暂无文章</p></div>';
+  `).join('') : '<div class="empty-state"><p>暂无文章</p></div>';
 
   // Tools
   const tools = data.filter(d => d.type==='tool').slice(0, 3);
-  document.getElementById('toolsList').innerHTML = tools.map(t => `
+  document.getElementById('toolsList').innerHTML = tools.length ? tools.map(t => `
     <a href="${t.url}" class="card">
       <div class="card-icon">⚙️</div>
       <h3>${t.title}</h3>
@@ -79,6 +79,6 @@ fetch('/search.json').then(r=>r.json()).then(data => {
         ${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}
       </div>
     </a>
-  `).join('') || '<div class="empty-state"><p>暂无工具</p></div>';
+  `).join('') : '<div class="empty-state"><p>暂无工具</p></div>';
 });
 </script>
