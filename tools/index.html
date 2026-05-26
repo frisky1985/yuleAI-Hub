@@ -4,43 +4,37 @@ title: 工具集
 desc: Agent 工具配置和最佳实践
 ---
 
-<div class="page-container">
+<div class="container">
 <div class="page-header">
   <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> 🔧 工具</div>
   <h1>🔧 工具</h1>
-  <div class="page-meta">
-    <span>AI 工具的安装、配置和使用指南 · MCP 集成 · 最佳实践</span>
-  </div>
+  <div class="page-meta"><span>AI 工具的安装、配置和使用指南 · MCP 集成 · 最佳实践</span></div>
   <div class="page-tags" id="pageTags"></div>
 </div>
 
-<div class="card-grid" id="toolList"></div>
+<div class="card-grid" id="toolGrid"></div>
 </div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'tool');
-
-  // Tags
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
-  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t]) =>
-    `<span class="tag">${t}</span>`
-  ).join('');
+  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t]) => `<span class="tag">${t}</span>`).join('');
 
-  document.getElementById('toolList').innerHTML = items.length ? items.map(t => `
+  document.getElementById('toolGrid').innerHTML = items.length ? items.map(t => `
     <a href="${t.url}" class="card">
-      <div class="card-header">
+      <div class="card-top">
         <div class="card-icon red">🔧</div>
-        <div>
-          <span class="card-type tool">工具</span>
+        <div class="card-top-info">
+          <span class="card-type red">工具</span>
           <h3>${t.title}</h3>
         </div>
       </div>
       <div class="card-desc">${t.desc||''}</div>
-      <div class="card-footer">
-        ${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}
+      <div class="card-bottom">
+        <div class="card-tags">${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}</div>
         ${t.date ? `<span class="card-date">${t.date}</span>` : ''}
       </div>
     </a>

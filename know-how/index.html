@@ -4,61 +4,52 @@ title: Know-How
 desc: AI Agent 相关的实践经验和技巧
 ---
 
-<div class="page-container">
+<div class="container">
 <div class="page-header">
   <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> 📖 Know-How</div>
   <h1>📖 Know-How</h1>
-  <div class="page-meta">
-    <span>实践指南 — 一步步教你配置和使用各种 AI 工具</span>
-  </div>
+  <div class="page-meta"><span>实践指南 — 一步步教你配置和使用各种 AI 工具</span></div>
   <div class="page-tags" id="pageTags"></div>
 </div>
 
-<div class="page-layout">
-  <div class="tag-sidebar">
-    <h3>📌 筛选标签</h3>
-    <div class="tag-cloud" id="sidebarTags"></div>
-  </div>
-  <div class="page-main">
-    <div class="article-list" id="articleList"></div>
-  </div>
-</div>
+<div class="tag-cloud" id="sidebarTags" style="margin-bottom:24px"></div>
+
+<div class="card-grid" id="articleGrid"></div>
 </div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'know-how');
-
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
-
   const urlParams = new URLSearchParams(window.location.search);
-  const currentTag = urlParams.get('tag');
+  const activeTag = urlParams.get('tag');
 
   document.getElementById('sidebarTags').innerHTML =
-    `<a href="/know-how/" class="${!currentTag ? 'active-tag' : ''}">全部 (${items.length})</a>` +
-    tags.map(([t,c]) =>
-      `<a href="/know-how/?tag=${encodeURIComponent(t)}" class="${t === currentTag ? 'active-tag' : ''}">${t} (${c})</a>`
-    ).join('');
+    `<a href="/know-how/" class="${!activeTag?'active-tag':''}">全部 (${items.length})</a>` +
+    tags.map(([t,c]) => `<a href="/know-how/?tag=${encodeURIComponent(t)}" class="${activeTag===t?'active-tag':''}">${t} (${c})</a>`).join('');
 
-  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t,c]) =>
-    `<span class="tag">${t}</span>`
-  ).join('');
+  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t]) => `<span class="tag">${t}</span>`).join('');
 
-  const filtered = currentTag ? items.filter(d => (d.tags||[]).includes(currentTag)) : items;
+  const filtered = activeTag ? items.filter(d => (d.tags||[]).includes(activeTag)) : items;
   const sorted = filtered.sort((a,b) => (b.date||'').localeCompare(a.date||''));
 
-  document.getElementById('articleList').innerHTML = sorted.length ? sorted.map(a => `
-    <div class="article-item">
-      <a href="${a.url}">
-        <h3>${a.title}</h3>
-        <div class="meta">${a.desc||''}</div>
-        <div class="tags">${(a.tags||[]).map(t => `<span class="tag">${t}</span>`).join('')}
-          ${a.date ? `<span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">${a.date}</span>` : ''}
+  document.getElementById('articleGrid').innerHTML = sorted.length ? sorted.map(a => `
+    <a href="${a.url}" class="card">
+      <div class="card-top">
+        <div class="card-icon green">📖</div>
+        <div class="card-top-info">
+          <span class="card-type green">KnowHow</span>
+          <h3>${a.title}</h3>
         </div>
-      </a>
-    </div>
-  `).join('') : '<div class="empty-state"><div class="empty-icon">🔍</div><p>该标签下暂无文章</p></div>';
+      </div>
+      <div class="card-desc">${a.desc||''}</div>
+      <div class="card-bottom">
+        <div class="card-tags">${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        ${a.date ? `<span class="card-date">${a.date}</span>` : ''}
+      </div>
+    </a>
+  `).join('') : '<div class="empty-state"><div class="empty-icon">🔍</div><p>暂无内容</p></div>';
 });
 </script>

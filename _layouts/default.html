@@ -5,16 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yuleAI-Hub{% if page.title %} — {{ page.title }}{% endif %}</title>
 <meta name="description" content="{% if page.desc %}{{ page.desc }}{% else %}yuleAI-Hub — AI Agent 知识沉淀与社区交流站{% endif %}">
-
-<!-- Open Graph -->
 <meta property="og:title" content="yuleAI-Hub{% if page.title %} — {{ page.title }}{% endif %}">
 <meta property="og:description" content="{% if page.desc %}{{ page.desc }}{% else %}个人AI学习知识家园。知识库、Know-How、Skills、规则集 — 记录AI Agent的实践与思考。{% endif %}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://frisky1985.github.io/yuleAI-Hub/">
-
 <link rel="stylesheet" href="/assets/css/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
-
 </head>
 <body>
 
@@ -27,13 +23,15 @@
     <input type="checkbox" id="navToggle" class="nav-toggle">
     <label for="navToggle" class="nav-toggle-label">
       <span></span>
+      <span></span>
+      <span></span>
     </label>
     <div class="nav-links">
       <a href="/" class="{% if page.url == '/' %}active{% endif %}">🏠 首页</a>
       <a href="/knowledge/" class="{% if page.url contains '/knowledge/' %}active{% endif %}">📚 知识库</a>
       <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">📖 Know-How</a>
       <a href="/skills/" class="{% if page.url contains '/skills/' %}active{% endif %}">⚡ Skills</a>
-      <a href="/rules/" class="{% if page.url contains '/rules/' %}active{% endif %}">📋 规则集</a>
+      <a href="/rules/" class="{% if page.url contains '/rules/' %}active{% endif %}">📋 规则</a>
       <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">🔧 工具</a>
       <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">📁 项目</a>
       <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">💬 关于</a>
@@ -65,7 +63,6 @@
 </footer>
 
 <script>
-// ── Global Search ──
 const searchData = [];
 let searchLoaded = false;
 
@@ -81,20 +78,12 @@ async function ensureSearchData() {
 
 function getTypeBadge(type) {
   const map = {
-    'knowledge': '📚 知识库',
-    'know-how': '📖 KnowHow',
-    'skill': '⚡ Skill',
-    'tool': '🔧 工具',
-    'project': '📁 项目',
-    'rule': '📋 规则'
+    'knowledge': '📚 知识库', 'know-how': '📖 KnowHow', 'skill': '⚡ Skill',
+    'tool': '🔧 工具', 'project': '📁 项目', 'rule': '📋 规则'
   };
   const clsMap = {
-    'knowledge': 'sd-type-knowledge',
-    'know-how': 'sd-type-knowhow',
-    'skill': 'sd-type-skill',
-    'tool': 'sd-type-tool',
-    'project': 'sd-type-project',
-    'rule': 'sd-type-knowledge'
+    'knowledge': 'sd-type-knowledge', 'know-how': 'sd-type-knowhow', 'skill': 'sd-type-skill',
+    'tool': 'sd-type-tool', 'project': 'sd-type-project', 'rule': 'sd-type-knowledge'
   };
   const label = map[type] || type;
   const cls = clsMap[type] || 'sd-type-knowledge';
@@ -105,44 +94,29 @@ document.getElementById('searchInput').addEventListener('input', async function(
   await ensureSearchData();
   const q = this.value.trim().toLowerCase();
   const dropdown = document.getElementById('searchDropdown');
-
-  if (q.length < 1) {
-    dropdown.classList.remove('show');
-    return;
-  }
-
+  if (q.length < 1) { dropdown.classList.remove('show'); return; }
   const results = searchData.filter(item =>
     item.title.toLowerCase().includes(q) ||
     (item.desc && item.desc.toLowerCase().includes(q)) ||
     (item.tags && item.tags.some(t => t.toLowerCase().includes(q)))
   ).slice(0, 8);
-
   if (results.length === 0) {
     dropdown.innerHTML = '<div class="sd-empty">🔍 未找到相关结果</div>';
-    dropdown.classList.add('show');
-    return;
+    dropdown.classList.add('show'); return;
   }
-
   dropdown.innerHTML = results.map(r => `
-    <a href="${r.url}">
-      ${getTypeBadge(r.type)}<span class="sd-title">${r.title}</span>
+    <a href="${r.url}">${getTypeBadge(r.type)}<span class="sd-title">${r.title}</span>
       <div class="sd-desc">${(r.desc||'').slice(0,60)}</div>
-    </a>
-  `).join('');
+    </a>`).join('');
   dropdown.classList.add('show');
 });
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.nav-search')) {
-    document.getElementById('searchDropdown').classList.remove('show');
-  }
+  if (!e.target.closest('.nav-search')) document.getElementById('searchDropdown').classList.remove('show');
 });
 
-// Close mobile nav on link click
 document.querySelectorAll('.nav-links a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('navToggle').checked = false;
-  });
+  a.addEventListener('click', () => { document.getElementById('navToggle').checked = false; });
 });
 </script>
 </body>

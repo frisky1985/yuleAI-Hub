@@ -4,43 +4,37 @@ title: 项目
 desc: 相关项目文档和架构
 ---
 
-<div class="page-container">
+<div class="container">
 <div class="page-header">
   <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> 📁 项目</div>
   <h1>📁 项目</h1>
-  <div class="page-meta">
-    <span>项目架构 · 部署笔记 · 开发文档</span>
-  </div>
+  <div class="page-meta"><span>项目架构 · 部署笔记 · 开发文档</span></div>
   <div class="page-tags" id="pageTags"></div>
 </div>
 
-<div class="card-grid" id="projectList"></div>
+<div class="card-grid" id="projectGrid"></div>
 </div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'project');
-
-  // Tags
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
-  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t]) =>
-    `<span class="tag">${t}</span>`
-  ).join('');
+  document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t]) => `<span class="tag">${t}</span>`).join('');
 
-  document.getElementById('projectList').innerHTML = items.length ? items.map(p => `
+  document.getElementById('projectGrid').innerHTML = items.length ? items.map(p => `
     <a href="${p.url}" class="card">
-      <div class="card-header">
+      <div class="card-top">
         <div class="card-icon blue">📁</div>
-        <div>
-          <span class="card-type project">项目</span>
+        <div class="card-top-info">
+          <span class="card-type blue">项目</span>
           <h3>${p.title}</h3>
         </div>
       </div>
       <div class="card-desc">${p.desc||''}</div>
-      <div class="card-footer">
-        ${(p.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+      <div class="card-bottom">
+        <div class="card-tags">${(p.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}</div>
         ${p.date ? `<span class="card-date">${p.date}</span>` : ''}
       </div>
     </a>
