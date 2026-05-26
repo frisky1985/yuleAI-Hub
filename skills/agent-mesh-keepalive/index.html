@@ -1,3 +1,111 @@
----
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=/skills/agent-mesh-keepalive/index.md"></head></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Mesh Keepalive — 跨 Agent 对话保活技能</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;
+  --bg: #FBF9F5; --bg-card: #fff; --fg: #2d3436; --fg2: #636e72; --border: #e8e4dd;
+  --radius: 14px; --font: "LXGW WenKai", "Noto Sans SC", serif; --sans: "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: var(--bg); color: var(--fg); line-height: 1.8; }
+.nav { background: rgba(255,255,255,.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 32px; }
+.logo { font-size: 20px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), #a29bfe); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 800; letter-spacing: -1px; }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a { padding: 6px 14px; border-radius: 8px; color: var(--fg2); text-decoration: none; font-size: 14px; font-family: var(--sans); }
+.nav-links a:hover, .nav-links a.active { background: var(--primary-bg); color: var(--primary); }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+.page-header { padding: 40px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+.page-header h1 { font-size: 26px; font-weight: 600; }
+.page-header .meta { font-size: 13px; color: var(--fg2); margin-top: 4px; font-family: var(--sans); }
+.content h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.content h3 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+.content p { margin: 12px 0; }
+.content pre { background: #1a1a2e; color: #e2e8f0; border-radius: var(--radius); padding: 16px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.5; }
+.content code { font-family: var(--mono); font-size: 13px; background: var(--primary-bg); padding: 2px 6px; border-radius: 4px; }
+.content pre code { background: none; padding: 0; color: inherit; }
+.content ul { margin: 12px 0; padding-left: 24px; }
+.content li { margin: 4px 0; }
+.content blockquote { border-left: 3px solid var(--primary); padding: 8px 16px; margin: 16px 0; background: var(--primary-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--fg2); }
+.content a { color: var(--primary); }
+footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 48px; text-align: center; font-size: 13px; color: var(--fg2); font-family: var(--sans); }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a>
+  <div class="nav-links"><a href="/">首页</a><a href="/skills/">技能</a></div>
+</div></nav>
+<div class="container">
+<div class="page-header">
+  <h1>⚡ Agent Mesh Keepalive</h1>
+  <p class="meta">跨 Agent 对话保活与在线维持 · 2026-05-26</p>
+</div>
+<div class="content">
+
+<p>确保 OpenClaw、Hermes、QoderCLI 三个 Agent 始终在线、上下文一致，会话不断连。</p>
+
+<h2>架构</h2>
+<pre>
+┌─────────────────────────────────────────┐
+│         Agent Mesh Keepalive            │
+│  ┌──────────┐  ┌──────────┐  ┌──────┐  │
+│  │  健康检查  │  │ 上下文同步 │  │ 保活 │  │
+│  └──────────┘  └──────────┘  └──────┘  │
+└────────────────┬────────────────────────┘
+      ┌────────────┼────────────┐
+      ▼            ▼            ▼
+  ┌───────┐  ┌────────┐  ┌──────────┐
+  │Hermes │  │QoderCLI│  │ OpenClaw │
+  └───────┘  └────────┘  └──────────┘
+</pre>
+
+<h2>1. 一键检查所有 Agent 状态</h2>
+<pre><code>agent-ping</code></pre>
+<p>或在对话中：</p>
+<pre><code>"用 agent-status 检查所有 Agent 是否在线"</code></pre>
+
+<h2>2. 保活机制</h2>
+<h3>方式 A：MCP Bridge 保活</h3>
+<p>在任何 Agent 对话中调用 agent-status 即可。</p>
+<h3>方式 B：cron 定时保活</h3>
+<pre><code># 每 30 分钟自动检查
+crontab -l | grep agent-ping</code></pre>
+
+<h2>3. 上下文同步</h2>
+<p>保存当前状态：</p>
+<pre><code>"用 context-write，key=任务进度, value=方案A已定稿"</code></pre>
+<p>恢复对话：</p>
+<pre><code>"用 context-read 查任务进度"</code></pre>
+
+<h2>4. 快速恢复断连会话</h2>
+<pre><code># Hermes 掉线
+hermes -z "继续：$(cat ~/.openclaw/mcp-bridge/workspace/context.json)" --yolo
+
+# QoderCLI 掉线
+qodercli -p "先读 ~/.openclaw/mcp-bridge/workspace/context.json 再继续"
+
+# OpenClaw 重启后
+直接调用 agent-status 确认网络即可</code></pre>
+
+<h2>5. 安装</h2>
+<pre><code># 保活脚本
+chmod +x ~/.local/bin/agent-ping
+
+# crontab 自动保活
+(crontab -l 2>/dev/null; echo "*/30 * * * * ~/.local/bin/agent-ping") | crontab -</code></pre>
+
+<blockquote>三个 Agent 一条心，对话永远不掉线。</blockquote>
+
+</div>
+</div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+</body>
+</html>
