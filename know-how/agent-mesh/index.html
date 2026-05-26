@@ -11,7 +11,63 @@ a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:24
 pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
 code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
 pre code{background:0 0;padding:0;color:inherit}
-</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div></div></nav>
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a><a href="https://github.com/frisky1985/yuleAI-Hub/issues/new" target="_blank" style="background:#6C5CE7;color:#fff!important;padding:6px 16px!important;border-radius:20px;font-weight:600;margin-left:4px">✏️ 发布</a></div></div></nav><div class="auth-section" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:'Noto Sans SC',sans-serif">
+  <div id="userMenu" style="display:none">
+    <span id="userAvatar" style="width:32px;height:32px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;cursor:pointer" onclick="toggleDropdown()"></span>
+    <div id="userDropdown" style="display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #e8e4dd;border-radius:10px;padding:8px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:8px 12px;font-size:13px;color:#2d3436" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e8e4dd;margin:4px 0">
+      <a href="/auth/login.html" style="display:block;padding:8px 12px;text-decoration:none;color:#636e72;font-size:13px;border-radius:6px">👤 个人中心</a>
+      <a href="#" style="display:block;padding:8px 12px;text-decoration:none;color:#636e72;font-size:13px;border-radius:6px" onclick="logout()">🚪 退出</a>
+    </div>
+  </div>
+  <a href="/auth/login.html" id="loginBtn" style="padding:6px 16px;border-radius:20px;background:#6C5CE7;color:#fff;text-decoration:none;font-size:13px;font-weight:600">登录</a>
+  <a href="/auth/register.html" id="registerBtn" style="padding:6px 16px;border-radius:20px;border:1px solid #e8e4dd;color:#636e72;text-decoration:none;font-size:13px;font-weight:500">注册</a>
+</div>
+<script>
+function toggleDropdown(){var dd=document.getElementById('userDropdown');dd.style.display=dd.style.display==='none'?'block':'none';}
+function logout(){localStorage.removeItem('yule_current_user');location.reload();}
+(function(){var user=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(user){document.getElementById('loginBtn').style.display='none';document.getElementById('registerBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=user.name?user.name[0].toUpperCase():'?';document.getElementById('userName').textContent=user.name||user.email;}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var dd=document.getElementById('userDropdown');if(dd)dd.style.display='none';}});
+</script><div class="auth-section" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:'Noto Sans SC',sans-serif">
+  <div id="userMenu" style="display:none">
+    <span id="userAvatar" style="width:32px;height:32px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;cursor:pointer" onclick="toggleDropdown()"></span>
+    <div id="userDropdown" style="display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #e8e4dd;border-radius:10px;padding:8px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:8px 12px;font-size:13px;color:#2d3436" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e8e4dd;margin:4px 0">
+      <a href="/auth/profile.html" style="display:block;padding:8px 12px;text-decoration:none;color:#636e72;font-size:13px;border-radius:6px">👤 个人中心</a>
+      <a href="#" style="display:block;padding:8px 12px;text-decoration:none;color:#636e72;font-size:13px;border-radius:6px" onclick="logout()">🚪 退出</a>
+    </div>
+  </div>
+  <a href="/auth/login.html" id="loginBtn" style="padding:6px 16px;border-radius:20px;background:#6C5CE7;color:#fff;text-decoration:none;font-size:13px;font-weight:600">登录</a>
+  <a href="/auth/register.html" id="registerBtn" style="padding:6px 16px;border-radius:20px;border:1px solid #e8e4dd;color:#636e72;text-decoration:none;font-size:13px;font-weight:500">注册</a>
+</div>
+<script>
+function toggleDropdown() {
+  var dd = document.getElementById('userDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+function logout() {
+  localStorage.removeItem('yule_current_user');
+  location.reload();
+}
+(function() {
+  var user = JSON.parse(localStorage.getItem('yule_current_user') || 'null');
+  if (user) {
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('registerBtn').style.display = 'none';
+    document.getElementById('userMenu').style.display = 'block';
+    document.getElementById('userAvatar').textContent = user.name ? user.name[0].toUpperCase() : '?';
+    document.getElementById('userName').textContent = user.name || user.email;
+  }
+})();
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.auth-section')) {
+    var dd = document.getElementById('userDropdown');
+    if (dd) dd.style.display = 'none';
+  }
+});
+</script>
 <div class="page-container">
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> Agent Mesh</div>

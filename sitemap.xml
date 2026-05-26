@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://frisky1985.github.io/yuleAI-Hub/about/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/about/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/agent-mesh/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/context-sharing/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/deepseek-optimization/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/deepseek-optimization/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/hermes-tips/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/openclaw-getting-started/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -22,6 +22,6 @@
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/skills/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/mcp-bridge/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/qodercli-setup/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/qodercli-setup/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/warp-agent/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
