@@ -12,13 +12,21 @@
 
 <nav>
   <div class="container">
-    <a href="/" class="logo">yule<span>AI</span>-Hub</a>
-    <a href="/know-how/">📖 Know-How</a>
-    <a href="/tools/">🛠 工具</a>
-    <a href="/projects/">📁 项目</a>
-    <a href="/about/">关于</a>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="搜索..." oninput="doSearch(this.value)">
+    <a href="/" class="logo">
+      <span class="logo-icon">Y</span>
+      yuleAI-Hub
+    </a>
+    <div class="nav-links">
+      <a href="/" class="{% if page.url == '/' %}active{% endif %}">首页</a>
+      <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">📖 Know-How</a>
+      <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">🛠 工具</a>
+      <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">📁 项目</a>
+      <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">关于</a>
+    </div>
+    <div class="search-wrapper">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <div class="search-dropdown" id="searchDropdown"></div>
     </div>
   </div>
 </nav>
@@ -29,50 +37,64 @@
 
 <footer>
   <div class="container">
-    <p>yuleAI-Hub — 用 AI 构建，为 AI 构建 🤖</p>
-    <p style="margin-top:4px"><a href="https://github.com/ingeek/yuleAI-Hub" style="color:var(--fg2)">GitHub</a></p>
+    <div class="copyright">© 2026 yuleAI-Hub · AI Agent 知识沉淀与分享</div>
+    <div class="footer-links">
+      <a href="/about/">关于</a>
+      <a href="https://github.com/frisky1985/yuleAI-Hub" target="_blank">GitHub</a>
+    </div>
   </div>
 </footer>
 
 <script>
-// ── 简单客户端搜索 ──
-let searchData = [];
-async function loadSearchData() {
+const searchData = [];
+let searchLoaded = false;
+
+async function ensureSearchData() {
+  if (searchLoaded) return;
   try {
     const r = await fetch('/search.json');
-    searchData = await r.json();
-  } catch(e) {}
+    const data = await r.json();
+    searchData.push(...data);
+    searchLoaded = true;
+  } catch(e) {
+    console.warn('search.json not found');
+  }
 }
-loadSearchData();
 
-function doSearch(q) {
-  if (!q || q.length < 2) {
-    document.querySelectorAll('.search-highlight').forEach(e => e.remove());
+document.getElementById('searchInput').addEventListener('input', async function() {
+  await ensureSearchData();
+  const q = this.value.trim().toLowerCase();
+  const dropdown = document.getElementById('searchDropdown');
+
+  if (q.length < 1) {
+    dropdown.classList.remove('show');
     return;
   }
-  q = q.toLowerCase();
+
   const results = searchData.filter(item =>
     item.title.toLowerCase().includes(q) ||
+    (item.desc && item.desc.toLowerCase().includes(q)) ||
     (item.tags && item.tags.some(t => t.toLowerCase().includes(q)))
   ).slice(0, 8);
 
-  // Remove old results
-  document.querySelectorAll('.search-highlight').forEach(e => e.remove());
+  if (results.length === 0) {
+    dropdown.innerHTML = '<div class="sd-empty">未找到相关文章</div>';
+    dropdown.classList.add('show');
+    return;
+  }
 
-  if (results.length === 0) return;
-
-  const div = document.createElement('div');
-  div.className = 'search-highlight';
-  div.style.cssText = 'position:fixed;top:60px;right:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px;max-width:320px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.12);';
-  div.innerHTML = results.map(r =>
-    `<a href="${r.url}" style="display:block;padding:6px 8px;text-decoration:none;color:var(--fg);border-radius:4px;font-size:13px;" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background=''">${r.title}</a>`
-  ).join('');
-  document.body.appendChild(div);
-}
+  dropdown.innerHTML = results.map(r => `
+    <a href="${r.url}">
+      ${r.title}
+      <div class="sd-desc">${(r.desc||'').slice(0,60)}</div>
+    </a>
+  `).join('');
+  dropdown.classList.add('show');
+});
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-box')) {
-    document.querySelectorAll('.search-highlight').forEach(el => el.remove());
+  if (!e.target.closest('.search-wrapper')) {
+    document.getElementById('searchDropdown').classList.remove('show');
   }
 });
 </script>

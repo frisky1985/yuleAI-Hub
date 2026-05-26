@@ -5,23 +5,24 @@ desc: 相关项目文档和架构
 ---
 
 <div class="page-header">
-  <div class="breadcrumb"><a href="/">首页</a> / 项目</div>
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> 项目</div>
   <h1>📁 项目</h1>
-  <p style="color:var(--fg2);margin-top:8px">相关项目架构、部署和开发笔记</p>
+  <p class="page-meta">相关项目架构、部署和开发笔记</p>
 </div>
 
-<ul class="article-list" id="projectList"></ul>
+<div id="projectList"></div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'project');
-  document.getElementById('projectList').innerHTML = items.map(p => `
-    <li>
+  document.getElementById('projectList').innerHTML = items.length ? items.map(p => `
+    <div class="article-item">
       <a href="${p.url}">
         <h3>${p.title}</h3>
         <div class="meta">${p.desc||''}</div>
+        <div class="tags">${(p.tags||[]).map(t => `<span class="tag">${t}</span>`).join('')}</div>
       </a>
-    </li>
-  `).join('');
+    </div>
+  `).join('') : '<div class="empty-state"><div class="icon">📁</div><p>暂无项目文档</p></div>';
 });
 </script>

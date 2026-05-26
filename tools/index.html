@@ -5,23 +5,24 @@ desc: Agent 工具配置和最佳实践
 ---
 
 <div class="page-header">
-  <div class="breadcrumb"><a href="/">首页</a> / 工具</div>
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> 工具</div>
   <h1>🛠 工具</h1>
-  <p style="color:var(--fg2);margin-top:8px">Agent 工具配置、MCP 集成和最佳实践</p>
+  <p class="page-meta">Agent 工具配置、MCP 集成和最佳实践</p>
 </div>
 
-<ul class="article-list" id="toolList"></ul>
+<div id="toolList"></div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
   const items = data.filter(d => d.type === 'tool');
-  document.getElementById('toolList').innerHTML = items.map(t => `
-    <li>
+  document.getElementById('toolList').innerHTML = items.length ? items.map(t => `
+    <div class="article-item">
       <a href="${t.url}">
         <h3>${t.title}</h3>
         <div class="meta">${t.desc||''}</div>
+        <div class="tags">${(t.tags||[]).map(tg => `<span class="tag">${tg}</span>`).join('')}</div>
       </a>
-    </li>
-  `).join('');
+    </div>
+  `).join('') : '<div class="empty-state"><div class="icon">🛠</div><p>暂无工具文档</p></div>';
 });
 </script>

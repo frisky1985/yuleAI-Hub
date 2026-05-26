@@ -3,62 +3,82 @@ layout: default
 ---
 
 <div class="hero">
-  <h1>yule<span>AI</span>-Hub</h1>
-  <p>AI Agent 协同的知识沉淀与分享站。<br>关于 OpenClaw、Hermes、QoderCLI 的一切 Know-How。</p>
+  <h1>yuleAI-Hub</h1>
+  <p>AI Agent 协同的知识沉淀与分享站。记录 OpenClaw、Hermes、QoderCLI 等 Agent 工具的实践 Know-How。</p>
   <div class="stats">
-    <div><strong id="articleCount">0</strong>篇文章</div>
-    <div><strong id="toolCount">0</strong>个工具</div>
-    <div><strong id="projectCount">0</strong>个项目</div>
+    <div class="stats-item">
+      <span class="num" id="articleCount">-</span>
+      <span class="label">篇文章</span>
+    </div>
+    <div class="stats-item">
+      <span class="num" id="toolCount">-</span>
+      <span class="label">个工具</span>
+    </div>
+    <div class="stats-item">
+      <span class="num" id="projectCount">-</span>
+      <span class="label">个项目</span>
+    </div>
   </div>
 </div>
 
 <div class="tag-cloud" id="tagCloud"></div>
 
-<h2 class="section-title">📖 最新 Know-How</h2>
-<div class="cards" id="recentArticles"></div>
+<div class="section">
+  <div class="section-header">
+    <h2>📖 最新 Know-How</h2>
+    <a href="/know-how/" class="more">查看全部 →</a>
+  </div>
+  <div class="card-grid" id="recentArticles"></div>
+</div>
 
-<h2 class="section-title">🛠 工具配置</h2>
-<div class="cards" id="toolsList"></div>
+<div class="section">
+  <div class="section-header">
+    <h2>🛠 工具配置</h2>
+    <a href="/tools/" class="more">查看全部 →</a>
+  </div>
+  <div class="card-grid" id="toolsList"></div>
+</div>
 
 <script>
-const DATA_URL = '/search.json';
-let allData = [];
-
-fetch(DATA_URL).then(r=>r.json()).then(data => {
-  allData = data;
-
-  // Count
+fetch('/search.json').then(r=>r.json()).then(data => {
+  // Stats
   document.getElementById('articleCount').textContent = data.filter(d=>d.type==='know-how').length;
   document.getElementById('toolCount').textContent = data.filter(d=>d.type==='tool').length;
   document.getElementById('projectCount').textContent = data.filter(d=>d.type==='project').length;
 
   // Tags
-  const tags = new Map();
-  data.forEach(d => (d.tags||[]).forEach(t => tags.set(t, (tags.get(t)||0)+1)));
-  document.getElementById('tagCloud').innerHTML =
-    [...tags.entries()].sort((a,b)=>b[1]-a[1]).slice(0,20).map(([t,c]) =>
-      `<a href="/tags/#${t}" style="font-size:${12+Math.min(c,8)}px">${t}</a>`
-    ).join('');
+  const tagMap = new Map();
+  data.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
+  const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]).slice(0,24);
+  document.getElementById('tagCloud').innerHTML = tags.map(([t,c]) =>
+    `<a href="/know-how/?tag=${t}" style="font-size:${12 + Math.min(c, 6)}px">${t}</a>`
+  ).join('');
 
-  // Recent articles
-  const articles = data.filter(d=>d.type==='know-how').slice(0,3);
+  // Articles
+  const articles = data.filter(d => d.type==='know-how').slice(0, 3);
   document.getElementById('recentArticles').innerHTML = articles.map(a => `
     <a href="${a.url}" class="card">
+      <div class="card-icon">📄</div>
       <h3>${a.title}</h3>
-      <p>${a.desc||''}</p>
-      ${(a.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}
-      <div class="meta">${a.date||''}</div>
+      <div class="desc">${a.desc||''}</div>
+      <div class="card-footer">
+        ${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+        <span class="tag-count">${a.date||''}</span>
+      </div>
     </a>
-  `).join('');
+  `).join('') || '<div class="empty-state"><p>暂无文章</p></div>';
 
   // Tools
-  const tools = data.filter(d=>d.type==='tool').slice(0,3);
+  const tools = data.filter(d => d.type==='tool').slice(0, 3);
   document.getElementById('toolsList').innerHTML = tools.map(t => `
     <a href="${t.url}" class="card">
+      <div class="card-icon">⚙️</div>
       <h3>${t.title}</h3>
-      <p>${t.desc||''}</p>
-      ${(t.tags||[]).slice(0,3).map(tg=>`<span class="tag">${tg}</span>`).join('')}
+      <div class="desc">${t.desc||''}</div>
+      <div class="card-footer">
+        ${(t.tags||[]).slice(0,3).map(tg => `<span class="tag">${tg}</span>`).join('')}
+      </div>
     </a>
-  `).join('');
+  `).join('') || '<div class="empty-state"><p>暂无工具</p></div>';
 });
 </script>
