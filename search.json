@@ -294,6 +294,21 @@
     "date": "2026-05-26"
   },
   {
+    "title": "Agent Runner",
+    "url": "/tools/agent-runner/",
+    "desc": "Agent Runner — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "工具",
     "url": "/tools/",
     "desc": "工具 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--rad",
