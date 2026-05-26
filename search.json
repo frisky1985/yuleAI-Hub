@@ -1,11 +1,17 @@
 [
+  {"title":"MCP 协议基础","url":"/knowledge/mcp-protocol-basics/","desc":"Model Context Protocol 核心概念与工作原理：Tools、Resources、JSON-RPC 通信流程","type":"knowledge","tags":["MCP","协议","入门","JSON-RPC"],"date":"2026-05-26"},
+  {"title":"Agent Mesh 架构","url":"/knowledge/agent-mesh-architecture/","desc":"Agent Mesh 系统架构设计文档：组件关系、数据流、设计决策","type":"knowledge","tags":["架构","Agent Mesh","设计","MCP"],"date":"2026-05-26"},
   {"title":"Agent Mesh — 跨 Agent 协同网络搭建","url":"/know-how/agent-mesh/","desc":"OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作的完整方案","type":"know-how","tags":["MCP","Agent协同","OpenClaw","Hermes","QoderCLI"],"date":"2026-05-26"},
   {"title":"跨 Agent 上下文共享方案","url":"/know-how/context-sharing/","desc":"通过 context-read/write 实现跨 Agent 信息共享","type":"know-how","tags":["上下文","MCP","协同"],"date":"2026-05-24"},
   {"title":"Hermes Agent 使用技巧","url":"/know-how/hermes-tips/","desc":"Hermes 日常使用技巧、Web搜索、代码执行和踩坑记录","type":"know-how","tags":["Hermes","技巧","AI"],"date":"2026-05-25"},
   {"title":"DeepSeek API 性能优化","url":"/know-how/deepseek-optimization/","desc":"DeepSeek API 调用优化、超时处理和 fallback 配置","type":"know-how","tags":["DeepSeek","API","优化","性能"],"date":"2026-05-23"},
   {"title":"OpenClaw 入门指南","url":"/know-how/openclaw-getting-started/","desc":"OpenClaw 基本概念、配置和日常使用","type":"know-how","tags":["OpenClaw","入门","MCP"],"date":"2026-05-24"},
+  {"title":"上下文共享技巧","url":"/skills/context-sharing/","desc":"跨 Agent 上下文读写的最佳实践：context-write/read 速查","type":"skill","tags":["上下文","MCP","协同","技巧"],"date":"2026-05-24"},
+  {"title":"Hermes 快速操作技巧","url":"/skills/hermes-tips/","desc":"Hermes Agent 高频使用的命令和操作速查表","type":"skill","tags":["Hermes","技巧","CLI"],"date":"2026-05-25"},
+  {"title":"Agent 协同规则","url":"/rules/agent-collaboration/","desc":"多 Agent 协作的基本约定和最佳实践","type":"rule","tags":["协同","规范","MCP","Agent Mesh"],"date":"2026-05-26"},
+  {"title":"Git 提交规范","url":"/rules/git-commit-convention/","desc":"yuleAI-Hub 项目的 Git 提交信息规范（Conventional Commits）","type":"rule","tags":["Git","规范","提交"],"date":"2026-05-26"},
   {"title":"MCP Bridge 配置指南","url":"/tools/mcp-bridge/","desc":"MCP Bridge v2 的安装、配置和故障排查（附源码）","type":"tool","tags":["MCP","Bridge","配置","源码"],"date":"2026-05-26"},
   {"title":"Warp Agent 集成指南","url":"/tools/warp-agent/","desc":"在 Warp 终端中配置 AI Agent 和解决常见问题","type":"tool","tags":["Warp","终端","配置"],"date":"2026-05-26"},
   {"title":"QoderCLI 配置与使用","url":"/tools/qodercli-setup/","desc":"QoderCLI 的安装、MCP 配置和权限管理","type":"tool","tags":["QoderCLI","CLI","配置","MCP"],"date":"2026-05-25"},
-  {"title":"Agent Mesh 架构","url":"/projects/agent-mesh-architecture/","desc":"Agent Mesh 项目架构设计文档","type":"project","tags":["架构","Agent Mesh","设计","MCP"],"date":"2026-05-26"}
+  {"title":"Agent Mesh 架构","url":"/projects/agent-mesh-architecture/","desc":"Agent Mesh 项目架构设计文档（已迁移至知识库）","type":"project","tags":["架构","Agent Mesh","设计","MCP"],"date":"2026-05-26"}
 ]

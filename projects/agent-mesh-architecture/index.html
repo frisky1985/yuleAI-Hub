@@ -3,6 +3,7 @@ layout: default
 title: Agent Mesh 架构
 ---
 
+<div class="page-container">
 <div class="page-header">
   <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/projects/">项目</a> <span>/</span> Agent Mesh</div>
   <h1>Agent Mesh 架构设计</h1>
@@ -13,7 +14,9 @@ title: Agent Mesh 架构
 </div>
 
 <div class="content">
-  <p>Agent Mesh 是一个轻量级的跨 Agent 协同网络，通过 MCP Bridge 实现 OpenClaw、Hermes、QoderCLI 三个 Agent 之间的互相调用和上下文共享。</p>
+  <blockquote>📌 本文已全面升级并迁移至 <a href="/knowledge/agent-mesh-architecture/">📚 知识库 — Agent Mesh 架构</a>，包含更详细的协议说明、数据流图和设计决策记录。下方为原始版本。</blockquote>
+
+  <p>Agent Mesh 是一个跨 Agent 协同网络的架构设计方案。本文档从全局视角描述系统的组件关系、数据流和设计决策。</p>
 
   <h2>核心架构</h2>
   <pre>
@@ -63,4 +66,5 @@ title: Agent Mesh 架构
     <li>多线程后台任务执行</li>
     <li>JSON 文件持久化任务状态和共享上下文</li>
   </ul>
+</div>
 </div>

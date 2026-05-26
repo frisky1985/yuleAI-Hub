@@ -1,0 +1,63 @@
+---
+layout: default
+title: Hermes 快速操作技巧
+desc: Hermes Agent 高频使用的命令和操作
+---
+
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/skills/">⚡ Skills</a> <span>/</span> Hermes 快速操作</div>
+  <h1>⚡ Hermes 快速操作技巧</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-25</span>
+    <span>⏱️ 即用型技巧</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">Hermes</span><span class="tag">技巧</span><span class="tag">CLI</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>Hermes Agent 日常使用中最实用的快速操作，一张速查表解决 80% 的场景。</p>
+
+  <h2>快速启动</h2>
+  <table>
+    <tr><th>命令</th><th>说明</th></tr>
+    <tr><td><code>hermes</code></td><td>对话模式启动</td></tr>
+    <tr><td><code>hermes -z "问题"</code></td><td>单次查询（one-shot），不启动交互</td></tr>
+    <tr><td><code>hermes --model openai/gpt-4</code></td><td>指定模型启动</td></tr>
+  </table>
+
+  <h2>常用操作</h2>
+
+  <h3>Web 搜索</h3>
+  <p>直接问，Hermes 自动调用内置搜索工具：</p>
+  <pre><code>"搜索一下最近的 Python 3.13 新特性"</code></pre>
+
+  <h3>文件读写</h3>
+  <pre><code>"读取 ~/project/config.json 的内容"
+"把这份代码保存到 ~/output/result.py"</code></pre>
+
+  <h3>代码执行</h3>
+  <pre><code>"运行 python3 -c 'print(\"hello\")'"
+"帮我写一个快速排序算法并执行测试"</code></pre>
+
+  <h3>跨 Agent 调用</h3>
+  <p>通过 MCP Bridge 调用其他 Agent：</p>
+  <pre><code>"帮我用 agent-chat 问一下 qodercli 现在几点了"</code></pre>
+
+  <h2>踩坑备忘</h2>
+  <ul>
+    <li><strong>One-shot 用 -z</strong> — Hermes 不支持 <code>-p</code> 参数，使用 <code>-z</code> 进行单次查询</li>
+    <li><strong>超时增大 timeout</strong> — DeepSeek API 高峰时响应慢，增大 <code>gateway_timeout</code></li>
+    <li><strong>MCP 连接失败</strong> — 确保 Bridge 的 Python 版本与 Hermes 兼容（Hermes 使用 venv Python 3.11）</li>
+  </ul>
+
+  <h2>详细教程</h2>
+  <ul>
+    <li><a href="/know-how/hermes-tips/">📖 Hermes Agent 使用技巧 — 完整版</a></li>
+    <li><a href="/know-how/deepseek-optimization/">📖 DeepSeek API 性能优化</a></li>
+  </ul>
+
+</div>
+</div>

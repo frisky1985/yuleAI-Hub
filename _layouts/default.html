@@ -4,9 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yuleAI-Hub{% if page.title %} — {{ page.title }}{% endif %}</title>
-<meta name="description" content="{% if page.desc %}{{ page.desc }}{% else %}yuleAI-Hub — AI Agent 知识沉淀与分享{% endif %}">
+<meta name="description" content="{% if page.desc %}{{ page.desc }}{% else %}yuleAI-Hub — AI Agent 知识沉淀与社区交流站{% endif %}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="yuleAI-Hub{% if page.title %} — {{ page.title }}{% endif %}">
+<meta property="og:description" content="{% if page.desc %}{{ page.desc }}{% else %}个人AI学习知识家园。知识库、Know-How、Skills、规则集 — 记录AI Agent的实践与思考。{% endif %}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://frisky1985.github.io/yuleAI-Hub/">
+
 <link rel="stylesheet" href="/assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+
 </head>
 <body>
 
@@ -21,11 +29,14 @@
       <span></span>
     </label>
     <div class="nav-links">
-      <a href="/" class="{% if page.url == '/' %}active{% endif %}">首页</a>
-      <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">Know-How</a>
-      <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">工具</a>
-      <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">项目</a>
-      <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">关于</a>
+      <a href="/" class="{% if page.url == '/' %}active{% endif %}">🏠 首页</a>
+      <a href="/knowledge/" class="{% if page.url contains '/knowledge/' %}active{% endif %}">📚 知识库</a>
+      <a href="/know-how/" class="{% if page.url contains '/know-how/' %}active{% endif %}">📖 Know-How</a>
+      <a href="/skills/" class="{% if page.url contains '/skills/' %}active{% endif %}">⚡ Skills</a>
+      <a href="/rules/" class="{% if page.url contains '/rules/' %}active{% endif %}">📋 规则集</a>
+      <a href="/tools/" class="{% if page.url contains '/tools/' %}active{% endif %}">🔧 工具</a>
+      <a href="/projects/" class="{% if page.url contains '/projects/' %}active{% endif %}">📁 项目</a>
+      <a href="/about/" class="{% if page.url contains '/about/' %}active{% endif %}">💬 关于</a>
     </div>
     <div class="nav-search">
       <span class="search-icon">⌕</span>
@@ -41,15 +52,20 @@
 
 <footer>
   <div class="footer-inner">
-    <div class="copyright">© 2026 yuleAI-Hub · AI Agent 知识沉淀与分享</div>
+    <div class="footer-brand">
+      <span class="fb-name">🧠 yuleAI-Hub</span>
+      <span class="fb-desc">个人AI知识家园 · 学习 · 记录 · 分享</span>
+    </div>
     <div class="footer-links">
       <a href="/about/">关于</a>
       <a href="https://github.com/frisky1985/yuleAI-Hub" target="_blank">GitHub</a>
+      <a href="https://github.com/frisky1985/yuleAI-Hub/issues" target="_blank">反馈</a>
     </div>
   </div>
 </footer>
 
 <script>
+// ── Global Search ──
 const searchData = [];
 let searchLoaded = false;
 
@@ -60,9 +76,29 @@ async function ensureSearchData() {
     const data = await r.json();
     searchData.push(...data);
     searchLoaded = true;
-  } catch(e) {
-    console.warn('search.json not found');
-  }
+  } catch(e) { console.warn('search.json not loaded'); }
+}
+
+function getTypeBadge(type) {
+  const map = {
+    'knowledge': '📚 知识库',
+    'know-how': '📖 KnowHow',
+    'skill': '⚡ Skill',
+    'tool': '🔧 工具',
+    'project': '📁 项目',
+    'rule': '📋 规则'
+  };
+  const clsMap = {
+    'knowledge': 'sd-type-knowledge',
+    'know-how': 'sd-type-knowhow',
+    'skill': 'sd-type-skill',
+    'tool': 'sd-type-tool',
+    'project': 'sd-type-project',
+    'rule': 'sd-type-knowledge'
+  };
+  const label = map[type] || type;
+  const cls = clsMap[type] || 'sd-type-knowledge';
+  return `<span class="sd-type ${cls}">${label}</span>`;
 }
 
 document.getElementById('searchInput').addEventListener('input', async function() {
@@ -82,14 +118,14 @@ document.getElementById('searchInput').addEventListener('input', async function(
   ).slice(0, 8);
 
   if (results.length === 0) {
-    dropdown.innerHTML = '<div class="sd-empty">未找到相关文章</div>';
+    dropdown.innerHTML = '<div class="sd-empty">🔍 未找到相关结果</div>';
     dropdown.classList.add('show');
     return;
   }
 
   dropdown.innerHTML = results.map(r => `
     <a href="${r.url}">
-      ${r.title}
+      ${getTypeBadge(r.type)}<span class="sd-title">${r.title}</span>
       <div class="sd-desc">${(r.desc||'').slice(0,60)}</div>
     </a>
   `).join('');

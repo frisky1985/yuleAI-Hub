@@ -4,106 +4,202 @@ layout: default
 
 <div class="hero">
   <div class="hero-inner">
-    <h1>yuleAI-Hub</h1>
-    <p class="hero-sub">AI Agent 协同的知识沉淀与分享站。探索 OpenClaw、Hermes、QoderCLI 等 Agent 工具的实践 Know-How。</p>
-    <div class="hero-search">
-      <span class="hero-search-icon">⌕</span>
-      <input type="text" id="heroSearchInput" placeholder="搜索文章、工具、项目..." autocomplete="off">
-      <div class="search-dropdown" id="heroSearchDropdown"></div>
+    <div class="hero-top">
+      <div class="hero-text">
+        <h1>🧠 yuleAI-Hub</h1>
+        <p class="hero-sub">个人 AI 知识家园 · 记录学习路上的思考与实践，与同好交流分享</p>
+      </div>
+      <div class="hero-search">
+        <span class="hero-search-icon">⌕</span>
+        <input type="text" id="heroSearchInput" placeholder="搜索知识库、技能、工具..." autocomplete="off">
+        <div class="search-dropdown" id="heroSearchDropdown"></div>
+      </div>
     </div>
-    <div class="hero-stats">
+    <div class="hero-stats" id="heroStats">
       <div class="hs-item">
-        <span class="num" id="articleCount">-</span>
-        <span class="label">篇文章</span>
+        <div class="hs-icon purple">📚</div>
+        <div>
+          <span class="num" id="statKnowledge">-</span>
+          <span class="label">知识库</span>
+        </div>
       </div>
       <div class="hs-item">
-        <span class="num" id="toolCount">-</span>
-        <span class="label">个工具</span>
+        <div class="hs-icon green">📖</div>
+        <div>
+          <span class="num" id="statKnowhow">-</span>
+          <span class="label">Know-How</span>
+        </div>
       </div>
       <div class="hs-item">
-        <span class="num" id="projectCount">-</span>
-        <span class="label">个项目</span>
+        <div class="hs-icon gold">⚡</div>
+        <div>
+          <span class="num" id="statSkill">-</span>
+          <span class="label">Skills</span>
+        </div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-icon blue">🔧</div>
+        <div>
+          <span class="num" id="statTool">-</span>
+          <span class="label">工具</span>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="page-container">
+  <div class="home-layout">
 
-<div class="category-pills" id="categoryPills">
-  <a href="/" class="pill active">全部</a>
-  <a href="/know-how/" class="pill">📖 Know-How</a>
-  <a href="/tools/" class="pill">🛠 工具</a>
-  <a href="/projects/" class="pill">📁 项目</a>
-</div>
+    <!-- Knowledge Map Sidebar -->
+    <div class="knowledge-map">
+      <h3>📌 知识地图</h3>
+      <a href="/knowledge/" class="map-item">
+        <span class="map-icon">📚</span>
+        <span class="map-name">知识库</span>
+        <span class="map-count" id="sidebarKnowledge">- 篇文章</span>
+      </a>
+      <a href="/know-how/" class="map-item">
+        <span class="map-icon">📖</span>
+        <span class="map-name">Know-How</span>
+        <span class="map-count" id="sidebarKnowhow">- 篇实践</span>
+      </a>
+      <a href="/skills/" class="map-item">
+        <span class="map-icon">⚡</span>
+        <span class="map-name">Skills</span>
+        <span class="map-count" id="sidebarSkill">- 个技巧</span>
+      </a>
+      <a href="/rules/" class="map-item">
+        <span class="map-icon">📋</span>
+        <span class="map-name">规则集</span>
+        <span class="map-count" id="sidebarRule">- 条规范</span>
+      </a>
+      <a href="/tools/" class="map-item">
+        <span class="map-icon">🔧</span>
+        <span class="map-name">工具</span>
+        <span class="map-count" id="sidebarTool">- 个工具</span>
+      </a>
+      <a href="/projects/" class="map-item">
+        <span class="map-icon">📁</span>
+        <span class="map-name">项目</span>
+        <span class="map-count" id="sidebarProject">- 个项目</span>
+      </a>
+      <div class="tag-cloud" id="homeTagCloud" style="margin-top:20px"></div>
+    </div>
 
-<div class="tag-cloud" id="tagCloud"></div>
+    <!-- Main Content -->
+    <div class="page-main">
 
-<div class="section">
-  <div class="section-header">
-    <h2>📖 最新 Know-How</h2>
-    <a href="/know-how/" class="more">查看全部</a>
+      <!-- Pills -->
+      <div class="pills" id="categoryPills">
+        <a href="/" class="pill active">全部</a>
+        <a href="/knowledge/" class="pill">📚 知识库</a>
+        <a href="/know-how/" class="pill">📖 Know-How</a>
+        <a href="/skills/" class="pill">⚡ Skills</a>
+        <a href="/rules/" class="pill">📋 规则集</a>
+        <a href="/tools/" class="pill">🔧 工具</a>
+        <a href="/projects/" class="pill">📁 项目</a>
+      </div>
+
+      <!-- Section: 最新内容 -->
+      <div class="section">
+        <div class="section-header">
+          <h2>📌 最新内容</h2>
+        </div>
+        <div class="card-grid" id="recentContent"></div>
+      </div>
+
+      <!-- Section: 精选推荐 -->
+      <div class="section">
+        <div class="section-header">
+          <h2>🔥 精选推荐</h2>
+          <a href="/know-how/" class="more">查看全部</a>
+        </div>
+        <div class="card-grid" id="featuredContent"></div>
+      </div>
+
+    </div>
   </div>
-  <div class="card-grid" id="recentArticles"></div>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <h2>🛠 工具配置</h2>
-    <a href="/tools/" class="more">查看全部</a>
-  </div>
-  <div class="card-grid" id="toolsList"></div>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <h2>📁 项目</h2>
-    <a href="/projects/" class="more">查看全部</a>
-  </div>
-  <div class="card-grid" id="projectsList"></div>
-</div>
-
 </div>
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
-  // Stats
-  const articles = data.filter(d => d.type==='know-how');
-  const tools = data.filter(d => d.type==='tool');
-  const projects = data.filter(d => d.type==='project');
-  document.getElementById('articleCount').textContent = articles.length;
-  document.getElementById('toolCount').textContent = tools.length;
-  document.getElementById('projectCount').textContent = projects.length;
+  // ── Stats ──
+  const stats = {
+    knowledge: data.filter(d => d.type === 'knowledge'),
+    knowhow: data.filter(d => d.type === 'know-how'),
+    skill: data.filter(d => d.type === 'skill'),
+    tool: data.filter(d => d.type === 'tool'),
+    project: data.filter(d => d.type === 'project'),
+    rule: data.filter(d => d.type === 'rule')
+  };
 
-  // Tags
+  document.getElementById('statKnowledge').textContent = stats.knowledge.length;
+  document.getElementById('statKnowhow').textContent = stats.knowhow.length;
+  document.getElementById('statSkill').textContent = stats.skill.length;
+  document.getElementById('statTool').textContent = stats.tool.length;
+
+  document.getElementById('sidebarKnowledge').textContent = stats.knowledge.length + ' 篇文章';
+  document.getElementById('sidebarKnowhow').textContent = stats.knowhow.length + ' 篇实践';
+  document.getElementById('sidebarSkill').textContent = stats.skill.length + ' 个技巧';
+  document.getElementById('sidebarRule').textContent = stats.rule.length + ' 条规范';
+  document.getElementById('sidebarTool').textContent = stats.tool.length + ' 个工具';
+  document.getElementById('sidebarProject').textContent = stats.project.length + ' 个项目';
+
+  // ── Tags ──
   const tagMap = new Map();
   data.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
-  const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]).slice(0,24);
-  document.getElementById('tagCloud').innerHTML = tags.map(([t,c]) =>
-    `<a href="/know-how/?tag=${encodeURIComponent(t)}" style="font-size:${12 + Math.min(c, 4)}px">${t} (${c})</a>`
+  const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]).slice(0, 18);
+  document.getElementById('homeTagCloud').innerHTML = tags.map(([t,c]) =>
+    `<a href="/know-how/?tag=${encodeURIComponent(t)}" style="font-size:${11 + Math.min(c, 5)}px">${t}</a>`
   ).join('');
 
-  function renderCards(containerId, items, icon) {
+  // ── Type icon/class mapping ──
+  const typeConfig = {
+    'knowledge': { icon: '📚', cls: 'purple', label: '知识库' },
+    'know-how':  { icon: '📖', cls: 'green',  label: 'KnowHow' },
+    'skill':     { icon: '⚡', cls: 'gold',   label: 'Skill' },
+    'tool':      { icon: '🔧', cls: 'red',    label: '工具' },
+    'project':   { icon: '📁', cls: 'blue',   label: '项目' },
+    'rule':      { icon: '📋', cls: 'purple', label: '规则' }
+  };
+
+  function renderCards(containerId, items, limit) {
     const el = document.getElementById(containerId);
-    el.innerHTML = items.length ? items.map(a => `
-      <a href="${a.url}" class="card">
-        <div class="card-icon">${icon}</div>
-        <h3>${a.title}</h3>
-        <div class="card-desc">${a.desc||''}</div>
-        <div class="card-footer">
-          ${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
-          ${a.date ? `<span class="card-date">${a.date}</span>` : ''}
-        </div>
-      </a>
-    `).join('') : '<div class="empty-state"><p>暂无内容</p></div>';
+    const slice = items.slice(0, limit || items.length);
+    el.innerHTML = slice.length ? slice.map(a => {
+      const cfg = typeConfig[a.type] || { icon: '📄', cls: 'purple', label: a.type };
+      return `
+        <a href="${a.url}" class="card">
+          <div class="card-header">
+            <div class="card-icon ${cfg.cls}">${cfg.icon}</div>
+            <div>
+              <span class="card-type ${cfg.cls}">${cfg.label}</span>
+              <h3>${a.title}</h3>
+            </div>
+          </div>
+          <div class="card-desc">${a.desc||''}</div>
+          <div class="card-footer">
+            ${(a.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+            ${a.date ? `<span class="card-date">${a.date}</span>` : ''}
+          </div>
+        </a>
+      `;
+    }).join('') : '<div class="empty-state"><div class="empty-icon">📭</div><p>暂无内容</p></div>';
   }
 
-  renderCards('recentArticles', articles.slice(0, 6), '📄');
-  renderCards('toolsList', tools.slice(0, 3), '⚙️');
-  renderCards('projectsList', projects.slice(0, 3), '📁');
+  // All content sorted by date (recent first)
+  const allSorted = [...data].sort((a, b) => (b.date||'').localeCompare(a.date||''));
+
+  // Recent: show all types, up to 6
+  renderCards('recentContent', allSorted, 6);
+
+  // Featured: pick the most tagged/popular items — for now, just show know-how items
+  const featured = [...stats.knowhow, ...stats.skill].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  renderCards('featuredContent', featured, 3);
 });
 
-// Hero search integration
+// ── Hero Search ──
 document.getElementById('heroSearchInput').addEventListener('input', async function() {
   if (typeof searchData === 'undefined' || !searchLoaded) {
     try {
@@ -128,14 +224,26 @@ document.getElementById('heroSearchInput').addEventListener('input', async funct
   ).slice(0, 8);
 
   if (results.length === 0) {
-    dropdown.innerHTML = '<div class="sd-empty">未找到相关结果</div>';
+    dropdown.innerHTML = '<div class="sd-empty">🔍 未找到相关结果</div>';
     dropdown.classList.add('show');
     return;
   }
 
+  function getTypeBadge(type) {
+    const map = {
+      'knowledge': '📚 知识库', 'know-how': '📖 KnowHow', 'skill': '⚡ Skill',
+      'tool': '🔧 工具', 'project': '📁 项目', 'rule': '📋 规则'
+    };
+    const clsMap = {
+      'knowledge': 'sd-type-knowledge', 'know-how': 'sd-type-knowhow', 'skill': 'sd-type-skill',
+      'tool': 'sd-type-tool', 'project': 'sd-type-project', 'rule': 'sd-type-knowledge'
+    };
+    return `<span class="sd-type ${clsMap[type]||'sd-type-knowledge'}">${map[type]||type}</span>`;
+  }
+
   dropdown.innerHTML = results.map(r => `
     <a href="${r.url}">
-      ${r.title}
+      ${getTypeBadge(r.type)}<span class="sd-title">${r.title}</span>
       <div class="sd-desc">${(r.desc||'').slice(0,60)}</div>
     </a>
   `).join('');

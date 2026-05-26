@@ -1,15 +1,15 @@
 ---
 layout: default
-title: Know-How
-desc: AI Agent 相关的实践经验和技巧
+title: 知识库
+desc: AI Agent 相关的系统性理论知识
 ---
 
 <div class="page-container">
 <div class="page-header">
-  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> 📖 Know-How</div>
-  <h1>📖 Know-How</h1>
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> 📚 知识库</div>
+  <h1>📚 知识库</h1>
   <div class="page-meta">
-    <span>实践指南 — 一步步教你配置和使用各种 AI 工具</span>
+    <span>系统性理论知识 — AI 基础 / Agent 原理 / 协议详解</span>
   </div>
   <div class="page-tags" id="pageTags"></div>
 </div>
@@ -27,26 +27,28 @@ desc: AI Agent 相关的实践经验和技巧
 
 <script>
 fetch('/search.json').then(r=>r.json()).then(data => {
-  const items = data.filter(d => d.type === 'know-how');
+  const items = data.filter(d => d.type === 'knowledge');
 
+  // Build tag set
   const tagMap = new Map();
   items.forEach(d => (d.tags||[]).forEach(t => tagMap.set(t, (tagMap.get(t)||0)+1)));
   const tags = [...tagMap.entries()].sort((a,b) => b[1]-a[1]);
 
   const urlParams = new URLSearchParams(window.location.search);
-  const currentTag = urlParams.get('tag');
+  const activeTag = urlParams.get('tag');
 
-  document.getElementById('sidebarTags').innerHTML =
-    `<a href="/know-how/" class="${!currentTag ? 'active-tag' : ''}">全部 (${items.length})</a>` +
-    tags.map(([t,c]) =>
-      `<a href="/know-how/?tag=${encodeURIComponent(t)}" class="${t === currentTag ? 'active-tag' : ''}">${t} (${c})</a>`
-    ).join('');
+  // Render tags in sidebar
+  document.getElementById('sidebarTags').innerHTML = tags.map(([t,c]) =>
+    `<a href="?tag=${encodeURIComponent(t)}" class="${activeTag===t?'active-tag':''}">${t} (${c})</a>`
+  ).join('');
 
+  // Also show tags in page header
   document.getElementById('pageTags').innerHTML = tags.slice(0,12).map(([t,c]) =>
     `<span class="tag">${t}</span>`
   ).join('');
 
-  const filtered = currentTag ? items.filter(d => (d.tags||[]).includes(currentTag)) : items;
+  // Filter by tag
+  const filtered = activeTag ? items.filter(d => (d.tags||[]).includes(activeTag)) : items;
   const sorted = filtered.sort((a,b) => (b.date||'').localeCompare(a.date||''));
 
   document.getElementById('articleList').innerHTML = sorted.length ? sorted.map(a => `
@@ -59,6 +61,6 @@ fetch('/search.json').then(r=>r.json()).then(data => {
         </div>
       </a>
     </div>
-  `).join('') : '<div class="empty-state"><div class="empty-icon">🔍</div><p>该标签下暂无文章</p></div>';
+  `).join('') : '<div class="empty-state"><div class="empty-icon">📚</div><p>暂无内容，期待你的贡献 ✨</p></div>';
 });
 </script>

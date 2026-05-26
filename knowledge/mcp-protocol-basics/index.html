@@ -1,0 +1,140 @@
+---
+layout: default
+title: MCP 协议基础
+desc: Model Context Protocol 核心概念与工作原理
+---
+
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/knowledge/">📚 知识库</a> <span>/</span> MCP 协议基础</div>
+  <h1>MCP 协议基础</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-26</span>
+    <span>📖 阅读约 6 分钟</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">MCP</span><span class="tag">协议</span><span class="tag">入门</span><span class="tag">JSON-RPC</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>MCP (Model Context Protocol) 是 AI Agent 之间通信的标准协议。它定义了 Agent 如何发现彼此的能力、如何发送请求、如何交换数据。</p>
+
+  <h2>为什么需要 MCP？</h2>
+  <p>在没有 MCP 之前，每个 Agent 工具都是独立的——Hermes 有自己的工具调用方式，OpenClaw 有另一套机制。如果要让两个 Agent 协作，需要手动编写胶水代码。</p>
+  <p>MCP 提供了一个统一的接口层：</p>
+  <ul>
+    <li>Agent 通过 MCP 注册自己的工具（能力）</li>
+    <li>其他 Agent 通过 MCP 发现和调用这些工具</li>
+    <li>数据和上下文通过 MCP 标准格式交换</li>
+  </ul>
+
+  <h2>核心概念</h2>
+
+  <h3>1. 工具（Tools）</h3>
+  <p>一个工具是一个具名的可调用功能，包含：</p>
+  <ul>
+    <li><strong>名称</strong> — 唯一标识符，如 <code>agent-chat</code></li>
+    <li><strong>描述</strong> — 自然语言说明这个工具做什么</li>
+    <li><strong>参数 Schema</strong> — JSON Schema 定义输入参数</li>
+    <li><strong>实现</strong> — 实际执行的逻辑（Python 函数、Shell 命令等）</li>
+  </ul>
+
+  <pre><code>// 工具定义示例
+{
+  "name": "agent-chat",
+  "description": "同其他 Agent 进行快速对话",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": { "type": "string", "description": "目标 Agent 名称" },
+      "message": { "type": "string", "description": "发送的消息" }
+    },
+    "required": ["agent", "message"]
+  }
+}</code></pre>
+
+  <h3>2. 资源（Resources）</h3>
+  <p>资源是 Agent 可以暴露给其他 Agent 的数据，类似 RESTful API 中的资源概念。例如：</p>
+  <ul>
+    <li>文件内容</li>
+    <li>数据库查询结果</li>
+    <li>共享上下文片段</li>
+  </ul>
+
+  <h3>3. 提示（Prompts）</h3>
+  <p>预定义的提示模板，帮助其他 Agent 知道如何与你交互。例如一个代码审查 Agent 可能会暴露一个 "review code" 提示模板。</p>
+
+  <h2>通信流程</h2>
+  <p>一次典型的 MCP 调用流程：</p>
+
+  <pre>
+┌──────────┐          ┌──────────┐          ┌──────────┐
+│ Agent A  │          │  Bridge  │          │ Agent B  │
+│ (调用方)  │          │ (路由器)  │          │ (执行方)  │
+└────┬─────┘          └────┬─────┘          └────┬─────┘
+     │                     │                     │
+     │ 1. tools/list       │                     │
+     │────────────────────→│                     │
+     │                     │ 2. tools/list       │
+     │                     │────────────────────→│
+     │                     │ 3. 工具列表          │
+     │                     │←────────────────────│
+     │ 4. 返回工具列表      │                     │
+     │←────────────────────│                     │
+     │                     │                     │
+     │ 5. tools/call       │                     │
+     │   agent-chat(小A..) │                     │
+     │────────────────────→│                     │
+     │                     │ 6. tools/call       │
+     │                     │────────────────────→│
+     │                     │ 7. 执行结果          │
+     │                     │←────────────────────│
+     │ 8. 返回结果          │                     │
+     │←────────────────────│                     │
+  </pre>
+
+  <h2>JSON-RPC 消息格式</h2>
+  <p>MCP 使用 JSON-RPC 2.0 作为底层的消息协议。所有消息分为三类：</p>
+
+  <h3>请求（Request）</h3>
+  <pre><code>{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": { ... },
+  "id": 1
+}</code></pre>
+
+  <h3>响应（Response）</h3>
+  <pre><code>{
+  "jsonrpc": "2.0",
+  "result": { ... },
+  "id": 1
+}</code></pre>
+
+  <h3>通知（Notification）</h3>
+  <pre><code>{
+  "jsonrpc": "2.0",
+  "method": "notifications/tools/list_changed"
+  // 没有 id——不需要响应
+}</code></pre>
+
+  <h2>MCP Transport</h2>
+  <p>MCP 支持两种传输方式：</p>
+  <table>
+    <tr><th>方式</th><th>协议</th><th>适用场景</th></tr>
+    <tr><td><strong>stdio</strong></td><td>标准输入/输出</td><td>本地 Agent，进程间通信</td></tr>
+    <tr><td><strong>SSE</strong></td><td>Server-Sent Events</td><td>远程 Agent，WebSocket 替代方案</td></tr>
+  </table>
+  <p>MCP Bridge 使用 stdio 方式启动子进程，通过管道与各 Agent 通信。</p>
+
+  <h2>在实践中</h2>
+  <p>在 yuleAI-Hub 的各种工具和 Know-How 中，MCP 是底层的连接纽带：</p>
+  <ul>
+    <li><a href="/tools/mcp-bridge/">🔧 MCP Bridge</a> 是一个 MCP 服务端实现</li>
+    <li><a href="/know-how/agent-mesh/">📖 Agent Mesh</a> 利用 MCP 构建协同网络</li>
+    <li><a href="/knowledge/agent-mesh-architecture/">📚 Agent Mesh 架构</a> 从系统层面描述 MCP 通信</li>
+  </ul>
+
+</div>
+</div>

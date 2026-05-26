@@ -1,0 +1,133 @@
+---
+layout: default
+title: Agent Mesh 架构
+desc: Agent Mesh 系统架构设计文档
+---
+
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/knowledge/">📚 知识库</a> <span>/</span> Agent Mesh 架构</div>
+  <h1>Agent Mesh 架构</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-26</span>
+    <span>📖 阅读约 5 分钟</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">架构</span><span class="tag">Agent Mesh</span><span class="tag">设计</span><span class="tag">MCP</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>Agent Mesh 是一个跨 Agent 协同网络的架构设计方案。本文档从全局视角描述系统的组件关系、数据流和设计决策。</p>
+
+  <h2>架构目标</h2>
+  <ul>
+    <li><strong>多 Agent 互联</strong> — 任意 Agent 之间可以互相发现和通信</li>
+    <li><strong>异步优先</strong> — 耗时任务非阻塞，通过任务队列管理</li>
+    <li><strong>统一上下文</strong> — 共享上下文空间，避免信息孤岛</li>
+    <li><strong>热插拔</strong> — Agent 可以随时加入或离开网络</li>
+  </ul>
+
+  <h2>系统架构图</h2>
+  <pre>
+                ┌──────────────────────┐
+                │    MCP Bridge v2     │
+                │  (消息路由 + 状态管理) │
+                └────┬──────┬──────┬───┘
+                     │      │      │
+               ┌─────┘  ┌───┴───┐  └──────┐
+               ▼        ▼       ▼         ▼
+         ┌─────────┐ ┌──────┐ ┌────────┐ ┌─────────┐
+         │OpenClaw │ │Hermes│ │QoderCLI│ │  共享    │
+         │ (入口)  │ │(主力)│ │ (工具) │ │ 工作区   │
+         └─────────┘ └──────┘ └────────┘ └─────────┘
+  </pre>
+
+  <h2>核心组件</h2>
+
+  <h3>1. MCP Bridge v2（消息路由层）</h3>
+  <p>作为整个 Mesh 网络的中心枢纽，负责：</p>
+  <ul>
+    <li><strong>工具注册</strong> — 每个 Agent 向 Bridge 注册自己的能力（工具列表）</li>
+    <li><strong>消息路由</strong> — 根据目标 Agent 名称，将请求转发到正确的目的地</li>
+    <li><strong>任务队列</strong> — 异步任务的管理和状态追踪</li>
+    <li><strong>上下文存储</strong> — 共享上下文的读写接口</li>
+  </ul>
+
+  <h3>2. Agent 节点</h3>
+  <ul>
+    <li><strong>OpenClaw</strong> — 前端入口 Agent，处理用户交互和任务分发</li>
+    <li><strong>Hermes</strong> — 主力工作 Agent，执行搜索、代码、文件操作</li>
+    <li><strong>QoderCLI</strong> — 工具型 Agent，提供系统级操作和脚本执行</li>
+  </ul>
+
+  <h3>3. 共享工作区（Workspace）</h3>
+  <p>文件系统中的共享目录，Bridge 进程负责管理：</p>
+  <pre>
+~/.openclaw/mcp-bridge/workspace/
+├── context.json         # 共享上下文（键值存储）
+└── tasks/               # 异步任务结果
+    ├── task_abc123.json
+    └── task_def456.json</pre>
+
+  <h2>通信协议</h2>
+  <p>所有通信通过 MCP (Model Context Protocol) 进行，采用 JSON-RPC 格式：</p>
+  <pre><code>// 请求
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "agent-chat",
+    "arguments": {
+      "agent": "hermes",
+      "message": "分析这份代码"
+    }
+  },
+  "id": 1
+}
+
+// 响应
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [{ "type": "text", "text": "分析结果..." }]
+  },
+  "id": 1
+}</code></pre>
+
+  <h2>数据流设计</h2>
+  <p>三种主要的通信模式：</p>
+
+  <h3>同步调用</h3>
+  <p>适用于快问快答（≤8 秒）。调用方 Agent 发送请求后阻塞等待，Bridge 转发并聚合响应后返回。</p>
+
+  <h3>异步委派</h3>
+  <p>适用于耗时任务。调用方立即收到 task_id，后续通过 task-result 轮询结果。</p>
+  <pre>
+Agent A → Bridge: agent-delegate(hermes, "分析日志")
+Bridge → Agent A: { task_id: "abc123" }
+
+Agent A → Bridge: task-result("abc123")
+Bridge → Agent A: { status: "completed", result: "..." }</pre>
+
+  <h3>上下文共享</h3>
+  <p>通过 context-write/context-read 实现跨 Agent 的信息传递。数据持久化在 context.json 中。</p>
+
+  <h2>设计决策记录</h2>
+  <table>
+    <tr><th>决策</th><th>方案</th><th>理由</th></tr>
+    <tr><td>通信协议</td><td>MCP + JSON-RPC</td><td>标准化、与现有工具兼容、易扩展</td></tr>
+    <tr><td>状态存储</td><td>本地文件 JSON</td><td>零外部依赖、易调试、性能足够</td></tr>
+    <tr><td>任务模型</td><td>同步+异步双模</td><td>灵活性，快任务不引入异步开销</td></tr>
+    <tr><td>发现机制</td><td>Bridge 中心化注册</td><td>简单可靠，适合 Agent 数量不多的场景</td></tr>
+  </table>
+
+  <h2>相关链接</h2>
+  <ul>
+    <li><a href="/know-how/agent-mesh/">📖 实战搭建 — Agent Mesh 跨 Agent 协同网络</a></li>
+    <li><a href="/tools/mcp-bridge/">🔧 MCP Bridge 配置指南</a></li>
+    <li><a href="/skills/context-sharing/">⚡ 上下文共享技巧</a></li>
+  </ul>
+
+</div>
+</div>
