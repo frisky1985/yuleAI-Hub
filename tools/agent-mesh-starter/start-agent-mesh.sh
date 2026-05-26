@@ -122,9 +122,24 @@ echo -e "  Dashboard: ${CYAN}http://127.0.0.1:18789/${NC}"
 refresh_status
 
 echo ""
-echo -e "${GREEN}${BOLD}✅ Agent Mesh 已就绪，后台进程继续运行中${NC}"
+echo -e "${GREEN}${BOLD}✅ Agent Mesh 已就绪${NC}"
 echo ""
 
-# 自动关闭窗口
+# ── 提示进入对话 ────────────────────────────────────────────
+echo -e "  按 ${BOLD}r${NC} 进入 OpenClaw 对话 · 直接关闭窗口退出"
+while true; do
+  read -r -n 1 key
+  if [ "$key" = "r" ] || [ "$key" = "R" ]; then
+    echo ""
+    echo -e "${CYAN}→ 进入 OpenClaw 对话...${NC}\n"
+    openclaw tui --session main
+    # TUI 退出后关闭窗口
+    echo ""
+    echo -e "${CYAN}对话已结束，关闭窗口...${NC}"
+    break
+  fi
+done
+
+# 关闭 Warp 窗口
 osascript -e 'tell application "Warp" to quit' 2>/dev/null || true
 exit 0
