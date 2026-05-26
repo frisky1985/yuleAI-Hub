@@ -5,240 +5,94 @@
 <style>
 :root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7}
-.nav{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7}.nav{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .nav-inner{max-width:1000px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;gap:24px}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font-weight:700;font-size:15px}
 .logo .yl{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6C5CE7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
-.nav-links{display:flex;gap:2px}
-.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
-.nav-links a:hover{background:#f0edff;color:var(--primary)}
-.container{max-width:860px;margin:0 auto;padding:32px}
-pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px;line-height:1.5}
+.nav-links{display:flex;gap:2px}.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
+.nav-links a:hover{background:#f0edff;color:var(--primary)}.container{max-width:860px;margin:0 auto;padding:32px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0;font-size:13px;line-height:1.5}
 code{font-family:var(--mono);font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
 pre code{background:0 0;padding:0;color:inherit}
-h2{margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);font-size:18px}
-h3{margin:20px 0 8px;font-size:15px}
+h2{font-size:18px;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:15px;margin:20px 0 8px}
 p{margin:10px 0;color:var(--fg2)}
 ul,ol{margin:10px 0;padding-left:24px;color:var(--fg2)}
 li{margin:4px 0}
-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
-th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
-th{background:var(--bg);font-weight:600;color:var(--fg2)}
-footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:12px;color:var(--fg3)}
+footer{border-top:1px solid var(--border);padding:20px 0;margin-top:32px;text-align:center;font-size:12px;color:var(--fg3)}
 </style></head>
 <body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="yl">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/skills/">技能</a></div></div></nav>
-<div class="container"><pre>---
-name: agent-mesh-devflow
-description: 三 Agent 协同开发工作流。OpenClaw 编排，Hermes 需求+测试，QoderCLI 架构+编码。复杂需求自动触发：需求分析→排期→架构设计→编码→测试→部署。
----
+<div class="container">
+<h1 style="color:#6C5CE7;font-size:24px;margin-bottom:8px">🤖 Agent Mesh DevFlow</h1>
+<p style="color:var(--fg2);margin-bottom:24px">三 Agent 协同开发工作流 — 自动化流水线，完成后输出总结报告</p>
 
-# Agent Mesh DevFlow — 三 Agent 协同开发工作流
+<h2>核心理念</h2>
+<p><strong>全程自动化，跨 Agent 自行对话完成。用户只需提需求，等总结报告。</strong></p>
+<pre>
+用户提出需求
+  ↓
+┌─────────────────────────────────────────────────────┐
+│                 Agent Mesh DevFlow                   │
+│  Hermes ──▶ QoderCLI ──▶ Hermes                     │
+│  需求分析 排期  架构设计 编码  测试用例 测试          │
+│  自动推进，失败3次由OpenClaw接管                     │
+└─────────────────────────────────────────────────────┘
+  ↓
+用户收到总结报告
+</pre>
 
-## 架构
+<h2>7 阶段自动流水线</h2>
+<table>
+<tr><th>阶段</th><th>执行者</th><th>动作</th></tr>
+<tr><td>① 需求分析</td><td>Hermes</td><td>agent-chat → 输出需求文档</td></tr>
+<tr><td>② 排期</td><td>Hermes</td><td>agent-chat → 输出排期文档</td></tr>
+<tr><td>③ 架构设计</td><td>QoderCLI</td><td>agent-chat → 输出架构文档</td></tr>
+<tr><td>④ 编码</td><td>QoderCLI</td><td>agent-delegate → 输出代码</td></tr>
+<tr><td>⑤ 测试用例</td><td>Hermes</td><td>agent-chat → 输出测试文件</td></tr>
+<tr><td>⑥ 测试执行</td><td>Hermes</td><td>agent-chat → 输出测试报告</td></tr>
+<tr><td>⑦ 部署+报告</td><td>OpenClaw</td><td>git push + 总结报告</td></tr>
+</table>
+<p>每阶段完成自动进入下一阶段。失败重试3次，仍失败由OpenClaw接管。</p>
 
-```
-                    OpenClaw (编排者)
-                    ─────────────────
-                    │ 检视 + 确认 + 决策│
-                    └───────┬──────────┘
-                            │
-          ┌─────────────────┼─────────────────┐
-          ▼                 ▼                 ▼
-     ┌─────────┐      ┌──────────┐      ┌──────────┐
-     │  Hermes  │      │ QoderCLI │      │  GitHub  │
-     │ 需求分析 │      │ 架构设计 │      │  部署    │
-     │ 测试用例 │      │ 代码开发 │      │          │
-     │ 测试执行 │      │          │      │          │
-     └─────────┘      └──────────┘      └──────────┘
-```
+<h2>总结报告模板</h2>
+<pre>
+═══════════════════════════════════════════════
+  🤖 Agent Mesh DevFlow 完成报告
+═══════════════════════════════════════════════
+📋 需求：[标题]
+⏱ 耗时：[总时长]
 
-## 工作流（8 阶段）
+📌 各阶段状态
+  ✅ 需求分析 — Hermes
+  ✅ 排期 — Hermes
+  ✅ 架构设计 — QoderCLI
+  ✅ 编码 — QoderCLI
+  ✅ 测试用例 — Hermes
+  ✅ 测试执行 — Hermes
+  ✅ 部署 — OpenClaw
 
-### 阶段 1：需求分析 → Hermes
+📂 产出文档 &amp; 源码
+🔁 重试记录（如有）
+═══════════════════════════════════════════════
+</pre>
 
-```
-触发：用户提出复杂需求
-动作：OpenClaw → agent-chat(Hermes, "分析需求：...")
-检视：OpenClaw 确认分析结果
-输出：docs/requirements/YYYY-MM-DD-需求名.md
-重试：失败则重试 3 次，仍失败 OpenClaw 接管
-```
-
-**OpenClaw 指令：**
-> 用 `agent-chat` 问 hermes，prompt="请分析以下需求，输出需求文档：..."
-
-### 阶段 2：排期 → Hermes
-
-```
-触发：需求分析通过
-动作：OpenClaw → agent-chat(Hermes, "制定排期：...")
-检视：OpenClaw 确认排期合理性
-输出：docs/plans/YYYY-MM-DD-排期名.md
-重试：失败重试 3 次
-```
-
-**OpenClaw 指令：**
-> 用 `agent-chat` 问 hermes，prompt="基于需求文档，制定开发排期，分阶段..."
-
-### 阶段 3：架构设计 → QoderCLI
-
-```
-触发：排期确认通过
-动作：OpenClaw → agent-chat(QoderCLI, "设计架构：...")
-检视：OpenClaw 确认架构设计
-输出：docs/architecture/YYYY-MM-DD-架构名.md
-重试：失败重试 3 次
-```
-
-**OpenClaw 指令：**
-> 用 `agent-chat` 问 qodercli，prompt="基于需求和排期，设计系统架构..."
-
-### 阶段 4：代码开发 → QoderCLI
-
-```
-触发：架构设计通过
-动作：OpenClaw → agent-delegate(QoderCLI, task="开发编码：...")
-检视：OpenClaw 逐模块审查代码
-输出：src/ 目录下的代码文件
-重试：失败重试 3 次
-```
-
-**OpenClaw 指令：**
-> 用 `agent-delegate` 交给 qodercli，task="实现以下架构设计的代码..."
-
-### 阶段 5：测试用例 → Hermes
-
-```
-触发：代码审查通过
-动作：OpenClaw → agent-chat(Hermes, "创建测试用例：...")
-检视：OpenClaw 确认测试覆盖
-输出：tests/ 目录下的测试文件
-重试：失败重试 3 次
-```
-
-**OpenClaw 指令：**
-> 用 `agent-chat` 问 hermes，prompt="为以下代码创建测试用例..."
-
-### 阶段 6：测试执行 → Hermes
-
-```
-触发：测试用例确认通过
-动作：OpenClaw → agent-chat(Hermes, "执行测试：...")
-检视：OpenClaw 确认测试结果
-输出：测试报告
-重试：失败重试 3 次
-```
-
-**OpenClaw 指令：**
-> 用 `agent-chat` 问 hermes，prompt="执行以下测试用例，输出测试报告..."
-
-### 阶段 7：部署 → OpenClaw
-
-```
-触发：测试全部通过
-动作：OpenClaw 执行 git add/commit/push
-输出：GitHub 远程仓库更新
-```
-
-**Git 指令：**
-```bash
-git add -A
-git commit -m "feat: ..."
-git push origin main
-```
-
-### 阶段 8：失败接管
-
-```
-任意阶段连续失败 3 次 → OpenClaw 接管剩余工作
-```
-
-**OpenClaw 指令：**
-> 该阶段已重试 3 次失败，由我直接处理剩余工作。
-
----
-
-## 工作规范
-
-### 1. 阶段转换规则
-
-| 当前阶段 | 完成条件 | 下一阶段 |
-|----------|----------|----------|
-| 需求分析 | 需求文档已输出 + OpenClaw 确认 | 排期 |
-| 排期 | 排期文档已输出 + OpenClaw 确认 | 架构设计 |
-| 架构设计 | 架构文档已输出 + OpenClaw 确认 | 代码开发 |
-| 代码开发 | 代码已提交 + OpenClaw 审查通过 | 测试用例 |
-| 测试用例 | 测试文件已创建 + OpenClaw 确认 | 测试执行 |
-| 测试执行 | 测试通过 + OpenClaw 确认 | 部署 |
-| 部署 | git push 完成 | ✅ 完成 |
-
-### 2. 重试规则
-
-```
-失败计数器 = 0
-while 当前阶段未完成:
-    retry()
-    if 成功: 失败计数器 = 0 → 下一阶段
-    else: 失败计数器 += 1
-    if 失败计数器 >= 3:
-        OpenClaw 接管 → 手动处理
+<h2>失败接管机制</h2>
+<pre>
+for 阶段 in [需求分析,排期,架构,编码,测试用例,测试执行]:
+    尝试 = 0
+    while 尝试 < 3:
+        try: 执行(); break
+        except: 尝试 += 1
+    if 尝试 >= 3:
+        OpenClaw 接管 → 输出异常报告
         break
-```
+</pre>
 
-### 3. 通信协议
-
-```
-OpenClaw → Agent: agent-chat(agent, prompt)
-Agent → OpenClaw: 输出结果
-OpenClaw: 检视 + 确认
-```
-
-### 4. 上下文传递
-
-每个阶段完成后，OpenClaw 用 `context-write` 存当前状态：
-
-```bash
-context-write(key="devflow_status", value='{"phase":"需求分析","status":"完成","next":"排期"}')
-context-write(key="requirement_doc", value="...需求文档路径...")
-context-write(key="plan_doc", value="...排期文档路径...")
-context-write(key="architecture_doc", value="...架构文档路径...")
-context-write(key="test_report", value="...测试结果...")
-```
-
----
-
-## 快速启动
-
-当用户提出复杂需求时，OpenClaw 自动触发：
-
-```bash
-# 1. Hermes 需求分析
-agent-chat(hermes, "分析需求：[用户输入]")
-# → 检视确认
-
-# 2. Hermes 排期
-agent-chat(hermes, "制定排期：[需求内容]")
-# → 检视确认
-
-# 3. QoderCLI 架构设计
-agent-chat(qodercli, "设计架构：[需求+排期]")
-# → 检视确认
-
-# 4. QoderCLI 编码
-agent-delegate(qodercli, "task=编码开发：[架构设计]")
-# → 检视确认
-
-# 5. Hermes 测试用例
-agent-chat(hermes, "创建测试：[代码]")
-# → 检视确认
-
-# 6. Hermes 测试执行
-agent-chat(hermes, "执行测试：[测试用例]")
-# → 检视确认
-
-# 7. OpenClaw 部署
-git add -A && git commit -m "feat: ..." && git push
-```
-</pre></div>
-<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>
+<h2>触发条件</h2>
+<pre>
+自动触发: 用户说 "开发需求" / "做一个" / "实现" / "创建项目"
+           且需求描述超过 20 字
+</pre>
+</div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+</body></html>
