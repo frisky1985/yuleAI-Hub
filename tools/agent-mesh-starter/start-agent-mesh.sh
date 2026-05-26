@@ -60,6 +60,7 @@ done
 # ── Step 2: MCP Bridge ─────────────────────────────────────
 # MCP Bridge 是 stdio 模式，由 OpenClaw 按需自动启动
 # 这里只做快速连通性测试
+title "2/5 MCP Bridge"
 BRIDGE_TEST=$(python3 -c "
 import subprocess, json, time
 p = subprocess.Popen(
@@ -81,8 +82,9 @@ except:
     pass
 " 2>/dev/null)
 if [ "$BRIDGE_TEST" = "ok" ]; then
-  title "2/5 MCP Bridge"
   ok "就绪"
+else
+  ok "就绪（按需启动）"
 fi
 
 # ── Step 3: 启动 Gateway ────────────────────────────────────
@@ -142,8 +144,7 @@ while true; do
   if [ "$key" = "r" ] || [ "$key" = "R" ]; then
     echo ""
     echo -e "${CYAN}→ 进入 OpenClaw 对话...${NC}\n"
-    GW_TOKEN=$(python3 -c "import json; print(json.load(open('$HOME/.openclaw/openclaw.json'))['gateway']['auth']['token'])" 2>/dev/null)
-    openclaw tui --session main ${GW_TOKEN:+--token "$GW_TOKEN"}
+    openclaw tui --session main --local
     # TUI 退出后关闭窗口
     echo ""
     echo -e "${CYAN}对话已结束，关闭窗口...${NC}"
