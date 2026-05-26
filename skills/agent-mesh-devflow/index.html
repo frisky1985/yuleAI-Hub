@@ -1,4 +1,34 @@
----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Agent Mesh DevFlow — 三Agent协同开发工作流</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7}
+.nav{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1000px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font-weight:700;font-size:15px}
+.logo .yl{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6C5CE7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
+.nav-links a:hover{background:#f0edff;color:var(--primary)}
+.container{max-width:860px;margin:0 auto;padding:32px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px;line-height:1.5}
+code{font-family:var(--mono);font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+h2{margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);font-size:18px}
+h3{margin:20px 0 8px;font-size:15px}
+p{margin:10px 0;color:var(--fg2)}
+ul,ol{margin:10px 0;padding-left:24px;color:var(--fg2)}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg);font-weight:600;color:var(--fg2)}
+footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:12px;color:var(--fg3)}
+</style></head>
+<body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="yl">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/skills/">技能</a></div></div></nav>
+<div class="container"><pre>---
 name: agent-mesh-devflow
 description: 三 Agent 协同开发工作流。OpenClaw 编排，Hermes 需求+测试，QoderCLI 架构+编码。复杂需求自动触发：需求分析→排期→架构设计→编码→测试→部署。
 ---
@@ -210,3 +240,5 @@ agent-chat(hermes, "执行测试：[测试用例]")
 # 7. OpenClaw 部署
 git add -A && git commit -m "feat: ..." && git push
 ```
+</pre></div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>
