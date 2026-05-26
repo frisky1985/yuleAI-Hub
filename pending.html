@@ -1,66 +1,135 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>我的发布 — yuleAI-Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>我的发布 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#6C5CE7;
+  --primary-hover:#5b4ed4;
+  --primary-light:#f0edff;
+  --accent:#00B894;
+  --bg:#f5f6fa;
+  --bg-card:#fff;
+  --fg:#1d2129;
+  --fg2:#6b7785;
+  --fg3:#9ba3af;
+  --border:#e5e8ed;
+  --radius:14px;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --font:"Noto Sans SC",-apple-system,sans-serif;
+}
 body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7}
-.nav{background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:32px}
-.logo{font-size:20px;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px}
-.logo-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;letter-spacing:-1px}
-.nav-links{display:flex;gap:4px}
-.nav-links a{padding:6px 14px;border-radius:8px;color:var(--fg2);text-decoration:none;font-size:14px;font-family:var(--sans);transition:all .15s}
-.nav-links a:hover,.nav-links a.active{background:var(--primary-bg);color:var(--primary)}
+.nav{background:rgba(255,255,255,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font-weight:700;font-size:16px}
+.logo .yl{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6C5CE7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
+.nav-links a:hover,.nav-links a.active{background:var(--primary-light);color:var(--primary)}
+.auth-section{margin-left:auto;display:flex;align-items:center;gap:6px}
+.auth-section .btn-login{padding:6px 16px;border-radius:8px;color:var(--primary);text-decoration:none;font-size:13px;font-weight:500;transition:all .15s}
+.auth-section .btn-login:hover{background:var(--primary-light)}
+.auth-section .btn-register{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff;text-decoration:none;font-size:13px;font-weight:500;transition:all .15s}
+.auth-section .btn-register:hover{background:var(--primary-hover)}
+.user-menu{position:relative}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.user-avatar:hover{border-color:var(--primary-light)}
+.user-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--border);border-radius:12px;padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:200}
+.user-dropdown .username{padding:8px 12px;font-size:12px;color:var(--fg);font-weight:500;border-bottom:1px solid var(--border);margin-bottom:4px}
+.user-dropdown a{display:block;padding:7px 12px;text-decoration:none;color:var(--fg2);font-size:13px;border-radius:6px;transition:all .15s}
+.user-dropdown a:hover{background:var(--primary-light);color:var(--primary)}
 .container{max-width:800px;margin:0 auto;padding:0 32px}
 .page-header{padding:40px 0 20px;border-bottom:1px solid var(--border);margin-bottom:32px}
-.page-header h1{font-size:26px;font-weight:600}
-.page-header p{font-size:14px;color:var(--fg2);margin-top:4px;font-family:var(--sans)}
-.post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;transition:all .2s}
+.page-header h1{font-size:24px;font-weight:600}
+.page-header p{font-size:14px;color:var(--fg2);margin-top:4px}
+.post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;transition:all .2s;box-shadow:var(--shadow)}
 .post-card:hover{border-color:var(--primary);box-shadow:0 8px 24px rgba(108,92,231,.1)}
 .post-card .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .post-card .avatar{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
-.post-card .type-badge{padding:2px 10px;border-radius:4px;font-size:11px;font-family:var(--sans);font-weight:500;background:var(--primary-bg);color:var(--primary)}
-.post-card .status{padding:2px 10px;border-radius:4px;font-size:11px;font-family:var(--sans);margin-left:auto}
+.post-card .type-badge{padding:2px 10px;border-radius:4px;font-size:11px;font-weight:500;background:var(--primary-light);color:var(--primary)}
+.post-card .status{padding:2px 10px;border-radius:4px;font-size:11px;margin-left:auto}
 .status.pending{background:#fef5e7;color:#d4a017}
 .status.approved{background:#e8f8f5;color:var(--accent)}
 .post-card h3{font-size:15px;font-weight:500;margin-bottom:4px}
-.post-card .desc{font-size:13px;color:var(--fg2);font-family:var(--sans)}
+.post-card .desc{font-size:13px;color:var(--fg2)}
 .post-card .foot{display:flex;gap:8px;margin-top:10px;align-items:center}
-.post-card .tag{padding:2px 8px;border-radius:4px;background:var(--primary-bg);color:var(--primary);font-size:11px;font-family:var(--sans)}
-.post-card .date{font-size:11px;color:var(--fg2);margin-left:auto;font-family:var(--sans)}
+.post-card .tag{padding:2px 8px;border-radius:4px;background:var(--primary-light);color:var(--primary);font-size:11px}
+.post-card .date{font-size:11px;color:var(--fg2);margin-left:auto}
 .empty{text-align:center;padding:64px 32px;color:var(--fg2)}
 .empty .icon{font-size:48px;margin-bottom:12px}
 .need-login{text-align:center;padding:80px 32px}
 .need-login .icon{font-size:48px;margin-bottom:16px}
 .need-login h2{font-size:20px;margin-bottom:8px}
-.need-login p{color:var(--fg2);margin-bottom:24px;font-family:var(--sans)}
-.need-login a{padding:10px 28px;border-radius:100px;background:var(--primary);color:#fff;text-decoration:none;font-weight:600;font-family:var(--sans)}
-footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:var(--fg2);font-family:var(--sans)}
+.need-login p{color:var(--fg2);margin-bottom:24px}
+.need-login a{padding:10px 28px;border-radius:100px;background:var(--primary);color:#fff;text-decoration:none;font-weight:600}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:var(--fg2)}
+@media(max-width:640px){
+  .nav-inner{padding:0 16px}
+  .container{padding:0 16px}
+  .nav-links{display:none}
+}
 </style>
-<div class="auth-section" style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
-  <div id="userMenu" style="display:none;position:relative">
-    <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="yl">YL</span> yuleAI-Hub</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/knowledge/">知识库</a>
+      <a href="/skills/">技能</a>
+      <a href="/pending.html" class="active">我的发布</a>
+    </div>
+    <div class="auth-section" id="authSection">
+      <div class="user-menu" id="userMenu" style="display:none">
+        <span class="user-avatar" id="userAvatar" onclick="toggleDropdown()"></span>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="username" id="userName"></div>
+          <a href="/pending.html">📝 我的发布</a>
+          <a href="/publish.html">✏️ 发布</a>
+          <a href="#" onclick="logout()">🚪 退出</a>
+        </div>
+      </div>
+      <a href="/auth/login.html" id="loginBtn" class="btn-login">登录</a>
+      <a href="/auth/register.html" id="registerBtn" class="btn-register">注册</a>
+    </div>
   </div>
-  <a href="/auth/login.html" id="loginBtn" style="padding:5px 14px;border-radius:6px;color:#6C5CE7;text-decoration:none;font-weight:500">登录</a>
-  <a href="/auth/register.html" id="registerBtn" style="padding:5px 14px;border-radius:6px;background:#6C5CE7;color:#fff;text-decoration:none;font-weight:500">注册</a>
-  <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
-    <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
-    <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
-    <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
-    <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
-    <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
-  </div>
-</div>
-<script>
-function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none';}
-function lo(){localStorage.removeItem('yule_current_user');location.reload();}
-(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('registerBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email;}})();
-document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none';}});
-</script></div></nav>
+</nav>
+
 <div class="container"><div id="content"></div></div>
 <footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+
+<script>
+function toggleDropdown(){
+  var d=document.getElementById('userDropdown');
+  d.style.display=d.style.display==='block'?'none':'block';
+}
+function logout(){
+  localStorage.removeItem('yule_current_user');
+  location.reload();
+}
+(function(){
+  var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');
+  if(u){
+    document.getElementById('loginBtn').style.display='none';
+    document.getElementById('registerBtn').style.display='none';
+    document.getElementById('userMenu').style.display='block';
+    document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();
+    document.getElementById('userName').textContent=u.name||u.email;
+  }
+})();
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.user-menu')){
+    var d=document.getElementById('userDropdown');
+    if(d)d.style.display='none';
+  }
+});
+</script>
+
 <script>
 (function(){
   const c = document.getElementById('content');
@@ -73,12 +142,12 @@ document.addEventListener('click',function(e){if(!e.target.closest('.auth-sectio
   const mine = posts.filter(p => p.author === user.name || p.author === user.email);
   const typeNames = {skill:'⚡技能',rule:'📋规则',knowledge:'📚知识库',knowhow:'📖Know-How',tool:'🔧工具'};
   if (!mine.length) {
-    c.innerHTML = `<div class="page-header"><h1>📝 我的发布</h1><p>还没有发布过内容</p></div><div class="empty"><div class="icon">✏️</div><p style="margin-bottom:16px">发布你的第一个内容吧</p><a href="/publish.html" style="padding:10px 28px;border-radius:100px;background:#6C5CE7;color:#fff;text-decoration:none;font-weight:600;font-family:sans-serif">去发布</a></div>`;
+    c.innerHTML = `<div class="page-header"><h1>📝 我的发布</h1><p>还没有发布过内容</p></div><div class="empty"><div class="icon">✏️</div><p style="margin-bottom:16px">发布你的第一个内容吧</p><a href="/publish.html" style="padding:10px 28px;border-radius:100px;background:#6C5CE7;color:#fff;text-decoration:none;font-weight:600">去发布</a></div>`;
     return;
   }
   c.innerHTML = `<div class="page-header"><h1>📝 我的发布</h1><p>共 ${mine.length} 篇内容</p></div>` +
     mine.map(p => `<div class="post-card"><div class="head"><span class="avatar">${p.authorAvatar||'?'}</span><span class="type-badge">${typeNames[p.type]||p.type}</span><span class="status ${p.status}">${p.status==='pending'?'⏳ 待审核':'✅ 已发布'}</span></div><h3>${p.title}</h3><div class="desc">${p.desc||''}</div><div class="foot">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}<span class="date">${p.date||''}</span></div></div>`
-    ).join('') + `<div style="text-align:center;margin-top:24px"><a href="/publish.html" style="padding:10px 28px;border-radius:100px;background:#6C5CE7;color:#fff;text-decoration:none;font-weight:600;font-family:sans-serif">✏️ 发布新内容</a></div>`;
+    ).join('') + `<div style="text-align:center;margin-top:24px"><a href="/publish.html" style="padding:10px 28px;border-radius:100px;background:#6C5CE7;color:#fff;text-decoration:none;font-weight:600">✏️ 发布新内容</a></div>`;
 })();
 </script>
 </body>

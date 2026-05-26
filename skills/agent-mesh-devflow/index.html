@@ -1,0 +1,212 @@
+---
+name: agent-mesh-devflow
+description: 三 Agent 协同开发工作流。OpenClaw 编排，Hermes 需求+测试，QoderCLI 架构+编码。复杂需求自动触发：需求分析→排期→架构设计→编码→测试→部署。
+---
+
+# Agent Mesh DevFlow — 三 Agent 协同开发工作流
+
+## 架构
+
+```
+                    OpenClaw (编排者)
+                    ─────────────────
+                    │ 检视 + 确认 + 决策│
+                    └───────┬──────────┘
+                            │
+          ┌─────────────────┼─────────────────┐
+          ▼                 ▼                 ▼
+     ┌─────────┐      ┌──────────┐      ┌──────────┐
+     │  Hermes  │      │ QoderCLI │      │  GitHub  │
+     │ 需求分析 │      │ 架构设计 │      │  部署    │
+     │ 测试用例 │      │ 代码开发 │      │          │
+     │ 测试执行 │      │          │      │          │
+     └─────────┘      └──────────┘      └──────────┘
+```
+
+## 工作流（8 阶段）
+
+### 阶段 1：需求分析 → Hermes
+
+```
+触发：用户提出复杂需求
+动作：OpenClaw → agent-chat(Hermes, "分析需求：...")
+检视：OpenClaw 确认分析结果
+输出：docs/requirements/YYYY-MM-DD-需求名.md
+重试：失败则重试 3 次，仍失败 OpenClaw 接管
+```
+
+**OpenClaw 指令：**
+> 用 `agent-chat` 问 hermes，prompt="请分析以下需求，输出需求文档：..."
+
+### 阶段 2：排期 → Hermes
+
+```
+触发：需求分析通过
+动作：OpenClaw → agent-chat(Hermes, "制定排期：...")
+检视：OpenClaw 确认排期合理性
+输出：docs/plans/YYYY-MM-DD-排期名.md
+重试：失败重试 3 次
+```
+
+**OpenClaw 指令：**
+> 用 `agent-chat` 问 hermes，prompt="基于需求文档，制定开发排期，分阶段..."
+
+### 阶段 3：架构设计 → QoderCLI
+
+```
+触发：排期确认通过
+动作：OpenClaw → agent-chat(QoderCLI, "设计架构：...")
+检视：OpenClaw 确认架构设计
+输出：docs/architecture/YYYY-MM-DD-架构名.md
+重试：失败重试 3 次
+```
+
+**OpenClaw 指令：**
+> 用 `agent-chat` 问 qodercli，prompt="基于需求和排期，设计系统架构..."
+
+### 阶段 4：代码开发 → QoderCLI
+
+```
+触发：架构设计通过
+动作：OpenClaw → agent-delegate(QoderCLI, task="开发编码：...")
+检视：OpenClaw 逐模块审查代码
+输出：src/ 目录下的代码文件
+重试：失败重试 3 次
+```
+
+**OpenClaw 指令：**
+> 用 `agent-delegate` 交给 qodercli，task="实现以下架构设计的代码..."
+
+### 阶段 5：测试用例 → Hermes
+
+```
+触发：代码审查通过
+动作：OpenClaw → agent-chat(Hermes, "创建测试用例：...")
+检视：OpenClaw 确认测试覆盖
+输出：tests/ 目录下的测试文件
+重试：失败重试 3 次
+```
+
+**OpenClaw 指令：**
+> 用 `agent-chat` 问 hermes，prompt="为以下代码创建测试用例..."
+
+### 阶段 6：测试执行 → Hermes
+
+```
+触发：测试用例确认通过
+动作：OpenClaw → agent-chat(Hermes, "执行测试：...")
+检视：OpenClaw 确认测试结果
+输出：测试报告
+重试：失败重试 3 次
+```
+
+**OpenClaw 指令：**
+> 用 `agent-chat` 问 hermes，prompt="执行以下测试用例，输出测试报告..."
+
+### 阶段 7：部署 → OpenClaw
+
+```
+触发：测试全部通过
+动作：OpenClaw 执行 git add/commit/push
+输出：GitHub 远程仓库更新
+```
+
+**Git 指令：**
+```bash
+git add -A
+git commit -m "feat: ..."
+git push origin main
+```
+
+### 阶段 8：失败接管
+
+```
+任意阶段连续失败 3 次 → OpenClaw 接管剩余工作
+```
+
+**OpenClaw 指令：**
+> 该阶段已重试 3 次失败，由我直接处理剩余工作。
+
+---
+
+## 工作规范
+
+### 1. 阶段转换规则
+
+| 当前阶段 | 完成条件 | 下一阶段 |
+|----------|----------|----------|
+| 需求分析 | 需求文档已输出 + OpenClaw 确认 | 排期 |
+| 排期 | 排期文档已输出 + OpenClaw 确认 | 架构设计 |
+| 架构设计 | 架构文档已输出 + OpenClaw 确认 | 代码开发 |
+| 代码开发 | 代码已提交 + OpenClaw 审查通过 | 测试用例 |
+| 测试用例 | 测试文件已创建 + OpenClaw 确认 | 测试执行 |
+| 测试执行 | 测试通过 + OpenClaw 确认 | 部署 |
+| 部署 | git push 完成 | ✅ 完成 |
+
+### 2. 重试规则
+
+```
+失败计数器 = 0
+while 当前阶段未完成:
+    retry()
+    if 成功: 失败计数器 = 0 → 下一阶段
+    else: 失败计数器 += 1
+    if 失败计数器 >= 3:
+        OpenClaw 接管 → 手动处理
+        break
+```
+
+### 3. 通信协议
+
+```
+OpenClaw → Agent: agent-chat(agent, prompt)
+Agent → OpenClaw: 输出结果
+OpenClaw: 检视 + 确认
+```
+
+### 4. 上下文传递
+
+每个阶段完成后，OpenClaw 用 `context-write` 存当前状态：
+
+```bash
+context-write(key="devflow_status", value='{"phase":"需求分析","status":"完成","next":"排期"}')
+context-write(key="requirement_doc", value="...需求文档路径...")
+context-write(key="plan_doc", value="...排期文档路径...")
+context-write(key="architecture_doc", value="...架构文档路径...")
+context-write(key="test_report", value="...测试结果...")
+```
+
+---
+
+## 快速启动
+
+当用户提出复杂需求时，OpenClaw 自动触发：
+
+```bash
+# 1. Hermes 需求分析
+agent-chat(hermes, "分析需求：[用户输入]")
+# → 检视确认
+
+# 2. Hermes 排期
+agent-chat(hermes, "制定排期：[需求内容]")
+# → 检视确认
+
+# 3. QoderCLI 架构设计
+agent-chat(qodercli, "设计架构：[需求+排期]")
+# → 检视确认
+
+# 4. QoderCLI 编码
+agent-delegate(qodercli, "task=编码开发：[架构设计]")
+# → 检视确认
+
+# 5. Hermes 测试用例
+agent-chat(hermes, "创建测试：[代码]")
+# → 检视确认
+
+# 6. Hermes 测试执行
+agent-chat(hermes, "执行测试：[测试用例]")
+# → 检视确认
+
+# 7. OpenClaw 部署
+git add -A && git commit -m "feat: ..." && git push
+```
