@@ -377,5 +377,18 @@
       "API"
     ],
     "date": "2026-05-26"
+  },
+  {
+    "title": "GitHub Pages 部署实战手册",
+    "url": "/know-how/gh-pages-deploy/",
+    "desc": "GitHub Pages 部署最佳实践，含导航栏标准、工作流配置、快速排查清单",
+    "type": "knowhow",
+    "tags": [
+      "CI/CD",
+      "GitHub Pages",
+      "踩坑",
+      "部署"
+    ],
+    "date": "2026-05-26"
   }
 ]
