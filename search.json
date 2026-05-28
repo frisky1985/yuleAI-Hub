@@ -306,6 +306,14 @@
     "date": "2026-05-26"
   },
   {
+    "title": "心跳静默规则",
+    "url": "/rules/heartbeat-silent/",
+    "desc": "心跳静默规则 — yuleAI-Hub📋 心跳静默规则用户在 2026-05-27 确认：心跳轮询完全静默，异常才说话。正常心跳 → 不回复异常 → 上报问题",
+    "type": "rules",
+    "tags": [],
+    "date": "2026-05-26"
+  },
+  {
     "title": "规则集",
     "url": "/rules/",
     "desc": "规则集 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72",
@@ -360,6 +368,16 @@
       "Hermes",
       "OpenClaw",
       "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Confirmation Capture",
+    "url": "/skills/confirmation-capture/",
+    "desc": "Confirmation Capture — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--bor",
+    "type": "skills",
+    "tags": [
       "API"
     ],
     "date": "2026-05-26"
