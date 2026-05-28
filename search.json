@@ -672,5 +672,18 @@
       "API"
     ],
     "date": "2026-05-26"
+  },
+  {
+    "title": "项目文档工作规范（QoderCLI优先）",
+    "url": "/rules/qodercli-doc-workflow/",
+    "desc": "所有项目解析/文档/Wiki必须调用QoderCLI，禁止读README总结",
+    "type": "rules",
+    "tags": [
+      "规则",
+      "QoderCLI",
+      "文档",
+      "工作流"
+    ],
+    "date": "2026-05-28"
   }
 ]
