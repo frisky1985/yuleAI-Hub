@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/about/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/agents/agent-mesh-devflow/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/agents/agent-mesh-keepalive/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/agents/confirmation-capture/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/agents/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/hermes/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/agent-mesh/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/context-sharing/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/know-how/deepseek-optimization/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -16,9 +21,11 @@
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/memory/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/memory/project-context/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/memory/user-profile/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/openclaw/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/projects/agent-mesh-architecture/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/projects/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/projects/yuleASR-Configurator/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://frisky1985.github.io/yuleAI-Hub/qodercli/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/rules/agent-collaboration/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/rules/agent-mesh-devflow/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/rules/git-commit-convention/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>

@@ -27,6 +27,71 @@
     "date": "2026-05-26"
   },
   {
+    "title": "Agent Mesh DevFlow — 三Agent协同开发工作流",
+    "url": "/agents/agent-mesh-devflow/",
+    "desc": "Agent Mesh DevFlow — 三Agent协同开发工作流\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh Keepalive — 跨 Agent 对话保活技能",
+    "url": "/agents/agent-mesh-keepalive/",
+    "desc": "Agent Mesh Keepalive — 跨 Agent 对话保活技能\n\n\n:root {\n  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;\n  -",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Confirmation Capture",
+    "url": "/agents/confirmation-capture/",
+    "desc": "Confirmation Capture — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--bor",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agents 通用能力",
+    "url": "/agents/",
+    "desc": "Agents 通用能力 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Hermes 能力总览",
+    "url": "/hermes/",
+    "desc": "Hermes 能力总览 — yuleAI-Hub\n\n:root{--primary:#E17055;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "QoderCLI",
+      "DeepSeek",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Agent Mesh — 跨 Agent 协同网络搭建",
     "url": "/know-how/agent-mesh/",
     "desc": "Agent Mesh — 跨 Agent 协同网络搭建 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;-",
@@ -224,6 +289,18 @@
     "date": "2026-05-26"
   },
   {
+    "title": "OpenClaw 技能总览",
+    "url": "/openclaw/",
+    "desc": "OpenClaw 技能总览 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "OpenClaw",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
     "title": "Agent Mesh 架构设计",
     "url": "/projects/agent-mesh-architecture/",
     "desc": "Agent Mesh 架构设计 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
@@ -254,6 +331,19 @@
     "desc": "yuleASR-Configurator 项目概览 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--f",
     "type": "project",
     "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "QoderCLI 能力总览",
+    "url": "/qodercli/",
+    "desc": "QoderCLI 能力总览 — yuleAI-Hub\n\n:root{--primary:#0984E3;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "QoderCLI",
       "API"
     ],
     "date": "2026-05-26"
