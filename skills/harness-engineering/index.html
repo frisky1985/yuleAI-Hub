@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harness Engineering 技能 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--yellow:#f9e2af;--red:#f38ba8;--lavender:#b4befe;--teal:#94e2d5}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.card{background:var(--surface);border-radius:8px;padding:1rem;margin:1rem 0}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">skills</span> / harness-engineering</nav>
+  <h1>Harness Engineering</h1>
+  <p>让现有仓库对 Agent 更可读，将关键知识转为仓库本地产物，用可执行检查替代纯文档</p>
+</header>
+
+<section>
+<h2>核心理念</h2>
+<p>把一个现有仓库逐步改造成 Harness Engineering 风格，不需要假装它在空白模板上重建。</p>
+<ul>
+<li>偏好仓库本地知识、可预测的结构、可执行的检查</li>
+<li>拒绝空洞的文档和隐藏的上下文</li>
+</ul>
+</section>
+
+<section>
+<h2>六步工作流</h2>
+
+<div class="card">
+<h3>1. 审计当前仓库</h3>
+<ul>
+<li>读取 AGENTS.md 和 docs/ 下的一级文档</li>
+<li>识别缺失的真相来源、死引用、占位符 CI、栈特定假设</li>
+<li>确认仓库是真实应用、治理层还是启动模板</li>
+<li>保留现有的产品和运行时结构</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>2. 建立最小仓库本地产物</h3>
+<p>只添加确实能改善 Agent 可读性的缺失产物：</p>
+<ul>
+<li>docs/ARCHITECTURE.md — 架构文档</li>
+<li>docs/core-beliefs.md — 核心信念</li>
+<li>docs/quality-score.md — 质量评分</li>
+<li>docs/observability.md — 可观测性</li>
+<li>docs/product-specs/ — 产品规范</li>
+<li>docs/exec-plans/ — 执行计划</li>
+<li>docs/generated/README.md — 生成物索引</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>3. 用可执行检查替代纯策略声明</h3>
+<ul>
+<li>优先使用 bun 编写轻量治理脚本</li>
+<li>添加可执行检查：必需文件存在、占位符过期、引用失效、契约漂移</li>
+<li>在 CI 中运行检查（每次 push 和 PR）</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>4. 保留通用性</h3>
+<ul>
+<li>保留真实的项目名称、领域和运行时细节</li>
+<li>只移除偶然的一次性假设、过时的团队知识和未记录的约定</li>
+<li>文档要写得让未来的 Agent 能从仓库本身继续工作</li>
+<li>渐进式加固，而不是大范围重写</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>5. 让仓库对 Agent 可读</h3>
+<ul>
+<li>每类知识放在一个明确的位置</li>
+<li>产品意图在 docs/product-specs/</li>
+<li>交付工作在 docs/exec-plans/</li>
+<li>外部库笔记在 docs/references/</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>6. 验证模板</h3>
+<ul>
+<li>运行 bun run template:check 或项目等效命令</li>
+<li>修复所有硬失败</li>
+<li>警告作为待办事项</li>
+</ul>
+</div>
+</section>
+
+<section>
+<h2>审计清单</h2>
+<table>
+<tr><th>类别</th><th>项目</th></tr>
+<tr><td rowspan="3">核心地图</td><td>AGENTS.md 存在且简短</td></tr>
+<tr><td>AGENTS.md 指向深层文档</td></tr>
+<tr><td>所有引用的文档确实存在</td></tr>
+<tr><td rowspan="3">真相来源</td><td>产品意图在 docs/product-specs/</td></tr>
+<tr><td>执行工作在 docs/exec-plans/</td></tr>
+<tr><td>技术债在 docs/exec-plans/tech-debt-tracker.md</td></tr>
+<tr><td rowspan="3">架构</td><td>层序明确</td></tr>
+<tr><td>边界规则已记录</td></tr>
+<tr><td>例子符合规则</td></tr>
+<tr><td rowspan="3">执行</td><td>有 bun 治理脚本</td></tr>
+<tr><td>CI 运行真实命令</td></tr>
+<tr><td>文档不声明不存在的自动化</td></tr>
+</table>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>📄 <a href="SKILL.md" style="color:var(--blue)">下载原始 SKILL.md</a> | 本地路径: <code>~/.openclaw/workspace/skills/harness-engineering/SKILL.md</code></p>
+</footer>
+</body>
+</html>

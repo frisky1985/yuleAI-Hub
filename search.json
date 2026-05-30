@@ -737,5 +737,40 @@
     "desc": "所有 Agent 的完整技能清单：Orchestrator、Hermes、QoderCLI 及 6 个子角色。含消息契约 schema 和消息总线命令参考。",
     "type": "skills",
     "tags": ["Agent Mesh", "技能", "Hermes", "QoderCLI", "MCP", "契约"]
+  },
+  {
+    "title": "Harness Engineering — 仓库可读性进化技能",
+    "url": "/skills/harness-engineering/",
+    "desc": "让现有仓库对 Agent 更可读：审计、流程化文档、可执行检查、CI 治理。六步工作流 + 审计清单。",
+    "type": "skills",
+    "tags": ["Harness", "工程", "CI", "文档", "治理"]
+  },
+  {
+    "title": "Superpowers — 设计驱动开发工作流",
+    "url": "/skills/superpowers/",
+    "desc": "Spec-first、TDD、Subagent-driven 开发流水线：Brainstorm→Plan→Build→Review→Finish。",
+    "type": "skills",
+    "tags": ["Superpowers", "TDD", "开发", "工作流"]
+  },
+  {
+    "title": "Harness Engineer — 自治工程运行时",
+    "url": "/skills/harness-engineer/",
+    "desc": "持久自治工程运行时。六大核心原则：上下文工程、工具使用、验证、状态管理、可观测性、人类监督。",
+    "type": "skills",
+    "tags": ["Harness", "自治", "Agent", "工程"]
+  },
+  {
+    "title": "Harness Creator — 项目模板创建",
+    "url": "/skills/harness-creator/",
+    "desc": "从零构建 Harness Engineering 风格的项目模板：骨架、文档结构、CI/CD、Agent 可读性。",
+    "type": "skills",
+    "tags": ["Harness", "模板", "项目", "脚手架"]
+  },
+  {
+    "title": "Using Superpowers — 使用指引",
+    "url": "/skills/using-superpowers/",
+    "desc": "Superpowers 技能的使用指引和最佳实践。",
+    "type": "skills",
+    "tags": ["Superpowers", "指引", "最佳实践"]
   }
 ]
