@@ -10,13 +10,14 @@
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
 h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
 h2{color:var(--blue);margin-top:1.8rem}
-h3{color:var(--teal)}
-pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+h3{color:var(--teal)}h4{color:var(--peach)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto;font-size:.9rem}
 code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
 table{border-collapse:collapse;width:100%;margin:1rem 0}
 th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
 th{background:var(--surface);color:var(--blue)}
 .tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.highlight{background:var(--surface);border-left:3px solid var(--green);padding:.8rem 1rem;margin:1rem 0;border-radius:0 8px 8px 0}
 </style>
 </head>
 <body>
@@ -61,26 +62,142 @@ th{background:var(--surface);color:var(--blue)}
 </section>
 
 <section>
-<h2>通信协议</h2>
-<p><strong>方式 1：MCP Bridge</strong> — Orchestrator → Agent</p>
-<pre>OpenClaw ──agent-chat──▶ Hermes        (同步 &lt;8s)
-OpenClaw ──agent-delegate──▶ QoderCLI  (异步，返回 task_id)</pre>
+<h2>如何保证 Agent 直接对话</h2>
 
-<p><strong>方式 2：消息总线</strong> — Agent ↔ Agent</p>
-<pre>Architect ──send──▶ Planner: "设计评审请求"
-Planner   ──reply──▶ Architect: "评审完成"
-Implementer ──broadcast──▶ 所有订阅者: "代码待审查"</pre>
+<h3>1. 消息总线 — 物理基础设施</h3>
+<p>所有 Agent 共享同一个文件级消息总线，这是对话的基础。</p>
+<pre>
+~/.openclaw/mcp-bridge/workspace/messages/
+  ├── queue/
+  │   ├── architect/       ← 每个角色有独立收件箱
+  │   ├── researcher/
+  │   ├── planner/
+  │   ├── implementer/
+  │   ├── tester/
+  │   ├── reviewer/
+  │   ├── hermes/
+  │   ├── qodercli/
+  │   └── orchestrator/
+  ├── archive/              ← 过期消息自动移入
+  ├── topics/               ← 广播主题存档
+  ├── threads/              ← 对话线程追踪
+  └── subscriptions.json    ← 主题订阅表
+</pre>
+
+<div class="highlight">
+  <strong>核心原则：Agent 从不直接发消息给对方——而是写入对方的收件箱文件。对方自读。</strong>
+</div>
+
+<h3>2. 对话流程（点对点）</h3>
+<pre>
+Agent A                   Agent B
+   │                         │
+   │  1. send(role, subject) │
+   │────────────────────────▶│  (写入 B 的收件箱)
+   │                         │
+   │  2. (B 在忙别的)         │
+   │                         │
+   │  3. B 空闲时 poll
+   │     messenger.py wait   │
+   │                         │
+   │  4. 读到消息             │
+   │                         │
+   │  5. reply(msg_id, body) │
+   │◀────────────────────────│  (写入 A 的收件箱)
+   │                         │
+   │  6. A 下次 read 看到回复  │
+</pre>
+<p><strong>保证机制</strong>：写文件是原子操作，不会丢消息。不依赖网络、不依赖两者同时在线。</p>
+
+<h3>3. 三种对话模式</h3>
+
+<h4>模式 A：点对点（最常见）</h4>
+<pre>
+# 发消息
+python3 agent-messenger.py send architect planner "design-review"
+
+# 等待收信（最长 60s）
+python3 agent-messenger.py wait planner --timeout 60
+# → [{"from": "architect", "subject": "design-review", ...}]
+
+# 回复
+python3 agent-messenger.py reply &lt;msg_id&gt; planner</pre>
+
+<h4>模式 B：广播 + 订阅</h4>
+<pre>
+# 订阅：Tester 和 Reviewer 注册自己关心的主题
+python3 agent-messenger.py subscribe tester "code/review-request"
+python3 agent-messenger.py subscribe reviewer "code/review-request"
+
+# 广播：Implementer 一发代码，所有订阅者自动收到
+python3 agent-messenger.py broadcast implementer "code/review-request" "代码已完成"</pre>
+
+<h4>模式 C：对话线程追踪</h4>
+<pre>
+# 追踪完整对话历史
+python3 agent-messenger.py thread &lt;origin_msg_id&gt;
+# → [msg1, reply1, reply2, ...]</pre>
+
+<h3>4. 不丢消息的保证</h3>
+<table>
+<tr><th>机制</th><th>说明</th></tr>
+<tr><td><strong>原子写</strong></td><td><code>_save_msg()</code> 把消息序列化为 JSON 再写入收件箱文件，不会写一半</td></tr>
+<tr><td><strong>自动清理</strong></td><td>消息在收件箱超过 30 分钟自动移入 archive，不丢失不堆积</td></tr>
+<tr><td><strong>存档保留</strong></td><td>archive 目录永久保留，purge 默认只清理 24h 以上</td></tr>
+<tr><td><strong>契约校验</strong></td><td>每条消息带 <code>contract: "message-v1"</code>，格式不合规可拒绝</td></tr>
+<tr><td><strong>发现机制</strong></td><td><code>discover</code> 自动列出所有在线 Agent，发错角色名会报错</td></tr>
+</table>
+
+<h3>5. Orchestrator 不中转</h3>
+<p>旧模式（v1）—— Orchestrator 代理：</p>
+<pre>Orchestrator → 问 Hermes → 拿结果 → 给 QoderCLI</pre>
+<p>新模式（v2）—— Orchestrator 引导，Agent 自己聊：</p>
+<pre>Orchestrator 说："Implementer，你的任务结束，broadcast 通知 Reviewer"
+     ↓
+Reviewer 听到广播，自动开始审查
+     ↓
+审查完直接 broadcast "pipeline/phase-complete"
+     ↓
+Orchestrator 收到广播，推进下一阶段</pre>
+<p><strong>Orchestrator 只在阶段边界出现，中间的高频对话全是 Agent 之间 p2p。</strong></p>
+
+<h3>6. 一键验证</h3>
+<pre># 查看整个通信链路
+python3 agent-messenger.py discover
+# → 所有 Agent 在线 + 角色清单
+
+python3 agent-messenger.py status
+# → 所有收件箱为空，系统就绪
+
+# 测试：Architect → Planner → 回传
+python3 agent-messenger.py send architect planner "ping" '{"test": true}'
+python3 agent-messenger.py read planner --last 1
+python3 agent-messenger.py reply &lt;msg_id&gt; planner '{"pong": true}'
+python3 agent-messenger.py thread &lt;msg_id&gt;
+# → 完整 ping-pong 记录</pre>
 </section>
 
 <section>
-<h2>边界规则</h2>
-<ol>
-<li>OpenClaw 只编排，不替 Agent 写代码</li>
-<li>Agent 之间直接沟通——不经过 OpenClaw 中转</li>
-<li>每阶段输出必须有验证</li>
-<li>生成与审查必须分离（不同 Agent）</li>
-<li>架构变更必须经 Architect 评审</li>
-</ol>
+<h2>通信协议</h2>
+<h3>MCP Bridge（编排→Agent）</h3>
+<pre>OpenClaw ──agent-chat──▶ Hermes        (同步 &lt;8s)
+OpenClaw ──agent-delegate──▶ QoderCLI  (异步，返回 task_id)</pre>
+
+<h3>消息总线（Agent↔Agent）</h3>
+<pre>Architect ──send──▶ Planner  (文件消息队列)
+Planner   ──reply──▶ Architect</pre>
+
+<h3>消息载荷结构</h3>
+<pre>{
+  "message_id": "uuid",
+  "from": "architect",
+  "to": "planner",
+  "subject": "architecture-review",
+  "body": { ... },
+  "timestamp": "2026-05-30T23:00:00Z",
+  "in_reply_to": null,
+  "contract": "message-v1"
+}</pre>
 </section>
 
 <section>
@@ -94,8 +211,20 @@ Implementer ──broadcast──▶ 所有订阅者: "代码待审查"</pre>
 </table>
 </section>
 
+<section>
+<h2>边界规则</h2>
+<ol>
+<li>OpenClaw 只编排，不替 Agent 写代码</li>
+<li>Agent 之间直接沟通——不经过 OpenClaw 中转</li>
+<li>每阶段输出必须有验证</li>
+<li>生成与审查必须分离（不同 Agent）</li>
+<li>架构变更必须经 Architect 评审</li>
+<li>消息必须遵守 message-v1 契约格式</li>
+</ol>
+</section>
+
 <footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
-  <p>版本: v2.0.0 | 最后更新: 2026-05-30 | 完整文档: <code>~/.openclaw/workspace/docs/ARCHITECTURE.md</code></p>
+  <p>版本: v2.0.0 | 最后更新: 2026-05-30 | 本地路径: <code>~/.openclaw/workspace/docs/ARCHITECTURE.md</code></p>
 </footer>
 </body>
 </html>
