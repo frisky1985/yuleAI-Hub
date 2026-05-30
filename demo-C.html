@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案C · 极简文档</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --sidebar-w: 280px;
+  --primary: #2563eb;
+  --primary-bg: #eff6ff;
+  --bg: #ffffff;
+  --bg-sidebar: #fafbfc;
+  --fg: #0f172a;
+  --fg2: #64748b;
+  --fg3: #94a3b8;
+  --border: #e2e8f0;
+  --accent-bg: #f8fafc;
+  --font: "Noto Sans SC", -apple-system, "PingFang SC", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", monospace;
+  --radius: 8px;
+}
+body { font-family: var(--font); color: var(--fg); background: var(--bg); line-height: 1.7; font-size: 15px; display: flex; min-height: 100vh; }
+
+/* sidebar */
+.sidebar { width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; }
+.sidebar-inner { padding: 24px 16px; }
+.sidebar-logo { font-size: 16px; font-weight: 700; margin-bottom: 24px; padding: 0 12px; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--fg); }
+.sidebar-logo .logo-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; }
+
+.sidebar-search { margin-bottom: 20px; padding: 0 12px; }
+.sidebar-search input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: var(--font); outline: none; background: white; }
+.sidebar-search input:focus { border-color: var(--primary); }
+
+.nav-group { margin-bottom: 20px; }
+.nav-group-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--fg3); padding: 0 12px; margin-bottom: 6px; }
+.nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 6px; font-size: 13px; color: var(--fg2); text-decoration: none; transition: all .1s; }
+.nav-item:hover { background: var(--primary-bg); color: var(--primary); }
+.nav-item.active { background: var(--primary-bg); color: var(--primary); font-weight: 500; }
+.nav-item .icon { font-size: 14px; }
+.nav-item .count { margin-left: auto; font-size: 11px; color: var(--fg3); background: var(--accent-bg); padding: 0 6px; border-radius: 4px; }
+
+/* main */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; }
+.main-inner { max-width: 860px; margin: 0 auto; padding: 48px 48px 80px; }
+
+.breadcrumb { font-size: 13px; color: var(--fg3); margin-bottom: 12px; }
+.breadcrumb a { color: var(--fg3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb span { margin: 0 4px; }
+
+h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+.subtitle { color: var(--fg2); font-weight: 300; margin-bottom: 32px; }
+
+.meta-line { display: flex; gap: 16px; font-size: 13px; color: var(--fg2); margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+
+h2 { font-size: 22px; font-weight: 600; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+p, li { color: var(--fg2); line-height: 1.8; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 4px 0; }
+code { font-family: var(--mono); font-size: 13px; background: var(--primary-bg); padding: 2px 6px; border-radius: 4px; }
+pre { background: #0f172a; color: #e2e8f0; border-radius: var(--radius); padding: 16px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+pre code { background: none; padding: 0; color: inherit; }
+blockquote { border-left: 3px solid var(--primary); padding: 8px 16px; margin: 16px 0; background: var(--primary-bg); border-radius: 0 var(--radius) var(--radius) 0; color: var(--fg2); }
+a { color: var(--primary); }
+
+/* article list */
+.article-list { }
+.article-card { display: block; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--fg); }
+.article-card:hover h3 { color: var(--primary); }
+.article-card h3 { font-size: 16px; font-weight: 600; margin: 0 0 4px; transition: color .15s; border: none; }
+.article-card .desc { font-size: 14px; color: var(--fg2); }
+.article-card .art-meta { font-size: 12px; color: var(--fg3); margin-top: 4px; display: flex; gap: 12px; }
+
+/* cards grid on index */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0; }
+.fcard { background: var(--accent-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--fg); transition: all .15s; display: block; }
+.fcard:hover { border-color: var(--primary); }
+.fcard .fnum { font-size: 28px; font-weight: 700; color: var(--primary); }
+.fcard h3 { font-size: 15px; margin: 4px 0; border: none; }
+.fcard p { font-size: 13px; color: var(--fg2); margin: 0; }
+
+/* footer */
+footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 48px; font-size: 13px; color: var(--fg3); display: flex; justify-content: space-between; }
+
+/* responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .main-inner { padding: 24px 20px; }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a href="#" class="sidebar-logo">
+      <span class="logo-icon">Y</span>
+      yuleAI-Hub
+    </a>
+    <div class="sidebar-search"><input placeholder="搜索文档..."></div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">📖 内容</div>
+      <a href="#" class="nav-item active"><span class="icon">📚</span> 知识库 <span class="count">4</span></a>
+      <a href="#" class="nav-item"><span class="icon">📖</span> Know-How <span class="count">5</span></a>
+      <a href="#" class="nav-item"><span class="icon">⚡</span> 技能 <span class="count">3</span></a>
+      <a href="#" class="nav-item"><span class="icon">📋</span> 规则集 <span class="count">2</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">🔧 参考</div>
+      <a href="#" class="nav-item"><span class="icon">🛠</span> 工具 <span class="count">3</span></a>
+      <a href="#" class="nav-item"><span class="icon">📁</span> 项目 <span class="count">1</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">🏷 标签</div>
+      <a href="#" class="nav-item">MCP</a>
+      <a href="#" class="nav-item">Hermes</a>
+      <a href="#" class="nav-item">OpenClaw</a>
+      <a href="#" class="nav-item">Agent协同</a>
+      <a href="#" class="nav-item">DeepSeek</a>
+    </div>
+
+    <div class="nav-group" style="margin-top:32px;padding-top:16px;border-top:1px solid var(--border)">
+      <a href="#" class="nav-item"><span class="icon">💬</span> 关于</a>
+      <a href="#" class="nav-item"><span class="icon">⭐</span> GitHub</a>
+    </div>
+  </div>
+</aside>
+
+<!-- main -->
+<div class="main">
+  <div class="main-inner">
+
+    <div class="breadcrumb"><a href="#">首页</a></div>
+    <h1>yuleAI-Hub</h1>
+    <p class="subtitle" style="font-size:16px">AI Agent 协同的知识库文档站。记录 Agent 工具、MCP 集成和跨 Agent 协作的 Know-How。</p>
+
+    <div style="display:flex;gap:24px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border)">
+      <div><span style="font-size:24px;font-weight:700;color:var(--primary)">12</span><span style="font-size:13px;color:var(--fg2);margin-left:4px">篇文章</span></div>
+      <div><span style="font-size:24px;font-weight:700;color:var(--primary)">5</span><span style="font-size:13px;color:var(--fg2);margin-left:4px">个技能</span></div>
+      <div><span style="font-size:24px;font-weight:700;color:var(--primary)">3</span><span style="font-size:13px;color:var(--fg2);margin-left:4px">个工具</span></div>
+    </div>
+
+    <h2>📚 知识库</h2>
+    <p>系统性知识文章，适合深度阅读</p>
+    <div class="article-list">
+      <a href="#" class="article-card"><h3>MCP 协议详解 — AI Agent 通信标准</h3><div class="desc">核心概念、消息格式和传输协议</div><div class="art-meta"><span>2026-05-26</span><span>☕ 8 min</span></div></a>
+      <a href="#" class="article-card"><h3>Agent 架构模式</h3><div class="desc">单 Agent、多 Agent、编排器模式的对比</div><div class="art-meta"><span>2026-05-24</span><span>☕ 12 min</span></div></a>
+    </div>
+
+    <h2>📖 Know-How</h2>
+    <p>实践导向的经验技巧</p>
+    <div class="article-list">
+      <a href="#" class="article-card"><h3>Agent Mesh — 跨 Agent 协同网络搭建</h3><div class="desc">OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作</div><div class="art-meta"><span>2026-05-26</span></div></a>
+      <a href="#" class="article-card"><h3>跨 Agent 上下文共享方案</h3><div class="desc">context-read/write 实现信息共享</div><div class="art-meta"><span>2026-05-24</span></div></a>
+      <a href="#" class="article-card"><h3>Hermes Agent 使用技巧</h3><div class="desc">日常技巧和踩坑记录</div><div class="art-meta"><span>2026-05-25</span></div></a>
+    </div>
+
+    <footer>
+      <span>© 2026 yuleAI-Hub</span>
+      <span>Built with ❤️</span>
+    </footer>
+  </div>
+</div>
+
+</body>
+</html>

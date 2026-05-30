@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Agent Mesh DevFlow — 三Agent协同开发工作流</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7}.nav{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1000px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font-weight:700;font-size:15px}
+.logo .yl{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6C5CE7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+.nav-links{display:flex;gap:2px}.nav-links a{padding:6px 12px;border-radius:6px;color:var(--fg2);text-decoration:none;font-size:13px;transition:all .15s}
+.nav-links a:hover{background:#f0edff;color:var(--primary)}.container{max-width:860px;margin:0 auto;padding:32px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0;font-size:13px;line-height:1.5}
+code{font-family:var(--mono);font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+h2{font-size:18px;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:15px;margin:20px 0 8px}
+p{margin:10px 0;color:var(--fg2)}
+ul,ol{margin:10px 0;padding-left:24px;color:var(--fg2)}
+li{margin:4px 0}
+footer{border-top:1px solid var(--border);padding:20px 0;margin-top:32px;text-align:center;font-size:12px;color:var(--fg3)}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head>
+<body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="yl">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/skills/">技能</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="container">
+<h1 style="color:#6C5CE7;font-size:24px;margin-bottom:8px">🤖 Agent Mesh DevFlow</h1>
+<p style="color:var(--fg2);margin-bottom:24px">三 Agent 协同开发工作流 — 自动化流水线，完成后输出总结报告</p>
+
+<h2>核心理念</h2>
+<p><strong>全程自动化，跨 Agent 自行对话完成。用户只需提需求，等总结报告。</strong></p>
+<pre>
+用户提出需求
+  ↓
+┌─────────────────────────────────────────────────────┐
+│                 Agent Mesh DevFlow                   │
+│  Hermes ──▶ QoderCLI ──▶ Hermes                     │
+│  需求分析 排期  架构设计 编码  测试用例 测试          │
+│  自动推进，失败3次由OpenClaw接管                     │
+└─────────────────────────────────────────────────────┘
+  ↓
+用户收到总结报告
+</pre>
+
+<h2>7 阶段自动流水线</h2>
+<table>
+<tr><th>阶段</th><th>执行者</th><th>动作</th></tr>
+<tr><td>① 需求分析</td><td>Hermes</td><td>agent-chat → 输出需求文档</td></tr>
+<tr><td>② 排期</td><td>Hermes</td><td>agent-chat → 输出排期文档</td></tr>
+<tr><td>③ 架构设计</td><td>QoderCLI</td><td>agent-chat → 输出架构文档</td></tr>
+<tr><td>④ 编码</td><td>QoderCLI</td><td>agent-delegate → 输出代码</td></tr>
+<tr><td>⑤ 测试用例</td><td>Hermes</td><td>agent-chat → 输出测试文件</td></tr>
+<tr><td>⑥ 测试执行</td><td>Hermes</td><td>agent-chat → 输出测试报告</td></tr>
+<tr><td>⑦ 部署+报告</td><td>OpenClaw</td><td>git push + 总结报告</td></tr>
+</table>
+<p>每阶段完成自动进入下一阶段。失败重试3次，仍失败由OpenClaw接管。</p>
+
+<h2>总结报告模板</h2>
+<pre>
+═══════════════════════════════════════════════
+  🤖 Agent Mesh DevFlow 完成报告
+═══════════════════════════════════════════════
+📋 需求：[标题]
+⏱ 耗时：[总时长]
+
+📌 各阶段状态
+  ✅ 需求分析 — Hermes
+  ✅ 排期 — Hermes
+  ✅ 架构设计 — QoderCLI
+  ✅ 编码 — QoderCLI
+  ✅ 测试用例 — Hermes
+  ✅ 测试执行 — Hermes
+  ✅ 部署 — OpenClaw
+
+📂 产出文档 &amp; 源码
+🔁 重试记录（如有）
+═══════════════════════════════════════════════
+</pre>
+
+<h2>失败接管机制</h2>
+<pre>
+for 阶段 in [需求分析,排期,架构,编码,测试用例,测试执行]:
+    尝试 = 0
+    while 尝试 < 3:
+        try: 执行(); break
+        except: 尝试 += 1
+    if 尝试 >= 3:
+        OpenClaw 接管 → 输出异常报告
+        break
+</pre>
+
+<h2>触发条件</h2>
+<pre>
+自动触发: 用户说 "开发需求" / "做一个" / "实现" / "创建项目"
+           且需求描述超过 20 字
+</pre>
+</div>
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+</body></html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dark Mode 实现 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:28px 0 8px;font-size:20px;border-bottom:1px solid var(--border);padding-bottom:4px}
+h3{margin:20px 0 4px;font-size:16px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px;font-family:var(--sans)}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+.breadcrumb{font-size:13px;margin-bottom:16px;font-family:var(--sans);color:var(--fg2)}
+.breadcrumb a{color:var(--fg2);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.page-meta{font-size:12px;color:var(--fg2);margin:8px 0;font-family:var(--sans);display:flex;gap:16px}
+.page-tags{display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap}
+.page-tags .tag{padding:2px 10px;border-radius:4px;background:var(--primary-bg);color:var(--primary);font-size:11px;font-family:var(--sans)}
+blockquote{border-left:3px solid var(--primary);background:var(--primary-bg);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:13px}
+strong{color:var(--fg)}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/skills/">⚡ Skills</a> <span>/</span> Dark Mode 实现</div>
+  <h1>⚡ Dark Mode 实现 — Tailwind React 主题切换方案</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-27</span>
+    <span>⏱️ 即用型技能</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">Dark Mode</span><span class="tag">Tailwind</span><span class="tag">React</span><span class="tag">CSS</span><span class="tag">yuleASR</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>为 Tailwind React 项目添加暗色模式支持，使用 CSS 自定义属性和非冲突的颜色 token 体系。涵盖 CSS 变量命名、Tailwind 配置、组件级灰色类替换、对比度规则等完整方案。</p>
+
+  <h2>适用场景</h2>
+  <ul>
+    <li>为已有 Tailwind React 应用添加 Dark Mode</li>
+    <li>修复暗色模式下的颜色对比度问题</li>
+    <li>搭建主题感知的 CSS 变量系统</li>
+  </ul>
+
+  <h2>CSS 变量系统 — 避免命名冲突</h2>
+
+  <p>使用 <strong>non-conflicting 命名空间</strong>（<code>app-*</code> 前缀）避免与 Tailwind 内置调色板冲突：</p>
+
+  <pre><code>/* ❌ 错误：与 Tailwind 的 `primary` 颜色冲突 */
+--bg-primary: #ffffff;  // Tailwind 把 bg-primary 解析成 hsl(var(--primary))，不是这个变量！
+--text-primary: #111827;
+
+/* ✅ 正确：使用 `app-` 前缀避免冲突 */
+--app-bg-primary: #ffffff;
+--app-text-primary: #111827;
+--app-border-primary: #e5e7eb;</code></pre>
+
+  <h2>Tailwind 配置</h2>
+
+  <p>在 <code>tailwind.config.js</code> 中定义嵌套颜色：</p>
+
+  <pre><code>colors: {
+  app: {
+    bg: {
+      primary: 'var(--app-bg-primary)',
+      secondary: 'var(--app-bg-secondary)',
+      tertiary: 'var(--app-bg-tertiary)',
+    },
+    text: {
+      primary: 'var(--app-text-primary)',
+      secondary: 'var(--app-text-secondary)',
+      tertiary: 'var(--app-text-tertiary)',
+    },
+    border: {
+      primary: 'var(--app-border-primary)',
+      secondary: 'var(--app-border-secondary)',
+    },
+  },
+}</code></pre>
+
+  <p>在 JSX 中使用：<code>bg-app-bg-primary</code>、<code>text-app-text-primary</code>、<code>border-app-border-primary</code>。</p>
+
+  <h2>步骤</h2>
+
+  <h3>1. 添加 CSS 变量</h3>
+
+  <pre><code>:root {
+  /* 亮色模式 */
+  --app-bg-primary: #ffffff;
+  --app-bg-secondary: #f9fafb;
+  --app-bg-tertiary: #f3f4f6;
+  --app-text-primary: #111827;
+  --app-text-secondary: #6b7280;
+  --app-text-tertiary: #9ca3af;
+  --app-border-primary: #e5e7eb;
+  --app-border-secondary: #d1d5db;
+}
+
+.dark {
+  /* 暗色模式 */
+  --app-bg-primary: #0f172a;
+  --app-bg-secondary: #1e293b;
+  --app-bg-tertiary: #334155;
+  --app-text-primary: #f1f5f9;
+  --app-text-secondary: #f1f5f9;
+  --app-text-tertiary: #f1f5f9;
+  --app-border-primary: #334155;
+  --app-border-secondary: #475569;
+}</code></pre>
+
+  <h3>2. 批量替换灰色类</h3>
+
+  <table>
+    <thead><tr><th>旧类名</th><th>新类名</th></tr></thead>
+    <tbody>
+      <tr><td><code>bg-white</code></td><td><code>bg-app-bg-primary</code></td></tr>
+      <tr><td><code>bg-gray-50</code></td><td><code>bg-app-bg-secondary</code></td></tr>
+      <tr><td><code>bg-gray-100/200/300</code></td><td><code>bg-app-bg-tertiary</code></td></tr>
+      <tr><td><code>text-gray-900/700</code></td><td><code>text-app-text-primary</code></td></tr>
+      <tr><td><code>text-gray-600/500</code></td><td><code>text-app-text-secondary</code></td></tr>
+      <tr><td><code>text-gray-400/300</code></td><td><code>text-app-text-tertiary</code></td></tr>
+      <tr><td><code>border-gray-200/300/100</code></td><td><code>border-app-border-primary</code></td></tr>
+      <tr><td><code>divide-gray-100</code></td><td><code>divide-app-border-primary</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>⚠️ 常见陷阱</h2>
+
+  <h3>固定色背景 + 固定色文字规则</h3>
+  <p>当容器使用固定色背景（如 <code>bg-blue-50</code>），内部所有文字必须使用固定色文字（如 <code>text-blue-700</code>）<strong>绝不能</strong>使用 <code>text-app-text-primary</code> 等变量 —— 暗色下会变成白色，在浅色背景上不可见。</p>
+
+  <h3>HSL 主题变量 vs app-* 变量</h3>
+  <p><code>bg-primary</code>、<code>text-secondary</code> 等类使用 HSL CSS 变量（<code>hsl(var(--primary))</code>），在设置为表面/背景色时要用 app-* 替换。仅用作品牌强调色时保留原样。</p>
+
+  <h3>双重替换 bug</h3>
+  <p>批量替换脚本跑了两次会导致 <code>bg-app-bg-app-bg-tertiary</code>。跑完后用 grep 检查：</p>
+  <pre><code>grep -rn 'app-bg-app-bg\|app-text-app-text\|app-border-app-border' src/ --include='*.tsx' | wc -l</code></pre>
+
+  <h2>相关技能</h2>
+  <ul>
+    <li><a href="/skills/yuleasr-configurator-ui/">⚡ yuleASR Configurator UI</a> — AUTOSAR 配置器 UI 模式，同样使用 app-* 主题方案</li>
+  </ul>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

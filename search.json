@@ -1,0 +1,776 @@
+[
+  {
+    "title": "yuleAI-Hub — AI Agent 知识花园",
+    "url": "/",
+    "desc": "AI Agent 协同的知识花园",
+    "type": "home",
+    "tags": [
+      "AI",
+      "Agent",
+      "MCP"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "关于 yuleAI-Hub",
+    "url": "/about/",
+    "desc": "关于 yuleAI-Hub — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh DevFlow — 三Agent协同开发工作流",
+    "url": "/agents/agent-mesh-devflow/",
+    "desc": "Agent Mesh DevFlow — 三Agent协同开发工作流\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh Keepalive — 跨 Agent 对话保活技能",
+    "url": "/agents/agent-mesh-keepalive/",
+    "desc": "Agent Mesh Keepalive — 跨 Agent 对话保活技能\n\n\n:root {\n  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;\n  -",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Confirmation Capture",
+    "url": "/agents/confirmation-capture/",
+    "desc": "Confirmation Capture — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--bor",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agents 通用能力",
+    "url": "/agents/",
+    "desc": "Agents 通用能力 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Hermes 能力总览",
+    "url": "/hermes/",
+    "desc": "Hermes 能力总览 — yuleAI-Hub\n\n:root{--primary:#E17055;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "QoderCLI",
+      "DeepSeek",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh — 跨 Agent 协同网络搭建",
+    "url": "/know-how/agent-mesh/",
+    "desc": "Agent Mesh — 跨 Agent 协同网络搭建 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;-",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "跨 Agent 上下文共享方案",
+    "url": "/know-how/context-sharing/",
+    "desc": "跨 Agent 上下文共享方案 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "DeepSeek API 性能优化",
+    "url": "/know-how/deepseek-optimization/",
+    "desc": "DeepSeek API 性能优化 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d343",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "DeepSeek",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "OpenClaw Gateway 部署 — Know-How",
+    "url": "/know-how/gateway-deployment/",
+    "desc": "OpenClaw Gateway 部署 — Know-How\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--accent-hover:#00a381;",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "GitHub Pages 部署实战 — Know-How",
+    "url": "/know-how/gh-pages-deploy/",
+    "desc": "GitHub Pages 部署实战 — Know-How\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--accent-hover:#00a381;--",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Hermes Agent 使用技巧",
+    "url": "/know-how/hermes-tips/",
+    "desc": "Hermes Agent 使用技巧 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d343",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "DeepSeek"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Know-How",
+    "url": "/know-how/",
+    "desc": "Know-How — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "OpenClaw 入门指南",
+    "url": "/know-how/openclaw-getting-started/",
+    "desc": "OpenClaw 入门指南 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent 架构模式 — AI Agent 设计模式详解",
+    "url": "/knowledge/agent-architecture-patterns/",
+    "desc": "Agent 架构模式 — AI Agent 设计模式详解\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d343",
+    "type": "knowledge",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh 架构",
+    "url": "/knowledge/agent-mesh-architecture/",
+    "desc": "Agent Mesh 架构 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--",
+    "type": "knowledge",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "知识库",
+    "url": "/knowledge/",
+    "desc": "知识库 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3",
+    "type": "knowledge",
+    "tags": [
+      "MCP",
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "MCP 协议基础",
+    "url": "/knowledge/mcp-protocol-basics/",
+    "desc": "MCP 协议基础 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#",
+    "type": "knowledge",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "记忆",
+    "url": "/memory/",
+    "desc": "记忆 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;",
+    "type": "knowhow",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "项目核心记忆",
+    "url": "/memory/project-context/",
+    "desc": "项目核心记忆 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#63",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "用户画像",
+    "url": "/memory/user-profile/",
+    "desc": "用户画像 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "OpenClaw 技能总览",
+    "url": "/openclaw/",
+    "desc": "OpenClaw 技能总览 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "knowhow",
+    "tags": [
+      "Agent",
+      "OpenClaw",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh 架构设计",
+    "url": "/projects/agent-mesh-architecture/",
+    "desc": "Agent Mesh 架构设计 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
+    "type": "project",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "项目",
+    "url": "/projects/",
+    "desc": "项目 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--rad",
+    "type": "project",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "yuleASR-Configurator 项目概览",
+    "url": "/projects/yuleASR-Configurator/",
+    "desc": "yuleASR-Configurator 项目概览 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--f",
+    "type": "project",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "QoderCLI 能力总览",
+    "url": "/qodercli/",
+    "desc": "QoderCLI 能力总览 — yuleAI-Hub\n\n:root{--primary:#0984E3;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "knowhow",
+    "tags": [
+      "MCP",
+      "Agent",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent 协同规则",
+    "url": "/rules/agent-collaboration/",
+    "desc": "Agent 协同规则 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2",
+    "type": "rules",
+    "tags": [
+      "MCP",
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "DevFlow 执行规则",
+    "url": "/rules/agent-mesh-devflow/",
+    "desc": "DevFlow 执行规则 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e",
+    "type": "rules",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Git 提交规范",
+    "url": "/rules/git-commit-convention/",
+    "desc": "Git 提交规范 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#",
+    "type": "rules",
+    "tags": [
+      "MCP",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Git 提交规范",
+    "url": "/rules/git-convention/",
+    "desc": "Git 提交规范 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "心跳静默规则",
+    "url": "/rules/heartbeat-silent/",
+    "desc": "心跳静默规则 — yuleAI-Hub📋 心跳静默规则用户在 2026-05-27 确认：心跳轮询完全静默，异常才说话。正常心跳 → 不回复异常 → 上报问题",
+    "type": "rules",
+    "tags": [],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "规则集",
+    "url": "/rules/",
+    "desc": "规则集 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "导航栏设计模式",
+    "url": "/rules/navbar-design-pattern/",
+    "desc": "导航栏设计模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "工作流核心原则",
+    "url": "/rules/workflow-principles/",
+    "desc": "工作流核心原则 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
+    "type": "rules",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh DevFlow — 三Agent协同开发工作流",
+    "url": "/skills/agent-mesh-devflow/",
+    "desc": "Agent Mesh DevFlow — 三Agent协同开发工作流\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--",
+    "type": "skills",
+    "tags": [
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh Keepalive — 跨 Agent 对话保活技能",
+    "url": "/skills/agent-mesh-keepalive/",
+    "desc": "Agent Mesh Keepalive — 跨 Agent 对话保活技能\n\n\n:root {\n  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;\n  -",
+    "type": "skills",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Confirmation Capture",
+    "url": "/skills/confirmation-capture/",
+    "desc": "Confirmation Capture — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--bor",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "上下文共享技巧",
+    "url": "/skills/context-sharing/",
+    "desc": "上下文共享技巧 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#6",
+    "type": "skills",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "设计驱动开发工作流",
+    "url": "/skills/design-driven-dev/",
+    "desc": "设计驱动开发工作流 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "双模式数据持久化模式",
+    "url": "/skills/dual-mode-persistence/",
+    "desc": "双模式数据持久化模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Hermes 快速操作技巧",
+    "url": "/skills/hermes-tips/",
+    "desc": "Hermes 快速操作技巧 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--",
+    "type": "skills",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "QoderCLI",
+      "DeepSeek",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "技能库",
+    "url": "/skills/",
+    "desc": "技能库 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72",
+    "type": "skills",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "React 动态实例容器模式",
+    "url": "/skills/react-dynamic-instances/",
+    "desc": "React 动态实例容器模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;-",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "yuleASR Configurator UI",
+    "url": "/skills/yuleasr-configurator-ui/",
+    "desc": "yuleASR Configurator UI — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "React 复制按钮模式",
+    "url": "/skills/yuleasr-copy-button/",
+    "desc": "React 复制按钮模式 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Dark Mode 实现",
+    "url": "/skills/yuleasr-dark-mode/",
+    "desc": "Dark Mode 实现 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "skills",
+    "tags": [
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Mesh 一键启动器 — 工具",
+    "url": "/tools/agent-mesh-starter/",
+    "desc": "Agent Mesh 一键启动器 — 工具\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--accent:#00B894;--bg:#FBF9F5;--bg-card:#fff;--fg",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "Warp"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Ping",
+    "url": "/tools/agent-ping/",
+    "desc": "Agent Ping — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8e",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Agent Runner",
+    "url": "/tools/agent-runner/",
+    "desc": "Agent Runner — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--f",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "工具",
+    "url": "/tools/",
+    "desc": "工具 — yuleAI-Hub\n\n:root{--primary:#6C5CE7;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--rad",
+    "type": "tool",
+    "tags": [
+      "Agent",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "MCP Bridge 配置指南",
+    "url": "/tools/mcp-bridge/",
+    "desc": "MCP Bridge 配置指南 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "QoderCLI 配置与使用",
+    "url": "/tools/qodercli-setup/",
+    "desc": "QoderCLI 配置与使用 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;-",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "QoderCLI",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "Warp Agent 集成指南",
+    "url": "/tools/warp-agent/",
+    "desc": "Warp Agent 集成指南 — yuleAI-Hub\n\n\n:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;",
+    "type": "tool",
+    "tags": [
+      "MCP",
+      "Agent",
+      "Hermes",
+      "OpenClaw",
+      "Warp",
+      "API"
+    ],
+    "date": "2026-05-26"
+  },
+  {
+    "title": "项目文档工作规范（QoderCLI优先）",
+    "url": "/rules/qodercli-doc-workflow/",
+    "desc": "所有项目解析/文档/Wiki必须调用QoderCLI，禁止读README总结",
+    "type": "rules",
+    "tags": [
+      "规则",
+      "QoderCLI",
+      "文档",
+      "工作流"
+    ],
+    "date": "2026-05-28"
+  },
+  {
+    "title": "Claude Code + DeepSeek V4 — 原生 Anthropic 端点配置",
+    "url": "/know-how/claude-code-deepseek/",
+    "desc": "Claude Code 通过 DeepSeek 原生 Anthropic 端点在中国运行的完整配置指南",
+    "type": "knowhow",
+    "tags": [
+      "DeepSeek",
+      "Claude Code",
+      "Proxy",
+      "AI助手"
+    ]
+  },
+  {
+    "title": "Claude Desktop — macOS ARM64 下载",
+    "url": "/tools/claude-desktop/",
+    "desc": "Claude Desktop for macOS (Apple Silicon). 通过 DeepSeek 原生端点可在中国使用。",
+    "type": "tool",
+    "tags": [
+      "Claude Desktop",
+      "下载",
+      "AI助手",
+      "macOS"
+    ]
+  },
+  {
+    "title": "Agent Mesh v2 — Harness Engineering + Superpowers 协作升级",
+    "url": "/skills/agent-mesh-upgrade/",
+    "desc": "Agent Mesh v2: 基于 Harness Engineering + Superpowers 框架的 Agent 协作基础设施升级。包括架构文档、技能清单、消息契约、治理检查。",
+    "type": "skills",
+    "tags": ["Agent Mesh", "Harness Engineering", "Superpowers", "MCP", "Agent", "OpenClaw", "Hermes", "QoderCLI"]
+  },
+  {
+    "title": "Agent Mesh 架构文档",
+    "url": "/docs/agent-mesh-architecture/",
+    "desc": "Agent Mesh 层叠架构：OpenClaw 编排层 → MCP Bridge 通信层 → 消息总线 → Agent 层。含角色定义、通信协议、边界规则、失败处理。",
+    "type": "docs",
+    "tags": ["Agent Mesh", "架构", "MCP", "Agent", "OpenClaw"]
+  },
+  {
+    "title": "Agent Mesh v2 产品规范",
+    "url": "/docs/agent-mesh-v2-spec/",
+    "desc": "Agent Mesh v2 产品规范：能力对比（v1 vs v2）、技能清单、消息契约、管道阶段、质量门禁。",
+    "type": "docs",
+    "tags": ["Agent Mesh", "规范", "MCP", "Agent", "OpenClaw"]
+  },
+  {
+    "title": "Agent Mesh 技能清单 — Agent 角色定义和消息契约",
+    "url": "/skills/agent-mesh-skills/",
+    "desc": "所有 Agent 的完整技能清单：Orchestrator、Hermes、QoderCLI 及 6 个子角色。含消息契约 schema 和消息总线命令参考。",
+    "type": "skills",
+    "tags": ["Agent Mesh", "技能", "Hermes", "QoderCLI", "MCP", "契约"]
+  },
+  {
+    "title": "Harness Engineering — 仓库可读性进化技能",
+    "url": "/skills/harness-engineering/",
+    "desc": "让现有仓库对 Agent 更可读：审计、流程化文档、可执行检查、CI 治理。六步工作流 + 审计清单。",
+    "type": "skills",
+    "tags": ["Harness", "工程", "CI", "文档", "治理"]
+  },
+  {
+    "title": "Superpowers — 设计驱动开发工作流",
+    "url": "/skills/superpowers/",
+    "desc": "Spec-first、TDD、Subagent-driven 开发流水线：Brainstorm→Plan→Build→Review→Finish。",
+    "type": "skills",
+    "tags": ["Superpowers", "TDD", "开发", "工作流"]
+  },
+  {
+    "title": "Harness Engineer — 自治工程运行时",
+    "url": "/skills/harness-engineer/",
+    "desc": "持久自治工程运行时。六大核心原则：上下文工程、工具使用、验证、状态管理、可观测性、人类监督。",
+    "type": "skills",
+    "tags": ["Harness", "自治", "Agent", "工程"]
+  },
+  {
+    "title": "Harness Creator — 项目模板创建",
+    "url": "/skills/harness-creator/",
+    "desc": "从零构建 Harness Engineering 风格的项目模板：骨架、文档结构、CI/CD、Agent 可读性。",
+    "type": "skills",
+    "tags": ["Harness", "模板", "项目", "脚手架"]
+  },
+  {
+    "title": "Using Superpowers — 使用指引",
+    "url": "/skills/using-superpowers/",
+    "desc": "Superpowers 技能的使用指引和最佳实践。",
+    "type": "skills",
+    "tags": ["Superpowers", "指引", "最佳实践"]
+  }
+]

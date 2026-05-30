@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Confirmation Capture — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7;padding:32px;max-width:800px;margin:0 auto}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:14px;overflow-x:auto;margin:10px 0;font-size:13px}
+code{font-family:var(--mono);font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
+h1{color:var(--primary);margin-bottom:8px}h2{margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+p{margin:8px 0;color:var(--fg2)}ul{margin:8px 0;padding-left:20px;color:var(--fg2)}li{margin:3px 0}
+</style></head><body>
+<h1>✅ Confirmation Capture</h1>
+<p style="color:var(--fg2);margin-bottom:24px">满意确认捕获技能 — 用户说"完美""符合预期"时自动记录偏好并上传 GitHub</p>
+
+<h2>触发词</h2>
+<p>完美 · 符合预期 · 正是我要的 · 非常满意 · 精彩 · 就是这个感觉 · 很不错 · 很好 · 太棒了 · 厉害 · 搞定 · 可以 · ok</p>
+
+<h2>四步动作</h2>
+<ol>
+<li>写 Memory → <code>memory/YYYY-MM-DD.md</code></li>
+<li>写 Skill → <code>skills/user-preference-{主题}/SKILL.md</code></li>
+<li>写规则 + search.json → <code>~/yuleAI-Hub/rules/{主题}/</code></li>
+<li>git push → 自动上传到远程</li>
+</ol>
+
+<h2>回执格式</h2>
+<pre>
+═══════════════════════════════════════════════
+  ✅ 偏好已记录并上传
+═══════════════════════════════════════════════
+📌 主题：[主题]
+🧠 Memory → memory/[日期].md
+⚡ Skill → skills/user-preference-[主题]/
+📋 规则 → rules/[主题]/
+🔄 已推送到 GitHub
+═══════════════════════════════════════════════
+</pre>
+</body></html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Agent Runner — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding-bottom:48px;max-width:100%}
+a{color:var(--primary);text-decoration:none}
+h1{color:var(--primary);margin-bottom:16px;font-size:28px}
+h2{margin:32px 0 10px;font-size:18px;color:var(--fg);padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{margin:20px 0 8px;font-size:15px;color:var(--fg)}
+p{margin:8px 0;font-size:14px;font-family:var(--sans)}
+ul,ol{margin:8px 0 8px 20px;font-size:14px;font-family:var(--sans)}
+li{margin:4px 0}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:10px;padding:18px 20px;overflow-x:auto;margin:14px 0;font-size:13px}
+code{font-family:"JetBrains Mono","Fira Code",monospace;font-size:13px;background:var(--primary-bg);color:var(--primary);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;font-family:var(--sans)}
+th{background:var(--primary-bg);color:var(--primary);padding:10px 14px;text-align:left;font-weight:600;border:1px solid var(--border)}
+td{padding:9px 14px;border:1px solid var(--border);vertical-align:top}
+tr:hover td{background:#faf9ff}
+
+/* nav */
+.nav{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:28px}
+.logo{font-size:19px;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;letter-spacing:-1px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 13px;border-radius:8px;color:var(--fg2);text-decoration:none;font-size:14px;font-family:var(--sans);transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--primary-bg);color:var(--primary)}
+
+.auth-section{display:flex;align-items:center;gap:6px;font-size:13px;font-family:'Noto Sans SC',sans-serif}
+
+/* page layout */
+.page-container{max-width:860px;margin:0 auto;padding:36px 32px}
+.breadcrumb{font-size:13px;color:var(--fg2);font-family:var(--sans);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.breadcrumb span{color:var(--border)}
+.page-meta{font-size:13px;color:var(--fg2);font-family:var(--sans);margin:6px 0 10px}
+.page-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 20px}
+.tag{display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-family:var(--sans);font-weight:500;background:var(--primary-bg);color:var(--primary);border:1px solid #d6cfff}
+
+/* callout */
+.callout{background:var(--primary-bg);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0;font-size:13px;font-family:var(--sans);color:var(--fg)}
+.callout.warn{background:#fff8e1;border-color:#f0b429;color:#7a5c00}
+
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:var(--fg2);font-family:var(--sans)}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/knowledge/">知识库</a>
+      <a href="/know-how/">Know-How</a>
+      <a href="/skills/">技能</a>
+      <a href="/tools/" class="active">工具</a>
+      <a href="/about/">关于</a>
+      <a href="https://github.com/frisky1985/yuleAI-Hub/issues/new" target="_blank" style="background:#6C5CE7;color:#fff!important;padding:6px 16px!important;border-radius:20px;font-weight:600;margin-left:4px">✏️ 发布</a>
+    </div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+        <div id="userMenu" style="display:none;position:relative">
+          <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+        </div>
+        <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+        <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+          <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+          <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+          <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+          <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+          <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+        </div>
+      </div>
+    </nav>
+
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script>
+
+<div class="page-container">
+  <div class="breadcrumb">
+    <a href="/">首页</a><span>/</span><a href="/tools/">工具</a><span>/</span>Agent Runner
+  </div>
+
+  <h1>Agent Runner</h1>
+  <div class="page-meta">📅 2026-05-26</div>
+  <div class="page-tags">
+    <span class="tag">Agent</span>
+    <span class="tag">Hermes</span>
+    <span class="tag">OpenClaw</span>
+    <span class="tag">QoderCLI</span>
+  </div>
+
+  <p>Agent Runner 是 Agent Mesh 的任务调度后端，以 Bash 脚本形式运行，负责将异步任务分发给 <code>hermes</code>、<code>openclaw</code> 或 <code>qodercli</code>，执行完成后将结构化结果写入共享工作区，供 MCP Bridge 查询。</p>
+
+  <h2>下载</h2>
+  <p>从 GitHub 获取最新版本并赋予执行权限：</p>
+  <pre><code>mkdir -p ~/.openclaw/bin
+curl -sL https://raw.githubusercontent.com/frisky1985/yuleAI-Hub/main/tools/agent-runner/agent-runner \
+  -o ~/.openclaw/bin/agent-runner
+chmod +x ~/.openclaw/bin/agent-runner</code></pre>
+
+  <h2>安装</h2>
+  <p>将脚本加入 <code>PATH</code>，使 MCP Bridge 能直接调用：</p>
+  <pre><code># bash / zsh
+echo 'export PATH="$HOME/.openclaw/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# 验证
+which agent-runner
+agent-runner --help 2>/dev/null || echo "agent-runner ready"</code></pre>
+
+  <div class="callout">
+    MCP Bridge 的 <code>agent-delegate</code> 工具会自动在后台调用 agent-runner，无需手动执行。直接使用 agent-runner 主要用于调试。
+  </div>
+
+  <h2>参数说明</h2>
+  <pre><code>agent-runner &lt;agent&gt; &lt;task_id&gt; &lt;task_text&gt;</code></pre>
+  <table>
+    <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+    <tr><td><code>agent</code></td><td>string</td><td>目标 Agent 名称，支持 <code>hermes</code>、<code>openclaw</code>、<code>qodercli</code></td></tr>
+    <tr><td><code>task_id</code></td><td>string</td><td>任务唯一 ID，用于结果文件命名（如 <code>task_20260526_001</code>）</td></tr>
+    <tr><td><code>task_text</code></td><td>string</td><td>传递给 Agent 的任务描述文本，建议用引号包裹</td></tr>
+  </table>
+
+  <h3>各 Agent 调用方式</h3>
+  <table>
+    <tr><th>Agent</th><th>实际命令</th><th>适用场景</th></tr>
+    <tr><td><code>hermes</code></td><td><code>hermes -z "&lt;task&gt;" --yolo</code></td><td>文件操作、系统任务、自动化</td></tr>
+    <tr><td><code>openclaw</code></td><td><code>openclaw session start --prompt "&lt;task&gt;"</code></td><td>代码分析、长时任务</td></tr>
+    <tr><td><code>qodercli</code></td><td><code>qodercli -p "&lt;task&gt;" --dangerously-skip-permissions</code></td><td>代码生成、工程辅助</td></tr>
+  </table>
+
+  <h2>结果文件</h2>
+  <p>任务执行后，结果写入：</p>
+  <pre><code>~/.openclaw/mcp-bridge/workspace/tasks/&lt;task_id&gt;.json</code></pre>
+  <p>文件格式示例：</p>
+  <pre><code>{
+  "task_id": "task_20260526_001",
+  "agent": "hermes",
+  "status": "completed",
+  "output": "任务输出内容（最多 5000 字符）",
+  "exit_code": 0
+}</code></pre>
+  <p><code>status</code> 字段可能的值：</p>
+  <ul>
+    <li><code>running</code> — 任务仍在执行中</li>
+    <li><code>completed</code> — 任务已完成（<code>exit_code</code> 为 0 表示成功）</li>
+  </ul>
+
+  <h2>使用示例</h2>
+  <h3>手动触发任务</h3>
+  <pre><code># 让 hermes 列出桌面文件
+agent-runner hermes task_001 "列出桌面上的所有文件"
+
+# 查看结果
+cat ~/.openclaw/mcp-bridge/workspace/tasks/task_001.json</code></pre>
+
+  <h3>通过 MCP Bridge 委派（推荐）</h3>
+  <pre><code># 在支持 MCP 的 Agent 中调用 agent-delegate 工具
+# MCP Bridge 会自动在后台调用 agent-runner
+{
+  "tool": "agent-delegate",
+  "agent": "hermes",
+  "task": "检查 ~/.openclaw 目录结构并输出摘要"
+}</code></pre>
+
+  <h2>故障排查</h2>
+
+  <h3>command not found: agent-runner</h3>
+  <p>脚本不在 PATH 中，检查安装路径：</p>
+  <pre><code>ls -la ~/.openclaw/bin/agent-runner
+echo $PATH | tr ':' '\n' | grep openclaw</code></pre>
+  <p>若路径未加载，重新执行：</p>
+  <pre><code>export PATH="$HOME/.openclaw/bin:$PATH"</code></pre>
+
+  <h3>任务状态一直是 running</h3>
+  <p>Agent 进程可能卡住或崩溃，检查临时输出文件：</p>
+  <pre><code># 查看 task_id 对应的输出
+cat /tmp/&lt;task_id&gt;.out
+
+# 查看 Agent 进程
+ps aux | grep -E "hermes|openclaw|qodercli"</code></pre>
+
+  <h3>结果文件不存在</h3>
+  <p>确认工作区目录已创建，并检查脚本权限：</p>
+  <pre><code>mkdir -p ~/.openclaw/mcp-bridge/workspace/tasks
+ls -la ~/.openclaw/bin/agent-runner  # 应有 -rwxr-xr-x</code></pre>
+
+  <h3>exit_code 非 0</h3>
+  <p>查看 <code>output</code> 字段中的错误信息；常见原因是 Agent 未安装或任务文本含特殊字符。建议将任务文本写入文件后通过文件路径传递：</p>
+  <pre><code>echo "复杂任务描述" > /tmp/task_input.txt
+agent-runner hermes task_002 "$(cat /tmp/task_input.txt)"</code></pre>
+
+  <div class="callout warn">
+    agent-runner 使用 <code>set -euo pipefail</code>，任何子命令失败都会导致脚本退出。若需容错，可在调用前去掉严格模式，或确保依赖的 Agent 已正确安装。
+  </div>
+</div>
+
+<footer><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer>
+</body>
+</html>

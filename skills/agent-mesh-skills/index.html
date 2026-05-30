@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Mesh 技能清单 + 消息契约 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--yellow:#f9e2af;--red:#f38ba8;--lavender:#b4befe;--teal:#94e2d5;--peach:#fab387}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}h4{color:var(--peach)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto;font-size:.9rem}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.card{background:var(--surface);border-radius:8px;padding:1.2rem;margin:1rem 0;border-left:3px solid var(--blue)}
+.card.hermes{border-left-color:var(--peach)}
+.card.qoder{border-left-color:var(--green)}
+.card.orch{border-left-color:var(--lavender)}
+.cmd{background:var(--bg);padding:.25rem .5rem;border-radius:4px;font-family:monospace;font-size:.9rem}
+.highlight{background:var(--surface);border-left:3px solid var(--green);padding:.8rem 1rem;margin:1rem 0;border-radius:0 8px 8px 0}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">skills</span> / agent-mesh-skills</nav>
+  <h1>Agent Mesh 技能清单 + 消息契约</h1>
+</header>
+
+<section>
+<h2>1. Orchestrator</h2>
+<div class="card orch">
+<p><strong>运行于</strong>: OpenClaw &nbsp; <strong>通信</strong>: agent-chat / agent-delegate</p>
+<p><strong>能力</strong>:</p>
+<ul>
+<li>管道编排：按阶段推进 Harness Engineering 管道</li>
+<li>状态管理：维护 orchestrator-state.json</li>
+<li>失败接管：3 次重试后自动介入修复</li>
+<li>报告输出：生成最终总结报告</li>
+</ul>
+<pre>python3 harness-orchestrator.py run "&lt;goal&gt;"
+python3 harness-orchestrator.py resume   # 续传
+python3 harness-orchestrator.py status   # 状态</pre>
+</div>
+
+<h2>2. Hermes</h2>
+<div class="card hermes">
+<p><strong>运行于</strong>: DeepSeek API（Hermes CLI） &nbsp; <strong>通信</strong>: agent-chat / agent-delegate</p>
+<p><strong>能力</strong>:</p>
+<ul>
+<li>需求分析：解析用户需求，输出结构化需求文档</li>
+<li>排期：基于需求制定时间线和里程碑</li>
+<li>测试用例：为代码创建测试用例</li>
+<li>测试执行：运行测试并输出测试报告</li>
+<li>快速代码审查</li>
+</ul>
+<pre>hermes -z "prompt" --yolo              # 同步（agent-chat）
+hermes -z "long task" --yolo           # 异步（agent-delegate）</pre>
+</div>
+
+<h2>3. QoderCLI</h2>
+<div class="card qoder">
+<p><strong>运行于</strong>: DeepSeek API（QoderCLI） &nbsp; <strong>通信</strong>: agent-delegate</p>
+<p><strong>能力</strong>: 架构设计、编码实现、代码审查、代码探索</p>
+
+<h3>子角色（6 个 QoderCLI Persona）</h3>
+<table>
+<tr><th>角色</th><th>Qoder Agent</th><th>职责</th></tr>
+<tr><td>Architect</td><td><code>ingeek-sw-arch</code></td><td>系统架构、模块边界、接口定义</td></tr>
+<tr><td>Researcher</td><td><code>ingeek-sw-reviewer</code></td><td>代码探索、差距分析、技术债务识别</td></tr>
+<tr><td>Planner</td><td><code>ingeek-sw-arch</code></td><td>任务分解、执行顺序、合同定义</td></tr>
+<tr><td>Implementer</td><td><code>ingeek-sw-dev</code></td><td>TDD 编码实现</td></tr>
+<tr><td>Tester</td><td><code>ingeek-sw-test</code></td><td>单元测试、覆盖率、静态分析</td></tr>
+<tr><td>Reviewer</td><td><code>ingeek-sw-reviewer</code></td><td>代码审查、质量门禁、架构合规检查</td></tr>
+</table>
+<pre>qodercli -p --dangerously-skip-permissions "prompt"          # 默认
+qodercli -a ingeek-sw-dev -p "implement this"               # 指定子角色</pre>
+</div>
+</section>
+
+<section>
+<h2>Agent 间直接对话 — 消息总线</h2>
+
+<div class="highlight">
+  <strong>核心理念</strong>：Agent 从不直接发消息给对方——而是写入对方的收件箱文件。对方自读。写文件是原子操作，不会丢消息。不依赖网络、不依赖两者同时在线。
+</div>
+
+<h3>消息总线目录结构</h3>
+<pre>
+~/.openclaw/mcp-bridge/workspace/messages/
+  ├── queue/                 # 活跃消息收件箱
+  │   ├── architect/         ← 每个角色有独立收件箱
+  │   ├── researcher/
+  │   ├── planner/           ← Planner 的待读消息
+  │   └── ...
+  ├── archive/               # 过期消息（30分钟自动移入）
+  ├── topics/                # 广播主题存档
+  ├── threads/               # 对话线程追踪
+  └── subscriptions.json     # 主题订阅表
+</pre>
+
+<h3>命令参考</h3>
+<table>
+<tr><th>命令</th><th>说明</th><th>示例</th></tr>
+<tr><td><code>send &lt;from&gt; &lt;to&gt; &lt;subj&gt;</code></td><td>点对点发送消息</td><td><code>send architect planner "design-review"</code></td></tr>
+<tr><td><code>read &lt;role&gt [--last N]</code></td><td>读取收件箱</td><td><code>read planner --last 5</code></td></tr>
+<tr><td><code>reply &lt;msg_id&gt; &lt;from&gt;</code></td><td>回复消息（自动填充 in_reply_to）</td><td><code>reply abc123 planner</code></td></tr>
+<tr><td><code>wait &lt;role&gt; [--timeout 60]</code></td><td>阻塞等待新消息（轮询 1s 间隔）</td><td><code>wait reviewer --timeout 120</code></td></tr>
+<tr><td><code>broadcast &lt;from&gt; &lt;topic&gt; &lt;subj&gt;</code></td><td>广播到主题（仅发送给订阅者）</td><td><code>broadcast impl "code/ready" "done"</code></td></tr>
+<tr><td><code>subscribe &lt;role&gt; &lt;topic&gt;</code></td><td>订阅主题</td><td><code>subscribe tester "code/ready"</code></td></tr>
+<tr><td><code>unsubscribe &lt;role&gt; &lt;topic&gt;</code></td><td>退订主题</td><td><code>unsubscribe tester "code/ready"</code></td></tr>
+<tr><td><code>thread &lt;msg_id&gt;</code></td><td>查看对话线程</td><td><code>thread abc123</code></td></tr>
+<tr><td><code>discover</code></td><td>发现所有可用 Agent</td><td><code>discover</code></td></tr>
+<tr><td><code>status</code></td><td>消息总线状态（各收件箱队列长度）</td><td><code>status</code></td></tr>
+<tr><td><code>purge [--age 86400]</code></td><td>清理过期消息（默认 24h）</td><td><code>purge --age 3600</code></td></tr>
+</table>
+
+<h3>对话流程（点对点）</h3>
+<pre>
+Agent A                          Agent B
+  │                                │
+  │  1. send(role, subject)        │
+  │───────────────────────────────▶│  (写入 B 的收件箱文件)
+  │                                │
+  │  2. (B 在做其他任务)            │
+  │                                │
+  │  3. B 空闲时 poll              │
+  │     messenger.py wait          │
+  │                                │
+  │  4. 读到新消息                  │
+  │                                │
+  │  5. reply(msg_id, body)        │
+  │◀───────────────────────────────│  (写入 A 的收件箱文件)
+  │                                │
+  │  6. A 下次 read 看到回复        │
+</pre>
+</section>
+
+<section>
+<h2>消息契约（JSON Schema）</h2>
+
+<h3>message-v1.json</h3>
+<pre>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Mesh Message Contract v1",
+  "type": "object",
+  "required": ["message_id", "from", "to", "subject", "body", "timestamp"],
+  "properties": {
+    "message_id": { "type": "string" },
+    "from": { "type": "string", "enum": [
+      "orchestrator", "architect", "researcher", "planner",
+      "implementer", "tester", "reviewer", "hermes", "qodercli"
+    ]},
+    "to": { "type": "string", "enum": [
+      "orchestrator", "architect", "researcher", "planner",
+      "implementer", "tester", "reviewer", "hermes", "qodercli", "all"
+    ]},
+    "subject": { "type": "string", "maxLength": 80 },
+    "body": { "type": "object" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "in_reply_to": { "type": ["string", "null"] },
+    "contract": { "type": "string", "default": "message-v1" },
+    "phase": { "type": "string", "enum": [
+      "init", "brainstorm", "research", "plan", "implement", "review", "report"
+    ]}
+  }
+}</pre>
+
+<h3>context-v1.json</h3>
+<pre>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Mesh Context Contract v1",
+  "type": "object",
+  "required": ["pipeline_status", "current_phase", "phase_history"],
+  "properties": {
+    "pipeline_status": { "type": "string", "enum": ["idle", "running", "done", "failed"] },
+    "current_phase": { "type": "string", "enum": [
+      "init", "brainstorm", "research", "plan", "implement", "review", "report"
+    ]},
+    "phase_history": { "type": "array", "items": {
+      "type": "object",
+      "required": ["phase", "status", "agent"],
+      "properties": {
+        "phase": { "type": "string" },
+        "status": { "type": "string", "enum": ["running", "done", "failed"] },
+        "agent": { "type": "string" },
+        "time": { "type": "string", "format": "date-time" },
+        "retries": { "type": "integer", "minimum": 0 }
+      }
+    }},
+    "artifacts": { "type": "object" },
+    "goal": { "type": "string" }
+  }
+}</pre>
+</section>
+
+<section>
+<h2>不丢消息的保证</h2>
+<table>
+<tr><th>机制</th><th>说明</th></tr>
+<tr><td><strong>原子写</strong></td><td>先把消息序列化为完整 JSON，再写入收件箱文件。不会写一半</td></tr>
+<tr><td><strong>自动清理</strong></td><td>消息在收件箱超过 30 分钟自动移入 archive，不丢失不堆积</td></tr>
+<tr><td><strong>存档保留</strong></td><td>archive 目录永久保留消息体，purge 默认只清理 24h 以上</td></tr>
+<tr><td><strong>契约校验</strong></td><td>每条消息带 <code>contract: "message-v1"</code>，Agent 可拒绝格式不合规的消息</td></tr>
+<tr><td><strong>发现机制</strong></td><td><code>discover</code> 自动列出所有在线 Agent，发错角色名会报错</td></tr>
+</table>
+</section>
+
+<section>
+<h2>一键验证</h2>
+<pre>
+# 1. 查看所有 Agent 在线状态
+python3 agent-messenger.py discover
+
+# 2. 查看消息总线状态
+python3 agent-messenger.py status
+
+# 3. 发送测试消息
+python3 agent-messenger.py send architect planner "ping" '{"test": true}'
+
+# 4. 读取收件箱
+python3 agent-messenger.py read planner --last 1
+
+# 5. 回复
+python3 agent-messenger.py reply &lt;msg_id&gt; planner '{"pong": true}'
+
+# 6. 查看完整对话线程
+python3 agent-messenger.py thread &lt;msg_id&gt;</pre>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>📄 下载原始文件：</p>
+  <ul>
+    <li><a href="orchestrator.md" style="color:var(--blue)">orchestrator.md</a> — 编排器技能清单</li>
+    <li><a href="hermes.md" style="color:var(--blue)">hermes.md</a> — Hermes 技能清单</li>
+    <li><a href="qodercli.md" style="color:var(--blue)">qodercli.md</a> — QoderCLI 技能清单</li>
+    <li><a href="message-v1.json" style="color:var(--blue)">message-v1.json</a> — 消息契约 Schema</li>
+    <li><a href="context-v1.json" style="color:var(--blue)">context-v1.json</a> — 上下文契约 Schema</li>
+  </ul>
+  <p>本地路径: <code>~/.openclaw/mcp-bridge/skills/</code> | <code>~/.openclaw/mcp-bridge/contracts/</code></p>
+</footer>
+</body>
+</html>
