@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Mesh 架构文档 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--yellow:#f9e2af;--red:#f38ba8;--lavender:#b4befe;--teal:#94e2d5;--peach:#fab387}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">docs</span> / agent-mesh-architecture</nav>
+  <h1>Agent Mesh 架构文档</h1>
+</header>
+
+<section>
+<h2>架构分层</h2>
+<pre>
+┌────────────────────────────────────────────┐
+│          OpenClaw (编排层)                   │
+│  管道编排 · 状态管理 · 失败接管 · 报告输出    │
+├────────────────────────────────────────────┤
+│          MCP Bridge (通信层)                │
+│  agent-chat · agent-delegate · context-r/w │
+├────────────────────────────────────────────┤
+│       Agent Messenger (消息总线 v2)          │
+│  文件消息队列 · 主题广播 · 线程追踪 · 自动发现 │
+├────────────────────────────────────────────┤
+│    Agent 层                                │
+│  OpenClaw | Hermes | QoderCLI              │
+│  with Architect/Researcher/Planner/...     │
+└────────────────────────────────────────────┘
+</pre>
+</section>
+
+<section>
+<h2>Agent 角色</h2>
+<table>
+<tr><th>角色</th><th>后端</th><th>职责</th></tr>
+<tr><td>Orchestrator</td><td>OpenClaw</td><td>管道编排、阶段推进、报告输出</td></tr>
+<tr><td>Hermes</td><td>DeepSeek API</td><td>需求分析、排期、测试用例、测试执行</td></tr>
+<tr><td>Architect</td><td>QoderCLI (ingeek-sw-arch)</td><td>系统架构、模块边界、接口定义</td></tr>
+<tr><td>Researcher</td><td>QoderCLI (ingeek-sw-reviewer)</td><td>代码探索、事实发现、差距检测</td></tr>
+<tr><td>Planner</td><td>QoderCLI (ingeek-sw-arch)</td><td>任务分解、排期细化、合同定义</td></tr>
+<tr><td>Implementer</td><td>QoderCLI (ingeek-sw-dev)</td><td>TDD 编码实现</td></tr>
+<tr><td>Tester</td><td>QoderCLI (ingeek-sw-test)</td><td>单元测试、覆盖率、静态分析</td></tr>
+<tr><td>Reviewer</td><td>QoderCLI (ingeek-sw-reviewer)</td><td>代码审查、质量门禁、架构合规</td></tr>
+</table>
+</section>
+
+<section>
+<h2>通信协议</h2>
+<p><strong>方式 1：MCP Bridge</strong> — Orchestrator → Agent</p>
+<pre>OpenClaw ──agent-chat──▶ Hermes        (同步 &lt;8s)
+OpenClaw ──agent-delegate──▶ QoderCLI  (异步，返回 task_id)</pre>
+
+<p><strong>方式 2：消息总线</strong> — Agent ↔ Agent</p>
+<pre>Architect ──send──▶ Planner: "设计评审请求"
+Planner   ──reply──▶ Architect: "评审完成"
+Implementer ──broadcast──▶ 所有订阅者: "代码待审查"</pre>
+</section>
+
+<section>
+<h2>边界规则</h2>
+<ol>
+<li>OpenClaw 只编排，不替 Agent 写代码</li>
+<li>Agent 之间直接沟通——不经过 OpenClaw 中转</li>
+<li>每阶段输出必须有验证</li>
+<li>生成与审查必须分离（不同 Agent）</li>
+<li>架构变更必须经 Architect 评审</li>
+</ol>
+</section>
+
+<section>
+<h2>失败处理</h2>
+<table>
+<tr><th>机制</th><th>参数</th></tr>
+<tr><td>每阶段重试</td><td>最多 3 次</td></tr>
+<tr><td>超时（同步）</td><td>8 秒</td></tr>
+<tr><td>超时（异步）</td><td>300 秒</td></tr>
+<tr><td>3 次全失败</td><td>OpenClaw 接管，输出异常报告</td></tr>
+</table>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>版本: v2.0.0 | 最后更新: 2026-05-30 | 完整文档: <code>~/.openclaw/workspace/docs/ARCHITECTURE.md</code></p>
+</footer>
+</body>
+</html>

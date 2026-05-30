@@ -709,5 +709,33 @@
       "AI助手",
       "macOS"
     ]
+  },
+  {
+    "title": "Agent Mesh v2 — Harness Engineering + Superpowers 协作升级",
+    "url": "/skills/agent-mesh-upgrade/",
+    "desc": "Agent Mesh v2: 基于 Harness Engineering + Superpowers 框架的 Agent 协作基础设施升级。包括架构文档、技能清单、消息契约、治理检查。",
+    "type": "skills",
+    "tags": ["Agent Mesh", "Harness Engineering", "Superpowers", "MCP", "Agent", "OpenClaw", "Hermes", "QoderCLI"]
+  },
+  {
+    "title": "Agent Mesh 架构文档",
+    "url": "/docs/agent-mesh-architecture/",
+    "desc": "Agent Mesh 层叠架构：OpenClaw 编排层 → MCP Bridge 通信层 → 消息总线 → Agent 层。含角色定义、通信协议、边界规则、失败处理。",
+    "type": "docs",
+    "tags": ["Agent Mesh", "架构", "MCP", "Agent", "OpenClaw"]
+  },
+  {
+    "title": "Agent Mesh v2 产品规范",
+    "url": "/docs/agent-mesh-v2-spec/",
+    "desc": "Agent Mesh v2 产品规范：能力对比（v1 vs v2）、技能清单、消息契约、管道阶段、质量门禁。",
+    "type": "docs",
+    "tags": ["Agent Mesh", "规范", "MCP", "Agent", "OpenClaw"]
+  },
+  {
+    "title": "Agent Mesh 技能清单 — Agent 角色定义和消息契约",
+    "url": "/skills/agent-mesh-skills/",
+    "desc": "所有 Agent 的完整技能清单：Orchestrator、Hermes、QoderCLI 及 6 个子角色。含消息契约 schema 和消息总线命令参考。",
+    "type": "skills",
+    "tags": ["Agent Mesh", "技能", "Hermes", "QoderCLI", "MCP", "契约"]
   }
 ]

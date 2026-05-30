@@ -55,4 +55,8 @@
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/qodercli-setup/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/warp-agent/</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
     <url><loc>https://frisky1985.github.io/yuleAI-Hub/tools/claude-desktop/</loc><lastmod>2026-05-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://frisky1985.github.io/yuleAI-Hub/skills/agent-mesh-upgrade/</loc><lastmod>2026-05-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://frisky1985.github.io/yuleAI-Hub/docs/agent-mesh-architecture/</loc><lastmod>2026-05-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://frisky1985.github.io/yuleAI-Hub/docs/agent-mesh-v2-spec/</loc><lastmod>2026-05-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://frisky1985.github.io/yuleAI-Hub/skills/agent-mesh-skills/</loc><lastmod>2026-05-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

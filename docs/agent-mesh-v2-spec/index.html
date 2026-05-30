@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Mesh v2 产品规范 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--yellow:#f9e2af;--red:#f38ba8;--lavender:#b4befe;--teal:#94e2d5}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.status-good{color:var(--green);font-weight:bold}
+.status-warn{color:var(--yellow);font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">docs</span> / agent-mesh-v2-spec</nav>
+  <h1>Agent Mesh v2 产品规范</h1>
+  <p><span class="tag">v2.0.0</span> <span class="tag">2026-05-30</span></p>
+</header>
+
+<section>
+<h2>能力对比</h2>
+<table>
+<tr><th>能力</th><th>v1</th><th>v2</th></tr>
+<tr><td>Agent 间通信</td><td>MCP Bridge 子进程</td><td>MCP Bridge + 消息总线</td></tr>
+<tr><td>Agent 角色定义</td><td>orchestrator.py 硬编码</td><td>独立技能清单文件</td></tr>
+<tr><td>消息结构</td><td>自由格式</td><td>合同约束的 JSON Schema</td></tr>
+<tr><td>上下文传递</td><td>无结构 context.json</td><td>合同约束的阶段式上下文</td></tr>
+<tr><td>治理检查</td><td>无</td><td>14 项可执行检查</td></tr>
+<tr><td>架构文档</td><td>无</td><td>docs/ARCHITECTURE.md</td></tr>
+</table>
+</section>
+
+<section>
+<h2>Agent 技能清单</h2>
+<p>每个 Agent 在 <code>~/.openclaw/mcp-bridge/skills/</code> 下有独立技能清单：</p>
+<ul>
+<li><code>orchestrator.md</code> — 管道编排、状态管理</li>
+<li><code>hermes.md</code> — 需求分析、测试</li>
+<li><code>qodercli.md</code> — 架构、编码、审查</li>
+</ul>
+</section>
+
+<section>
+<h2>消息契约</h2>
+<p><code>~/.openclaw/mcp-bridge/contracts/</code>:</p>
+<ul>
+<li><code>message-v1.json</code> — Agent 间消息格式（must: message_id/from/to/subject/body/timestamp）</li>
+<li><code>context-v1.json</code> — 共享上下文格式（must: pipeline_status/current_phase/phase_history）</li>
+</ul>
+</section>
+
+<section>
+<h2>管道阶段</h2>
+<pre>
+Phase 0: Init       — 加载状态，检查前置条件
+Phase 1: Brainstorm — 需求分析+设计（Hermes 分析 → Architect 架构）
+Phase 2: Research   — 代码库探索（Researcher）
+Phase 3: Plan       — 任务分解+排期（Planner → Hermes 排期）
+Phase 4: Implement  — TDD 编码（Implementer → Tester → Reviewer）↻ ITR
+Phase 5: Review     — 最终代码审查（Reviewer）
+Phase 6: Report     — 总结报告输出（Orchestrator）
+</pre>
+</section>
+
+<section>
+<h2>质量门禁</h2>
+<ul>
+<li>每阶段输出必须有下一个阶段的确认</li>
+<li>代码必须通过 TDD 循环（失败测试 → 实现 → 通过 → 审查）</li>
+<li>审查与生成必须不同 Agent</li>
+<li>阶段 3 次失败 → OpenClaw 接管</li>
+</ul>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>完整规范: <code>~/.openclaw/workspace/docs/product-specs/agent-mesh-v2-spec.md</code></p>
+</footer>
+</body>
+</html>
