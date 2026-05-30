@@ -685,5 +685,17 @@
       "工作流"
     ],
     "date": "2026-05-28"
+  },
+  {
+    "title": "Claude Code + DeepSeek V4 — 原生 Anthropic 端点配置",
+    "url": "/know-how/claude-code-deepseek/",
+    "desc": "Claude Code 通过 DeepSeek 原生 Anthropic 端点在中国运行的完整配置指南",
+    "type": "knowhow",
+    "tags": [
+      "DeepSeek",
+      "Claude Code",
+      "Proxy",
+      "AI助手"
+    ]
   }
 ]
