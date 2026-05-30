@@ -697,5 +697,17 @@
       "Proxy",
       "AI助手"
     ]
+  },
+  {
+    "title": "Claude Desktop — macOS ARM64 下载",
+    "url": "/tools/claude-desktop/",
+    "desc": "Claude Desktop for macOS (Apple Silicon). 通过 DeepSeek 原生端点可在中国使用。",
+    "type": "tool",
+    "tags": [
+      "Claude Desktop",
+      "下载",
+      "AI助手",
+      "macOS"
+    ]
   }
 ]
