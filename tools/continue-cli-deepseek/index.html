@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Continue CLI + DeepSeek V4 Flash 配置 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--accent:#00B894;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+h1{color:var(--primary);margin-bottom:8px}
+h2{margin:32px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--border)}
+h3{margin:24px 0 4px}
+p,li{color:var(--fg2)}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:14px;line-height:1.5}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+ul,ol{padding-left:20px;margin:8px 0}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{padding:8px 12px;border:1px solid var(--border);text-align:left}
+th{background:var(--primary-bg);font-weight:600}
+blockquote{border-left:3px solid var(--primary);padding:8px 16px;margin:16px 0;background:var(--primary-bg);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+.nav{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 20px;margin-bottom:24px}
+.nav-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.logo{font-size:18px;font-weight:700;color:var(--fg)!important;text-decoration:none!important}
+.logo-icon{background:var(--primary);color:#fff;padding:2px 8px;border-radius:6px;margin-right:6px;font-size:14px}
+.nav-links{display:flex;gap:16px;font-size:14px}
+.nav-links a{color:var(--fg2);text-decoration:none}
+.nav-links a:hover{color:var(--primary);text-decoration:none}
+.page-header{margin-bottom:32px}
+.breadcrumb{font-size:13px;color:var(--fg2);margin-bottom:12px}
+.breadcrumb a{color:var(--fg2)}.breadcrumb span{margin:0 4px}
+.page-meta{font-size:13px;color:var(--fg2);margin-top:4px}
+.page-tags{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.tag{padding:2px 10px;border-radius:20px;background:var(--primary-bg);color:var(--primary);font-size:12px}
+.content h2:first-of-type{margin-top:0}
+.problem-box{border-radius:12px;background:#fff3f0;border:1px solid #ffccc7;padding:16px;margin:16px 0}
+.problem-box h4{color:#cf1322;margin-bottom:8px}
+.solution-box{border-radius:12px;background:#f6ffed;border:1px solid #b7eb8f;padding:16px;margin:16px 0}
+.solution-box h4{color:#389e0d;margin-bottom:8px}
+.file-box{border-radius:12px;background:#e6f7ff;border:1px solid #91d5ff;padding:16px;margin:16px 0}
+.file-box h4{color:#096dd9;margin-bottom:8px}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;margin-left:auto}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head><body>
+<nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn">登录</a>
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/tools/">工具</a> <span>/</span> Continue CLI + DeepSeek</div>
+  <h1>Continue CLI + DeepSeek V4 Flash 配置</h1>
+  <p class="page-meta">2026-06-08 · 深度排查 · 踩坑实录</p>
+  <div class="page-tags">
+    <span class="tag">Continue CLI</span><span class="tag">DeepSeek</span><span class="tag">CLI</span><span class="tag">配置</span><span class="tag">踩坑</span>
+  </div>
+</div>
+
+<div class="content">
+
+<h2>背景</h2>
+<p><code>cn</code>（Continue CLI，<code>@continuedev/cli@1.5.45</code>）安装后默认使用 Continue Hub 下发的 Claude Sonnet 4.6 模型。尽管本地 <code>config.json</code> 配了 DeepSeek，但每次运行 CLI 都报 <code>"invalid x-api-key"</code>。</p>
+
+<div class="problem-box">
+<h4>原始症状</h4>
+<p><code>cn "hello" --print</code> → <code>{"error":{"type":"authentication_error","message":"invalid x-api-key"}}</code></p>
+<p>API Key 明明是 DeepSeek 的，却被送到了 Anthropic 的端点。</p>
+</div>
+
+<h2>根因分析</h2>
+
+<h3>文件优先级</h3>
+<p>Continue CLI 的配置优先级 <strong>和你以为的不一样</strong>：</p>
+<table>
+<tr><th>优先级</th><th>文件</th><th>说明</th></tr>
+<tr><td>🔴 最高</td><td><code>~/.continue/config.yaml</code></td><td>Continue Hub 拉取的配置文件</td></tr>
+<tr><td>🟡 中</td><td><code>~/.continue/config.ts</code></td><td>TypeScript 钩子，运行时编译</td></tr>
+<tr><td>🟢 最低</td><td><code>~/.continue/config.json</code></td><td>本地 JSON，被前两者覆盖</td></tr>
+</table>
+
+<h3>问题链</h3>
+<ol>
+<li><code>auth.json</code> 包含 Hub 登录信息（WorkOS JWT，email: <code>tianhua_ming@126.com</code>）</li>
+<li>CLI 启动时用 JWT 向 <code>api.continue.dev</code> 拉取配置</li>
+<li>Hub 配置（<code>config.yaml</code>）定义了 <code>anthropic/claude-sonnet-4-6</code>，覆盖本地模型</li>
+<li>CLI 用 DeepSeek 的 API Key 去调 Anthropic API → <code>invalid x-api-key</code></li>
+</ol>
+
+<div class="solution-box">
+<h4>关键发现</h4>
+<p>即使 <code>config.json</code> 配了 <code>provider: deepseek</code> + <code>model: deepseek-chat</code>，只要 <code>config.yaml</code> 存在（Hub 拉着来的），前者完全被忽略。</p>
+</div>
+
+<h2>修复方案</h2>
+
+<h3>最终配置</h3>
+<p>修改 <code>~/.continue/config.yaml</code>：</p>
+
+<div class="file-box">
+<h4>~/.continue/config.yaml</h4>
+<pre><code>name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - uses: deepseek/deepseek-chat
+    with:
+      DEEPSEEK_API_KEY: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+</div>
+
+<p><code>config.json</code> 的等价写法（如果 <code>config.yaml</code> 不存在）：</p>
+
+<div class="file-box">
+<h4>~/.continue/config.json</h4>
+<pre><code>{
+  "models": [
+    {
+      "title": "DeepSeek V4 Flash",
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "apiKey": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+  ],
+  "allowAnonymousTelemetry": false
+}</code></pre>
+</div>
+
+<h3>验证</h3>
+<pre><code>cn "你是谁？用的什么模型？" --print</code></pre>
+<p>应正常返回 DeepSeek 模型输出。</p>
+
+<h2>技术细节</h2>
+
+<h3>Provider 选择</h3>
+<p>Continue CLI 原生支持 <code>deepseek</code> provider（源码中为 <code>DIt</code> class，继承自 OpenAI provider）。</p>
+<p><strong>不要用</strong> <code>provider: openai</code> + <code>apiBase: https://api.deepseek.com/v1</code>，因为 OpenAI provider 会用 <code>x-api-key</code> header，DeepSeek API 要求 <code>Authorization: Bearer</code>。</p>
+
+<h3>模型 ID 对比</h3>
+<table>
+<tr><th>上下文</th><th>模型 ID</th></tr>
+<tr><td>DeepSeek API（OpenAI 兼容）</td><td><code>deepseek-chat</code></td></tr>
+<tr><td>DeepSeek API（Anthropic 兼容）</td><td><code>deepseek-v4-flash</code>（OpenClaw 别名）</td></tr>
+<tr><td>Continue CLI YAML</td><td><code>deepseek/deepseek-chat</code></td></tr>
+<tr><td>Continue CLI JSON</td><td><code>deepseek-chat</code></td></tr>
+</table>
+
+<h3>二进制路径</h3>
+<p><code>continue</code> 是 bash 内建关键字。实际 CLI 二进制：</p>
+<pre><code># 安装路径
+/opt/homebrew/lib/node_modules/@continuedev/cli/
+
+# 可执行文件
+/opt/homebrew/bin/cn   # 指向 @continuedev/cli/dist/cn.js</code></pre>
+
+<h2>调试技巧</h2>
+<pre><code># 查看日志
+tail -f ~/.continue/logs/cn.log
+
+# 查看 Hub 配置
+cat ~/.continue/auth.json
+
+# 检查 gpt-5 等 Hub 默认模型是否被使用
+grep "modelName" ~/.continue/auth.json
+
+# 加 --print 强制非交互模式（适合 CI 和脚本）
+cn "prompt" --print</code></pre>
+
+<h2>相关文件</h2>
+<table>
+<tr><th>文件</th><th>用途</th></tr>
+<tr><td><code>~/.continue/config.yaml</code></td><td>Hub 配置（最高优先级）</td></tr>
+<tr><td><code>~/.continue/config.json</code></td><td>本地 JSON 配置</td></tr>
+<tr><td><code>~/.continue/config.ts</code></td><td>TypeScript 钩子</td></tr>
+<tr><td><code>~/.continue/auth.json</code></td><td>Hub 登录凭证</td></tr>
+<tr><td><code>~/.continue/logs/cn.log</code></td><td>运行时日志</td></tr>
+<tr><td><code>~/.continue/dev_data/devdata.sqlite</code></td><td>本地状态缓存</td></tr>
+</table>
+
+<h2>踩坑路线图</h2>
+<ol>
+<li>❌ 改 <code>config.json</code> 的 <code>apiBase</code> → 没用，Hub 覆盖</li>
+<li>❌ 改 <code>config.json</code> 的 <code>provider</code> 为 <code>deepseek</code> → 还是被 Hub 覆盖</li>
+<li>❌ 改 <code>config.ts</code> 的 <code>modifyConfig</code> → Hub 优先级更高</li>
+<li>✅ 改 <code>config.yaml</code> 里的 <code>uses: deepseek/deepseek-chat</code> → 生效</li>
+</ol>
+
+</div>
+</body>
+</html>

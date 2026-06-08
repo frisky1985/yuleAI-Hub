@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>三人小队 v2.0 角色定义 — yuleAI-Hub</title>
+<style>:root{--primary:#6C5CE7;--accent:#00B894;--warm:#FDCB6E;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC","PingFang SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:960px;margin:0 auto}
+h1{color:var(--primary);margin-bottom:4px;font-size:26px}
+.subtitle{color:var(--fg2);font-size:14px;margin-bottom:24px;border-left:3px solid var(--primary);padding-left:12px}
+h2{margin:32px 0 12px;font-size:18px;padding-bottom:6px;border-bottom:2px solid var(--border);color:var(--fg)}
+h3{margin:20px 0 8px;font-size:16px;color:var(--primary)}
+p{margin:6px 0;color:var(--fg2);font-size:14px;line-height:1.8}
+ul,ol{margin:6px 0 12px 20px;color:var(--fg2);font-size:14px;line-height:1.8}
+li{margin:4px 0}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin:12px 0}
+.card.primary{border-left:4px solid var(--primary)}
+.card.accent{border-left:4px solid var(--accent)}
+.card.warm{border-left:4px solid var(--warm)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--bg-card);border-radius:var(--radius);overflow:hidden}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--primary);color:#fff;font-weight:500}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8f7ff}
+.tag{display:inline-block;padding:2px 10px;border-radius:6px;font-size:12px;margin-right:4px}
+.tag.purple{background:#f0edff;color:var(--primary)}
+.tag.green{background:#e0f8f0;color:var(--accent)}
+.tag.gold{background:#fef7e0;color:#e17055}
+pre{background:#1e1e2e;color:#cdd6f4;border-radius:var(--radius);padding:16px 20px;overflow-x:auto;font-size:13px;line-height:1.6;margin:12px 0}
+code{font-family:"JetBrains Mono","Fira Code",monospace}
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+.nav{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.nav a{color:var(--primary);font-size:13px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);text-decoration:none}
+.nav a:hover{background:#f0edff;border-color:var(--primary)}
+</style></head><body>
+
+<div class="nav">
+  <a href="/agents/">← Agents 总览</a>
+  <a href="#v2">v2.0 定义</a>
+  <a href="#xiaoma">小马 🐴</a>
+  <a href="#xiaoke">小克 👨‍💻</a>
+  <a href="#xiaoming">小明 🧑‍💼</a>
+  <a href="#pipeline">流水线</a>
+  <a href="#change-log">更新日志</a>
+</div>
+
+<h1>👥 三人小队 v2.0</h1>
+<p class="subtitle">角色分工优化 · 2026-06-05 · 明天华 决策 · 小明+小马+小克 协同讨论</p>
+
+<div class="card primary">
+<h3>🎯 核心理念</h3>
+<p><strong>各归其位、并行推进、责任到人、只审自己擅长的事。</strong></p>
+<p>从「排队干活互相等」变为「并行推进各司其职」。小马从文档管理员升级为质量架构师，小克自测简化聚焦代码质量，小明只审业务价值。<br>方法论底座：<strong>OpenSpec + Superpowers + Harness Engineering</strong> 三位一体。</p>
+</div>
+
+<h2 id="v2">一、角色总览</h2>
+
+<table>
+<tr><th>Agent</th><th>角色</th><th>定位</th><th>工具</th></tr>
+<tr><td>小明 🧑‍💼</td><td>项目经理 / Orchestrator</td><td>需求入口 + 编排 + 终审 + 裁决</td><td>OpenClaw</td></tr>
+<tr><td>小马 🐴</td><td>质量架构师</td><td>Spec 契约层 + 验收矩阵 + 前置审查</td><td>Hermes Agent</td></tr>
+<tr><td>小克 👨‍💻</td><td>编码/架构/测试专家</td><td>架构 + 开发 + check list + 技术债务 + 根因分析</td><td>Claude Code</td></tr>
+</table>
+
+<h2 id="xiaoma">二、小马 🐴（原 Hermes）— 质量架构师</h2>
+
+<div class="card accent">
+<h3>✅ 做</h3>
+<ul>
+<li><strong>Spec 契约层撰写</strong> — SHALL / SHALL NOT + GIVEN / WHEN / THEN。契约层不可变，变更需全员同意</li>
+<li><strong>实现指引</strong>（可变）— 给小克的「从哪入手」提示，过期即弃，不需要严格维护</li>
+<li><strong>验收判定矩阵</strong> — 写 spec 时同步产出，确立每条需求的验收标准</li>
+<li><strong>架构审查（前置）</strong> — 小克做完架构设计先给小马 review，确保架构覆盖 spec 契约层</li>
+<li><strong>代码审查</strong> — 双维度：<em>规范对齐</em>（代码实现了 spec 说的吗？）+ <em>可测试性</em>（实现容易被验证吗？）</li>
+<li><strong>变更影响分析</strong> — 需求变更时评估波及范围</li>
+</ul>
+</div>
+
+<div class="card warm">
+<h3>❌ 不做</h3>
+<ul>
+<li>PRD 独立文档 — 合并为 Spec 序言章节</li>
+<li>逐字排版和语法格式化 — 工具化/精简，不人工搞</li>
+<li>微小频繁变更的逐次记录 — 累积到阈值再更新契约层</li>
+</ul>
+</div>
+
+<h2 id="xiaoke">三、小克 👨‍💻（原 Claude）— 编码/架构/测试专家</h2>
+
+<div class="card accent">
+<h3>✅ 做</h3>
+<ul>
+<li><strong>架构设计</strong> — 输出 architecture.md，含 spec → 架构 SHALL 追溯表</li>
+<li><strong>开发</strong> — src/ 代码实现</li>
+<li><strong>自测 check list</strong> — 每条 SHALL 对应 1-2 个关键检查点（精简版，不写完整 GIVEN/WHEN/THEN 文档）</li>
+<li><strong>技术债务跟踪</strong> — 维护 tech-debt.md，记录「该重构但这次不做」的问题</li>
+<li><strong>覆盖率自动化工具</strong> — 写自动检查工具</li>
+<li><strong>根因分析 RCA</strong> — 测试失败后产出 rca-log.md，反馈改进 spec 质量</li>
+<li><strong>技术设计记录</strong> — tech-notes.md（ADR 精简版）</li>
+</ul>
+</div>
+
+<div class="card warm">
+<h3>❌ 不做</h3>
+<ul>
+<li>大量重复的格式化测试文档撰写</li>
+<li>在缺少关键 spec 信息的情况下做架构决策 — 有权打回要求小马补全 spec 输入</li>
+</ul>
+</div>
+
+<h2 id="xiaoming">四、小明 🧑‍💼 — 项目经理 / Orchestrator</h2>
+
+<div class="card accent">
+<h3>✅ 做</h3>
+<ul>
+<li><strong>需求入口</strong> — 接老板需求 + Superpowers S.U.P.E.R 启动分析</li>
+<li><strong>Agents 编排调度</strong> — 决定谁做什么、什么时候交接</li>
+<li><strong>三线终审</strong> — 审查业务价值维度：这个实现解决了业务问题吗？边界覆盖了吗？</li>
+<li><strong>争议裁决</strong> — 小克 vs 小马 分歧时的最终决策</li>
+<li><strong>Git 操作</strong> — commit + push</li>
+<li><strong>最终报告</strong> — task-summary.md</li>
+</ul>
+</div>
+
+<div class="card warm">
+<h3>❌ 不做</h3>
+<ul>
+<li>逐层内部评审 — 由小马前置审查替代</li>
+</ul>
+</div>
+
+<h2 id="pipeline">五、流水线 v2.0</h2>
+
+<pre>
+老板 → 小明(需求 + Superpowers 分析)
+         │
+         ├── 小马: Spec 契约层 + 验收矩阵
+         │
+         ├── 小克: 架构设计 → 小马审查架构 ✅ 前置
+         │
+         ├── 小克: 开发 + check list 自测
+         │      │
+         │      └── 小马: 持续跟进（非正式审查）
+         │
+         ├── 小马: 正式审查（规范对齐 + 可测试性）
+         │
+         ├── 小明: 终审（业务价值维度）
+         │
+         ├── 小克: tech-debt.md + 根因分析
+         │
+         └── 小明: 最终报告</pre>
+
+<h3>三线确认机制</h3>
+<table>
+<tr><th>线</th><th>责任人</th><th>审查维度</th></tr>
+<tr><td>第1线</td><td>小马 🐴</td><td>规范对齐 — 代码做的和 spec 说的一致吗？</td></tr>
+<tr><td>第2线</td><td>小明 🧑‍💼</td><td>业务价值 — 实现解决了问题吗？边界覆盖了吗？</td></tr>
+<tr><td>第3线</td><td>小克 + 小马</td><td>变更影响 — 波及了什么？需要更新其他东西吗？</td></tr>
+</table>
+
+<h2 id="change-log">六、更新日志</h2>
+
+<table>
+<tr><th>日期</th><th>版本</th><th>变更</th></tr>
+<tr><td>2026-06-05</td><td>v1.0 → v2.0</td>
+<td>
+三人讨论（小明+小马+小克）后全面优化。<br>
+小马转型质量架构师 + 审查前置 + 取消 PRD<br>
+小克自测简化 + 新增技术债务/根因分析<br>
+小明三线终审 + 争议裁决
+</td></tr>
+</table>
+
+<hr>
+<p style="text-align:center;color:var(--fg2);font-size:12px">yuleAI-Hub · 三人小队 v2.0 · 角色分工优化 · 持续演进中 🔥</p>
+</body></html>

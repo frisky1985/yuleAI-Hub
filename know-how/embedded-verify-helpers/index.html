@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Verify Helpers — yuleAI 知识库</title>
+    <link rel="icon" href="https://frisky1985.github.io/yuleAI-Hub/assets/img/yl-logo.svg">
+    <link rel="stylesheet" href="https://frisky1985.github.io/yuleAI-Hub/assets/css/style.css">
+    <style>
+        .pattern-card { background: #f8f6ff; border-left: 4px solid #6C5CE7; padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .pattern-card h4 { margin: 0 0 0.3rem; color: #6C5CE7; }
+        .pattern-card p { margin: 0; color: #555; font-size: 0.95rem; }
+        .code-block { background: #1e1e2e; color: #cdd6f4; padding: 1rem; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.5; }
+        .code-block .comment { color: #6c7086; }
+        .code-block .keyword { color: #cba6f7; }
+        .code-block .type { color: #89b4fa; }
+        .code-block .func { color: #a6e3a1; }
+        .code-block .num { color: #fab387; }
+        .code-block .str { color: #f9e2af; }
+        .diff-plus { background: #1e3a2e; color: #a6e3a1; }
+        .diff-minus { background: #3a1e1e; color: #f38ba8; }
+        .meta-tag { display: inline-block; background: #6C5CE7; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; margin: 0.3rem 0.3rem 0 0; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+        th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+        th { background: #6C5CE7; color: #fff; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .warn { background: #fff3cd; border-left: 4px solid #ffc107; padding: 0.8rem 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .tip { background: #d4edda; border-left: 4px solid #28a745; padding: 0.8rem 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .danger { background: #f8d7da; border-left: 4px solid #dc3545; padding: 0.8rem 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+    </style>
+</head>
+<body>
+    <nav class="nav-wrapper">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="https://frisky1985.github.io/yuleAI-Hub/" class="logo-link">
+                    <div class="yl-logo">YL</div>
+                    <span class="site-name">yuleAI</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="https://frisky1985.github.io/yuleAI-Hub/">首页</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/know-how/">Know-How</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/skills/">技能</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/projects/">项目</a>
+                <div class="auth-section">
+                    <a href="https://frisky1985.github.io/yuleAI-Hub/auth/login.html" class="login-btn">登录</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-content" style="max-width: 860px; margin: 0 auto; padding: 2rem 1rem;">
+
+            <div>
+                <span class="meta-tag">模式</span>
+                <span class="meta-tag">嵌入式C</span>
+                <span class="meta-tag">代码去重</span>
+                <span class="meta-tag">AUTOSAR</span>
+            </div>
+
+            <h1>Embedded Verify Helpers 模式</h1>
+            <p class="subtitle" style="color: #666; font-size: 1.05rem;">用 static helper 消除 N 处重复的读+比较循环</p>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 1.5rem 0;">
+
+            <h2>问题</h2>
+            <p>在嵌入式 Flash 驱动（或类似的外设驱动）中，常有多个独立的操作步骤需要进行数据校验：</p>
+            <ul>
+                <li><strong>Erase verify：</strong>读 256B 出来，按 uint32 word 检查是否全为 <code>0xFFFFFFFF</code></li>
+                <li><strong>Write verify：</strong>读 256B 出来，逐字节比对 WriteBuffer 中的期望数据</li>
+                <li><strong>Compare handler：</strong>读一个 chunk，逐字节比对 CallerBuffer 中的数据</li>
+            </ul>
+            <p>这三处代码基本一样：读 flash → 比较 → 返回 OK/FAIL。区别仅在比较模式和期望数据来源。如果独立实现，每处都是 14-26 行相似的代码，总共 58+ 行重复。</p>
+
+            <div class="danger">
+                <strong>更隐蔽的风险：</strong>每处独立实现都可能引入不同的 Bug（比如 readBuf 类型不一致、长度判断漏了、未对齐访问）。DRY 原则在这里不仅是文风问题，是正确性问题。
+            </div>
+
+            <h2>解决方案</h2>
+            <p>提取一个 <code>static</code> helper 函数，用 enum 模式区分 ERASE/BYTE 两种比较方式：</p>
+
+            <div class="code-block">
+<span class="comment">/* ========== 模式枚举（.c 内，不暴露） ========== */</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> {
+    EXT_FLS_VERIFY_ERASE,   <span class="comment">/* Expect all bytes 0xFF */</span>
+    EXT_FLS_VERIFY_BYTE     <span class="comment">/* Compare byte-by-byte against ExpectedPtr */</span>
+} ExtFls_VerifyModeType;
+
+<span class="comment">/* ========== Helper 函数 ========== */</span>
+<span class="keyword">static</span> <span class="type">Std_ReturnType</span> <span class="func">ExtFls_VerifyChunk</span>(
+    <span class="type">uint32</span>               Address,
+    <span class="type">ExtFls_LengthType</span>    Length,
+    <span class="keyword">const</span> <span class="type">uint8</span>         *Expected,
+    <span class="type">ExtFls_VerifyModeType</span> Mode
+) {
+    <span class="type">uint32</span> readBuf[64U];         <span class="comment">/* 256 bytes, 4-byte aligned */</span>
+    <span class="type">uint16</span> i;
+
+    <span class="keyword">if</span> (Length > 256U)           <span class="keyword">return</span> E_NOT_OK;
+    <span class="keyword">if</span> ((Mode == EXT_FLS_VERIFY_ERASE) && ((Length & 3U) != 0U))
+        <span class="keyword">return</span> E_NOT_OK;           <span class="comment">/* P2: ERASE mode needs word alignment */</span>
+    <span class="keyword">if</span> (ExtFlashDriver_Read(Address, Length, (uint8 *)readBuf) != E_OK)
+        <span class="keyword">return</span> E_NOT_OK;
+
+    <span class="keyword">if</span> (Mode == EXT_FLS_VERIFY_ERASE) {
+        <span class="type">uint32</span> *wordPtr = readBuf;  <span class="comment">/* uint32[] → no alignment issue */</span>
+        <span class="type">uint16</span> n = (uint16)(Length / <span class="keyword">sizeof</span>(uint32));
+        <span class="keyword">for</span> (i = 0; i < n; i++)
+            <span class="keyword">if</span> (wordPtr[i] != 0xFFFFFFFFU) <span class="keyword">return</span> E_NOT_OK;
+    } <span class="keyword">else</span> {
+        <span class="keyword">for</span> (i = 0; i < (uint16)Length; i++)
+            <span class="keyword">if</span> (((uint8 *)readBuf)[i] != Expected[i]) <span class="keyword">return</span> E_NOT_OK;
+    }
+    <span class="keyword">return</span> E_OK;
+}
+            </div>
+
+            <h3>调用方示例</h3>
+            <p>三处调用全都是同一个模式：</p>
+
+            <div class="code-block">
+<span class="comment">/* Erase verify — 传 NULL，ERASE 模式不走 Expected */</span>
+<span class="keyword">if</span> (<span class="func">ExtFls_VerifyChunk</span>(Address, 256U, NULL,
+        EXT_FLS_VERIFY_ERASE) != E_OK) {
+    <span class="comment">/* handle error */</span>
+}
+
+<span class="comment">/* Write verify — 按偏移定位到 WriteBuffer 中的预期字节 */</span>
+<span class="keyword">if</span> (<span class="func">ExtFls_VerifyChunk</span>(Address, readSize,
+        &WriteBufferPtr[VerifyAddress - WriteAddress],
+        EXT_FLS_VERIFY_BYTE) != E_OK) {
+    <span class="comment">/* handle error */</span>
+}
+
+<span class="comment">/* Compare handler — 逐字节比对 ReadBuffer 中的数据 */</span>
+<span class="keyword">if</span> (<span class="func">ExtFls_VerifyChunk</span>(Address, ReadCount,
+        ReadBufferPtr, EXT_FLS_VERIFY_BYTE) != E_OK) {
+    <span class="comment">/* data mismatch or read failure */</span>
+}
+            </div>
+
+            <h2>关键设计决策</h2>
+
+            <div class="table-wrap">
+            <table>
+                <tr><th>决策</th><th>方案</th><th>理由</th></tr>
+                <tr>
+                    <td>函数位置</td>
+                    <td>CDD 层 <code>static</code></td>
+                    <td>不是 HAL 接口，不跨文件调用；<code>static</code> 表示「这里是实现细节，调用方自己处理状态管理」</td>
+                </tr>
+                <tr>
+                    <td>Buffer 类型</td>
+                    <td><code>uint32[64]</code></td>
+                    <td>保证 4 字节对齐，ERASE mode 强转 <code>uint32*</code> 无 HardFault 风险</td>
+                </tr>
+                <tr>
+                    <td>模式分离</td>
+                    <td>enum 参数</td>
+                    <td>比函数指针回调简单，比两个独立函数 DRY</td>
+                </tr>
+                <tr>
+                    <td>不接管状态</td>
+                    <td>只做 chunk 级操作</td>
+                    <td>地址推进、剩余长度管理、回调通知全在调用方。helper 只负责「读+比」，单一职责</td>
+                </tr>
+                <tr>
+                    <td>ERASE 传 NULL</td>
+                    <td>ERASE mode 不解引用 <code>Expected</code></td>
+                    <td>C 标准安全（条件分支互斥），不用造空数组。BYTE mode 必须传有效指针</td>
+                </tr>
+            </table>
+            </div>
+
+            <h2>陷阱 &amp; 教训</h2>
+
+            <div class="danger">
+                <strong>P0: Buffer 对齐</strong><br>
+                <code>uint8[256]</code> 栈数组只保证 1 字节对齐，ARM Cortex-M 上强转 <code>uint32*</code> 后，
+                如果 <code>CCR.UNALIGN_TRP=1</code> 会 HardFault。
+                声明为 <code>uint32[64]</code> 从根源解决。
+            </div>
+
+            <div class="warn">
+                <strong>P1: 旧代码的隐藏 UB</strong><br>
+                审查发现原 Compare handler 用的 <code>uint32[16] = 64 bytes</code> 作为 readBuf。
+                如果 <code>FlsFastRead</code> 配置 > 64 字节，旧代码是栈溢出 UB（不出错是因为凑巧够用）。
+            </div>
+
+            <div class="tip">
+                <strong>技巧：小抠抓出的嵌入知识差距</strong><br>
+                栈对齐问题在 x86 开发环境完全感知不到，只有 ARM Cortex-M 才会暴露。
+                这类「跨架构盲区」正是代码审查中嵌入专家（小抠）的价值所在。
+            </div>
+
+            <h2>适用场景</h2>
+            <ul>
+                <li>驱动层有 N 个操作都需要「读一个 chunk → 检查内容」</li>
+                <li>比较模式固定（全擦除 0xFF、逐字节比对待定数据、mask 模式等）</li>
+                <li>调用方自己管理状态机（地址、剩余长度、回调）</li>
+                <li>buffer 大小由内部决定（通常 256B，合适 SPI Flash page 对齐）</li>
+            </ul>
+
+            <h2>不适用场景</h2>
+            <ul>
+                <li>需要跨模块共享（应该放在 HAL 层，函数指针回调注入比较器）</li>
+                <li>比较逻辑需要动态注入（应该用回调函数指针，不要用 enum + if-else）</li>
+                <li>buffer 大小取决于调用方配置（应该把 buffer 也作为参数传给 helper）</li>
+            </ul>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 2rem 0;">
+
+            <h2>变更统计</h2>
+            <div class="table-wrap">
+            <table>
+                <tr><th>阶段</th><th>变更</th><th>效果</th></tr>
+                <tr><td>重构前</td><td>3 处独立读+比较循环</td><td>~58 行重复代码</td></tr>
+                <tr><td>提取 helper</td><td><code>+80/-78</code> 行</td><td>净增 2 行，消除所有重复</td></tr>
+                <tr><td>对齐修复</td><td><code>+4/-4</code> 行</td><td><code>uint32[64]</code> 保证对齐</td></tr>
+                <tr><td>P2 防御</td><td><code>+15</code> 行</td><td>ERASE 4B 对齐检查 + Write 指针越界守卫</td></tr>
+            </table>
+            </div>
+
+            <p style="color: #888; font-size: 0.9rem; margin-top: 2rem;">
+                最后更新：2026-06-06 · 基于 ExtFls VerifyChunk 实战
+            </p>
+        </div>
+    </div>
+</body>
+</html>

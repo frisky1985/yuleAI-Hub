@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Codex CLI + DeepSeek — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7;padding:32px;max-width:860px;margin:0 auto}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:14px;overflow-x:auto;margin:10px 0;font-size:13px;tab-size:4}
+code{font-family:var(--mono);font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
+pre code{background:transparent;padding:0;color:inherit}
+h1{color:var(--primary);margin-bottom:8px}h2{margin:32px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+h3{margin:18px 0 6px;color:#333}p{margin:8px 0;color:var(--fg2)}ul,ol{margin:8px 0;padding-left:20px;color:var(--fg2)}li{margin:3px 0}
+.tag{display:inline-block;background:var(--primary);color:#fff;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:500;margin-right:6px}
+.tag.python{background:#3572A5}.tag.tool{background:#e17055}.tag.proxy{background:#00b894}
+.download{display:inline-block;background:var(--primary);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:500;margin:16px 0}
+.download:hover{opacity:.85}
+.arch{display:flex;justify-content:center;margin:20px 0}
+.arch-box{border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:4px;text-align:center;font-size:14px}
+.arch-box.cmd{background:#ffeaa7;border-color:#fdcb6e}.arch-box.proxy{background:#81ecec;border-color:#00cec9}.arch-box.api{background:#dfe6e9;border-color:#b2bec3}
+.arch-arrow{font-size:24px;color:var(--fg2);margin:auto 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{text-align:left;padding:8px 12px;border:1px solid var(--border);font-size:14px}
+th{background:var(--bg);font-weight:600;color:var(--primary)}
+.info-box{background:#f0edff;border-left:4px solid var(--primary);padding:12px 16px;border-radius:4px;margin:12px 0}
+</style></head><body>
+
+<h1>&#x1F916; Codex CLI + DeepSeek</h1>
+<p style="color:var(--fg2);margin-bottom:16px">通过本地代理桥接，让 OpenAI Codex CLI v0.137+ 使用 DeepSeek 模型（deepseek-v4-flash / deepseek-v4-pro）</p>
+
+<span class="tag">skill</span><span class="tag python">Python</span><span class="tag tool">Codex CLI</span><span class="tag proxy">Responses Proxy</span>
+
+<div style="margin:16px 0">
+<a class="download" href="codex-deepseek.skill" download>&#x2B07; 下载 .skill 文件</a>
+</div>
+
+<h2>&#x1F3D7; 架构</h2>
+
+<div class="arch">
+<div class="arch-box cmd">Codex CLI<br><small>Responses API</small></div>
+<div class="arch-arrow">&#x2192;</div>
+<div class="arch-box proxy">localhost:8787<br><small>Proxy</small></div>
+<div class="arch-arrow">&#x2192;</div>
+<div class="arch-box api">api.deepseek.com<br><small>Chat Completions</small></div>
+</div>
+
+<div class="info-box">
+Codex CLI v0.137+ 只支持 Responses API，而 DeepSeek 只提供 Chat Completions API。
+这个本地 Proxy 负责双向协议转换：工具类型重写（shell_command / namespace &#x2192; function）、角色映射（developer &#x2192; system）、SSE 流格式转换、以及 reasoning_content 透传。
+</div>
+
+<h2>&#x1F680; 自动安装</h2>
+
+<pre><code>bash scripts/setup.sh</code></pre>
+
+<p>脚本会执行：</p>
+<ul>
+<li>复制 proxy 和启动脚本到 <code>~/.codex/</code></li>
+<li>写入 <code>config.toml</code> 和 <code>reasoner.config.toml</code></li>
+<li>将 <code>DEEPSEEK_API_KEY</code> 添加到 <code>~/.zshrc</code>（如果缺）</li>
+<li>添加 <code>codex</code> shell 函数到 <code>~/.zshrc</code>（自动启动 proxy）</li>
+<li>安装 macOS LaunchAgent（开机自启）</li>
+<li>立即启动 proxy</li>
+</ul>
+
+<h2>&#x1F9F0 手动安装</h2>
+
+<h3>Step 1: 复制 proxy 文件</h3>
+<pre><code>cp scripts/deepseek-proxy.py ~/.codex/
+cp scripts/start-proxy.sh ~/.codex/
+chmod +x ~/.codex/start-proxy.sh</code></pre>
+
+<h3>Step 2: 配置 Codex</h3>
+<p><code>~/.codex/config.toml</code>：</p>
+<pre><code>model = "deepseek-v4-flash"
+model_provider = "deepseek"
+
+[model_providers.deepseek]
+name = "DeepSeek"
+base_url = "http://localhost:8787/v1"
+env_key = "DEEPSEEK_API_KEY"
+wire_api = "responses"</code></pre>
+
+<p><code>~/.codex/reasoner.config.toml</code>（用于 <code>--profile reasoner</code>）：</p>
+<pre><code>model = "deepseek-v4-pro"
+model_provider = "deepseek"
+
+[model_providers.deepseek]
+name = "DeepSeek"
+base_url = "http://localhost:8787/v1"
+env_key = "DEEPSEEK_API_KEY"
+wire_api = "responses"</code></pre>
+
+<h3>Step 3: 存储 API Key</h3>
+<pre><code>~/.codex/auth.json:
+
+{
+  "auth_mode": "apikey",
+  "DEEPSEEK_API_KEY": "your-deepseek-api-key"
+}</code></pre>
+
+<h3>Step 4: 环境变量</h3>
+<pre><code>export DEEPSEEK_API_KEY="your-deepseek-api-key"</code></pre>
+
+<h3>Step 5: 自动启动 proxy</h3>
+<p>添加到 <code>~/.zshrc</code>：</p>
+<pre><code>codex() {
+    if ! pgrep -f "deepseek-proxy.py" > /dev/null 2>&1; then
+        ~/.codex/start-proxy.sh start
+    fi
+    command codex "$@"
+}</code></pre>
+
+<h3>Step 6: LaunchAgent（可选）</h3>
+<p>开机自启 macOS LaunchAgent plist，详见 <code>launchagent.md</code>。</p>
+
+<h2>&#x1F4A1 使用</h2>
+
+<pre><code>codex                              # 默认: deepseek-v4-flash
+codex --profile reasoner           # deepseek-v4-pro
+codex -m deepseek-v4-pro           # 显式指定模型</code></pre>
+
+<h2>&#x1F4E6 依赖</h2>
+<ul>
+<li>Python 3.9+  + <code>aiohttp</code>（<code>pip3 install aiohttp</code>）</li>
+<li>Codex CLI v0.137+（<code>npm install -g @openai/codex</code>）</li>
+<li>DeepSeek API key——<a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a></li>
+</ul>
+
+<h2>&#x1F41B 排障</h2>
+
+<table>
+<tr><th>现象</th><th>原因</th><th>修复</th></tr>
+<tr><td>404 on <code>/v1/responses</code></td><td>Proxy 没跑</td><td><code>~/.codex/start-proxy.sh start</code></td></tr>
+<tr><td>"Missing DEEPSEEK_API_KEY"</td><td>环境变量未设置</td><td>export 或检查 <code>~/.codex/auth.json</code></td></tr>
+<tr><td>Port 8787 被占用</td><td>已有进程</td><td><code>lsof -i :8787</code> 查找，或改 <code>PROXY_PORT</code></td></tr>
+<tr><td>工具调用循环</td><td>DeepSeek 模型行为</td><td>非 proxy 问题，可尝试缩减工具数量</td></tr>
+</table>
+
+<h2>&#x1F4A5 Proxy 核心实现</h2>
+
+<p>Proxy 将 Codex 的 Responses API 请求转换为 Chat Completions：</p>
+
+<h3>请求转换（Responses &#x2192; Chat Completions）</h3>
+<ul>
+<li><code>instructions</code> &#x2192; system message</li>
+<li><code>input</code> 数组 &#x2192; messages（处理 role 映射 developer&#x2192;system）</li>
+<li>Codex 内置工具类型（<code>shell_command</code>, <code>namespace</code>）&#x2192; 标准 <code>function</code> 类型</li>
+<li><code>max_output_tokens</code> &#x2192; <code>max_tokens</code></li>
+<li><code>tool_choice.type="function"</code> &#x2192; 嵌套函数引用</li>
+</ul>
+
+<h3>响应转换（Chat Completions &#x2192; Responses）</h3>
+<ul>
+<li><code>reasoning_content</code> &#x2192; Responses reasoning 类型输出项</li>
+<li><code>tool_calls</code> &#x2192; <code>function_call</code> 输出项</li>
+<li>SSE 流：按 Responses API 的事件序列（<code>response.created</code> &#x2192; <code>output_item.added</code> &#x2192; <code>content_part.delta</code> &#x2192; <code>response.completed</code>）重构</li>
+<li>usage 数据映射（prompt_tokens &#x2192; input_tokens, completion_tokens &#x2192; output_tokens）</li>
+</ul>
+
+<h2>&#x1F4C2 文件清单</h2>
+
+<table>
+<tr><th>文件</th><th>说明</th></tr>
+<tr><td>SKILL.md</td><td>技能主文档（本页源内容）</td></tr>
+<tr><td>launchagent.md</td><td>macOS LaunchAgent plist 模板</td></tr>
+<tr><td>scripts/setup.sh</td><td>全自动安装脚本</td></tr>
+<tr><td>scripts/start-proxy.sh</td><td>Proxy 启动/停止管理脚本</td></tr>
+<tr><td>scripts/deepseek-proxy.py</td><td>核心 Proxy 实现（338 行 Python）</td></tr>
+</table>
+
+</body></html>

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Mesh Context Contract v1",
+  "type": "object",
+  "required": ["pipeline_status", "current_phase", "phase_history"],
+  "properties": {
+    "pipeline_status": {
+      "type": "string",
+      "enum": ["idle", "running", "done", "failed"],
+      "description": "Overall pipeline status"
+    },
+    "current_phase": {
+      "type": "string",
+      "enum": ["init", "brainstorm", "research", "plan",
+               "implement", "review", "report"],
+      "description": "Current pipeline phase"
+    },
+    "phase_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phase", "status", "agent"],
+        "properties": {
+          "phase": {"type": "string"},
+          "status": {"type": "string", "enum": ["running", "done", "failed"]},
+          "agent": {"type": "string"},
+          "time": {"type": "string", "format": "date-time"},
+          "retries": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "Generated artifact paths"
+    },
+    "goal": {
+      "type": "string",
+      "description": "Original user goal"
+    }
+  }
+}

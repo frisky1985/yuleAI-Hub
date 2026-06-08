@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>注册 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#6C5CE7;
+  --primary-hover:#5b4ed4;
+  --primary-light:#f0edff;
+  --accent:#00B894;
+  --bg:#f5f6fa;
+  --bg-card:#fff;
+  --fg:#1d2129;
+  --fg2:#6b7785;
+  --fg3:#9ba3af;
+  --border:#e5e8ed;
+  --radius:20px;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --font:"Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--fg);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.top-bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:64px;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 32px;
+  z-index:100;
+}
+.top-bar-inner{
+  max-width:1200px;
+  width:100%;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.top-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--fg);
+  font-weight:700;
+  font-size:17px;
+}
+.top-logo .yl{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#6C5CE7,#a29bfe);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+}
+.auth-card{
+  background:var(--bg-card);
+  border-radius:var(--radius);
+  padding:44px 40px;
+  width:420px;
+  max-width:100%;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  margin-top:80px;
+}
+.auth-card h1{
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:6px;
+  letter-spacing:-0.3px;
+}
+.auth-card .sub{
+  font-size:14px;
+  color:var(--fg2);
+  margin-bottom:28px;
+  font-weight:400;
+}
+.field{
+  margin-bottom:18px;
+}
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:500;
+  color:var(--fg);
+  margin-bottom:7px;
+}
+.field input{
+  width:100%;
+  padding:11px 15px;
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  font-size:14px;
+  font-family:var(--font);
+  outline:none;
+  transition:all .2s;
+  background:#fafafa;
+  color:var(--fg);
+}
+.field input::placeholder{color:#c4c9d0}
+.field input:focus{
+  border-color:var(--primary);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(108,92,231,.1);
+}
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:var(--primary);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  font-family:var(--font);
+  transition:all .15s;
+  margin-top:4px;
+}
+.btn:hover{
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(108,92,231,.25);
+}
+.btn:active{transform:scale(.98) translateY(0)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.error-msg{
+  color:#dc2626;
+  font-size:13px;
+  padding:10px 14px;
+  background:#fef2f2;
+  border:1px solid #fecaca;
+  border-radius:10px;
+  margin-bottom:18px;
+  display:none;
+  font-weight:500;
+}
+.success-msg{
+  color:#059669;
+  font-size:13px;
+  padding:10px 14px;
+  background:#ecfdf5;
+  border:1px solid #a7f3d0;
+  border-radius:10px;
+  margin-bottom:18px;
+  display:none;
+  font-weight:500;
+}
+.footer-text{
+  text-align:center;
+  margin-top:26px;
+  font-size:13px;
+  color:var(--fg2);
+}
+.footer-text a{color:var(--primary);text-decoration:none;font-weight:600}
+.footer-text a:hover{text-decoration:underline}
+@media(max-width:480px){
+  .auth-card{padding:32px 24px}
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="/" class="top-logo"><span class="yl">YL</span> yuleAI-Hub</a>
+  </div>
+</div>
+
+<div class="auth-card">
+  <h1>创建账号</h1>
+  <p class="sub">加入 yuleAI-Hub 社区</p>
+  <div class="error-msg" id="errorMsg">该邮箱已被注册</div>
+  <div class="success-msg" id="successMsg">注册成功！正在跳转...</div>
+  <form onsubmit="return register()">
+    <div class="field">
+      <label>昵称</label>
+      <input type="text" id="name" placeholder="你的昵称" required>
+    </div>
+    <div class="field">
+      <label>邮箱地址</label>
+      <input type="email" id="email" placeholder="your@email.com" required>
+    </div>
+    <div class="field">
+      <label>密码</label>
+      <input type="password" id="password" placeholder="至少 6 位" minlength="6" required>
+    </div>
+    <button class="btn" id="submitBtn" type="submit">注 册</button>
+  </form>
+  <p class="footer-text">已有账号？<a href="/auth/login.html">立即登录</a></p>
+</div>
+
+<script>
+function register(){
+  var u=JSON.parse(localStorage.getItem('yule_users')||'[]'),
+      n=document.getElementById('name').value,
+      e=document.getElementById('email').value,
+      p=document.getElementById('password').value;
+  if(u.find(function(x){return x.email===e})){
+    document.getElementById('errorMsg').style.display='block';
+    return false;
+  }
+  var m={name:n,email:e,password:p,avatar:n[0].toUpperCase(),joined:new Date().toISOString()};
+  u.push(m);
+  localStorage.setItem('yule_users',JSON.stringify(u));
+  localStorage.setItem('yule_current_user',JSON.stringify(m));
+  document.getElementById('successMsg').style.display='block';
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent='✓ 注册成功';
+  setTimeout(function(){window.location.href='/'},1200);
+  return false;
+}
+</script>
+</body>
+</html>

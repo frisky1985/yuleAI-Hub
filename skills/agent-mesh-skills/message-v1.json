@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Mesh Message Contract v1",
+  "type": "object",
+  "required": ["message_id", "from", "to", "subject", "body", "timestamp"],
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "description": "UUID of the message"
+    },
+    "from": {
+      "type": "string",
+      "enum": ["orchestrator", "architect", "researcher", "planner",
+               "implementer", "tester", "reviewer", "hermes", "qodercli"],
+      "description": "Sender role"
+    },
+    "to": {
+      "type": "string",
+      "enum": ["orchestrator", "architect", "researcher", "planner",
+               "implementer", "tester", "reviewer", "hermes", "qodercli",
+               "all"],
+      "description": "Recipient role"
+    },
+    "subject": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Message subject/topic"
+    },
+    "body": {
+      "type": "object",
+      "description": "Message payload"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    },
+    "in_reply_to": {
+      "type": ["string", "null"],
+      "description": "Message ID this is replying to"
+    },
+    "contract": {
+      "type": "string",
+      "description": "Contract version",
+      "default": "message-v1"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["init", "brainstorm", "research", "plan",
+               "implement", "review", "report"],
+      "description": "Pipeline phase this message belongs to"
+    }
+  }
+}

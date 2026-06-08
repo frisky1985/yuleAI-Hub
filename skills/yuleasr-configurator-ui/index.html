@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>yuleASR Configurator UI — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:28px 0 8px;font-size:20px;border-bottom:1px solid var(--border);padding-bottom:4px}
+h3{margin:20px 0 4px;font-size:16px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0;font-size:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px;font-family:var(--sans)}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+.breadcrumb{font-size:13px;margin-bottom:16px;font-family:var(--sans);color:var(--fg2)}
+.breadcrumb a{color:var(--fg2);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.page-meta{font-size:12px;color:var(--fg2);margin:8px 0;font-family:var(--sans);display:flex;gap:16px}
+.page-tags{display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap}
+.page-tags .tag{padding:2px 10px;border-radius:4px;background:var(--primary-bg);color:var(--primary);font-size:11px;font-family:var(--sans)}
+blockquote{border-left:3px solid var(--primary);background:var(--primary-bg);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:13px}
+strong{color:var(--fg)}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/skills/">⚡ Skills</a> <span>/</span> yuleASR Configurator UI</div>
+  <h1>⚡ AUTOSAR Configurator UI 模式 — React/Vite 配置工具</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-27</span>
+    <span>⏱️ 项目技能包</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">AUTOSAR</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Zustand</span><span class="tag">yuleASR</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>构建 AUTOSAR ECU 配置 Web 工具的模式集合（类似 Vector DaVinci Configurator），使用 React + TypeScript + Vite + Zustand 技术栈。涵盖动态多实例容器、ARXML 对齐数据模型、三列编辑器布局、实例状态管理和 localStorage 持久化。</p>
+
+  <h2>适用场景</h2>
+  <ul>
+    <li>构建或扩展 AUTOSAR ECU 配置工具</li>
+    <li>需要多实例（+ / × / ⎘）的树形配置编辑器</li>
+    <li>需要离线持久化 + 多配置管理的场景</li>
+  </ul>
+
+  <h2>核心架构</h2>
+
+  <h3>三列布局</h3>
+  <pre><code>col-span-3 | col-span-7      | col-span-2
+ConfigTree | Validation+Params | ConfigStatus</code></pre>
+
+  <h3>数据层级</h3>
+  <pre><code>Module → Container → SubContainer → Parameter
+Layer (MCAL / ECUAL / Service / OS)</code></pre>
+
+  <h2>动态多实例容器</h2>
+
+  <p>数据模型中用 <code>multiple</code> 标记支持多实例的容器：</p>
+
+  <pre><code>interface ConfigContainer {
+  id: string; name: string; displayName?: string;
+  parameters: ConfigParameter[];
+  subContainers?: ConfigContainer[];  // 静态子容器
+  multiple?: boolean;                  // true = 动态实例
+  minInstances?: number;               // 默认 0
+  maxInstances?: number;               // 可选上限
+}</code></pre>
+
+  <h3>实例生命周期</h3>
+  <table>
+    <thead><tr><th>操作</th><th>触发方式</th></tr></thead>
+    <tbody>
+      <tr><td>创建</td><td><code>[+]</code> 按钮</td></tr>
+      <tr><td>删除</td><td><code>[×]</code> 按钮（带确认弹窗）</td></tr>
+      <tr><td>复制</td><td><code>[⎘]</code> 按钮（继承参数值）</td></tr>
+      <tr><td>重命名</td><td>双击名称 / 右键菜单</td></tr>
+      <tr><td>排序</td><td>拖拽（HTML5 DnD）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Auto-Select 模式</h3>
+
+  <p>右键面板 <code>[+]</code> 创建实例后，用 <code>forwardRef + useImperativeHandle</code> 返回实例名，自动选中使其参数立即显示：</p>
+
+  <pre><code>const handleAddInstance = () => {
+  const containerPath = `layer:...`
+  const instanceName = configTreeRef.current?.addInstance(containerPath)
+  if (instanceName) {
+    setSelectedPath(`${containerPath}/instance:${instanceName}`)
+  }
+}</code></pre>
+
+  <h2>持久化</h2>
+
+  <h3>单配置自动保存</h3>
+  <pre><code>useConfigStore.subscribe((state) => {
+  if (state.isDirty && state.currentConfig) {
+    localStorage.setItem('yuleasr_config', JSON.stringify({...}))
+  }
+})</code></pre>
+
+  <h3>多配置管理（F-1 模式）</h3>
+  <ul>
+    <li><code>yuleasr_config_list</code> — 主列表（ID、名称、时间戳）</li>
+    <li><code>yuleasr_config_{id}</code> — 每个项目的完整配置数据</li>
+    <li>支持创建、加载、删除、克隆、导出（.yuleasr.json）、导入</li>
+  </ul>
+
+  <h2>验证引擎</h2>
+
+  <pre><code>validate()
+  ├── validateModuleDependencies()   — module.dependencies 数组检查
+  ├── validateOSConfiguration()       — task/ISR/alarm 唯一性
+  ├── validateParameterConstraints()  — required/range/enum 检查
+  ├── validateCrossModuleReferences() — AUTOSAR 隐式依赖规则
+  └── validateRTEConsistency()        — RTE 接口验证</code></pre>
+
+  <h3>跨模块依赖规则</h3>
+  <pre><code>CanTp → Can, CanNm → Can, CanSM → Can + CanNm,
+NvM → Fee + Fls, EcuM → Mcu, Csm → Crypto + CryIf,
+Dcm → CanTp, PduR → Can</code></pre>
+
+  <h2>⚠️ 关键陷阱</h2>
+
+  <ul>
+    <li><strong>命名冲突</strong> — Shadcn/UI 项目中的 <code>primary</code>、<code>secondary</code> 是预定义的 HSL 颜色 token，自定义 key 会被忽略。必须用 <code>app-*</code> 命名空间</li>
+    <li><strong>嵌套动态容器</strong> — 实例内部的子容器也可能是动态的，需要递归 <code>collectDynamicContainers</code> 和 <code>seedNestedDynamics</code></li>
+    <li><strong>Self-template 模式</strong> — 某些 <code>multiple: true</code> 容器自身就是模板（无 subContainers），需特殊处理</li>
+    <li><strong>ID 匹配而非路径匹配</strong> — 因路径中包含 <code>instance:xxx</code> 段，查找模板容器必须用 ID 匹配</li>
+  </ul>
+
+  <h2>相关技能</h2>
+  <ul>
+    <li><a href="/skills/yuleasr-dark-mode/">⚡ Dark Mode 实现</a> — 同样使用 app-* 命名空间的主题方案</li>
+    <li><a href="/skills/react-dynamic-instances/">⚡ React Dynamic Instances</a> — 多实例容器 CRUD 模式详解</li>
+  </ul>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

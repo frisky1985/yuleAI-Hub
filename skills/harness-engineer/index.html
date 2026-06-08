@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harness Engineer — 自治工程运行时 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--teal:#94e2d5;--peach:#fab387}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--peach);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.card{background:var(--surface);border-left:3px solid var(--peach);padding:1rem;margin:1rem 0;border-radius:0 8px 8px 0}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">skills</span> / harness-engineer</nav>
+  <h1>Harness Engineer</h1>
+  <p>持久自治工程运行时 — 将任何仓库变成自改进的软件系统</p>
+</header>
+
+<section>
+<h2>六大核心原则</h2>
+
+<div class="card">
+<h3>P1: 上下文工程</h3>
+<p>将上下文视为有限且宝贵的资源。积极剪裁。参见：<code>runtime/context-engineering.md</code>、<code>runtime/compaction.md</code></p>
+</div>
+
+<div class="card">
+<h3>P2: 工具使用</h3>
+<p>每个子 Agent 只获得它需要的工具——不多不少。参见：<code>tools/TOOL_REGISTRY.md</code></p>
+</div>
+
+<div class="card">
+<h3>P3: 验证机制</h3>
+<p>每个输出由生产者以外的人验证。参见：<code>agents/reviewer.md</code></p>
+</div>
+
+<div class="card">
+<h3>P4: 状态管理</h3>
+<p>状态存在于上下文窗口之外——在仓库中。参见：<code>runtime/status-management.md</code></p>
+</div>
+
+<div class="card">
+<h3>P5: 可观测性与反馈闭环</h3>
+<p>追踪发生了什么。将失败反馈给 harness，而不是代码。参见：<code>runtime/observability.md</code></p>
+</div>
+
+<div class="card">
+<h3>P6: 人类监督</h3>
+<p>人类审批高影响事件。Harness 显式地呈现它们。参见：<code>runtime/autonomy-rules.md</code></p>
+</div>
+</section>
+
+<section>
+<h2>不可妥协的规则</h2>
+<ol>
+<li>AGENTS.md 是真相来源——每个会话先读</li>
+<li>代码库优先于文档——冲突时信任代码</li>
+<li>40% 上下文规则——超过 40% 前剪枝或分 Agent</li>
+<li>无研究输出、计划、验证标准则不实现</li>
+<li>生成和审查始终分离——不能同一 Agent</li>
+<li>失败 = Harness 缺口——修复 harness，不只是修复症状</li>
+<li>优化优先级：安全 → 正确 → 可靠 → 性能 → 内存 → 可维护 → 成本</li>
+<li>最小子 Agent 范围——>5K 行按模块拆分</li>
+<li>最大并行 5</li>
+<li>10 分钟卡死杀死——无输出 >10 分钟则拆分重试</li>
+</ol>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>📄 <a href="SKILL.md" style="color:var(--blue)">下载原始 SKILL.md</a> | 本地路径: <code>~/.openclaw/workspace/skills/harness-engineer/SKILL.md</code></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superpowers 技能 — 设计驱动开发 | yuleAI-Hub</title>
+<link rel="stylesheet" href="/yuleAI-Hub/style.css">
+<style>
+:root{--bg:#1e1e2e;--surface:#313244;--overlay:#45475a;--text:#cdd6f4;--subtext:#a6adc8;--blue:#89b4fa;--green:#a6e3a1;--yellow:#f9e2af;--red:#f38ba8;--lavender:#b4befe;--teal:#94e2d5}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.7;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{color:var(--lavender);border-bottom:2px solid var(--overlay);padding-bottom:.5rem}
+h2{color:var(--blue);margin-top:1.8rem}
+h3{color:var(--teal)}
+pre{background:var(--surface);padding:1rem;border-radius:8px;overflow-x:auto}
+code{background:var(--surface);padding:.15rem .4rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid var(--overlay);padding:.5rem .8rem;text-align:left}
+th{background:var(--surface);color:var(--blue)}
+.tag{display:inline-block;background:var(--overlay);padding:.15rem .5rem;border-radius:4px;font-size:.85rem;color:var(--subtext)}
+.card{background:var(--surface);border-left:3px solid var(--teal);padding:1rem;margin:1rem 0;border-radius:0 8px 8px 0}
+.gate{background:var(--surface);border-left:3px solid var(--red);padding:.8rem 1rem;margin:1rem 0;border-radius:0 8px 8px 0;color:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/yuleAI-Hub/">← yuleAI-Hub</a> / <span class="tag">skills</span> / superpowers</nav>
+  <h1>Superpowers — OpenClaw 版</h1>
+  <p>Spec-first, TDD, subagent-driven 软件开发工作流。</p>
+</header>
+
+<section>
+<h2>流水线</h2>
+<pre>Idea → Brainstorm → Plan → Subagent-Driven Build (TDD) → Code Review → Finish Branch</pre>
+<p>每个编码任务走这条流水线。"太简单不需要设计"永远是错的。</p>
+</section>
+
+<section>
+<h2>阶段 1：需求调研 (Brainstorming)</h2>
+<div class="card">
+<ol>
+<li>探索项目上下文（文件、文档、最近提交）</li>
+<li>提问澄清问题——每次一个，优先用多项选择</li>
+<li>提出 2–3 种方案（含权衡 + 推荐）</li>
+<li>按部分展示设计，每部分得到批准后再继续</li>
+<li>写设计文档 → <code>docs/plans/YYYY-MM-DD-&lt;topic&gt;-design.md</code> → 提交</li>
+</ol>
+<div class="gate">⚠️ 硬门禁：设计获批前不得写任何代码</div>
+</div>
+
+<h2>阶段 2：编写执行计划</h2>
+<div class="card">
+<ul>
+<li>输出详细的任务级实施计划</li>
+<li>每个任务 2–5 分钟：写测试 → 看失败 → 实现 → 看通过 → 提交</li>
+<li>保存到 <code>docs/plans/YYYY-MM-DD-&lt;feature&gt;.md</code></li>
+</ul>
+</div>
+
+<h2>阶段 3：Subagent 驱动开发</h2>
+<div class="card">
+<p>每个任务的执行循环：</p>
+<ol>
+<li><code>sessions_spawn</code> 启动实现 Agent（含完整计划上下文）</li>
+<li>等待完成</li>
+<li><code>sessions_spawn</code> 启动 spec 审查 Agent → 确认代码匹配 spec</li>
+<li><code>sessions_spawn</code> 启动质量审查 Agent → 批准质量</li>
+<li>修复问题后重新审查</li>
+<li>所有任务完成后 → 总体代码审查 → 进入阶段 5</li>
+</ol>
+<p><strong>TDD 是强制性的</strong>：先写失败测试 → 实现 → 通过 → 提交。</p>
+</div>
+
+<h2>阶段 4：系统化调试（bug 专线）</h2>
+<div class="card">
+<div class="gate">⚠️ 无根因调查不得修复</div>
+<ol>
+<li>根因调查：读错误、重现、检查最近变更、跟踪数据流</li>
+<li>模式分析：找工作示例、对比、识别差异</li>
+<li>假设+验证：一次一个假设，测试证明/证伪</li>
+<li>修复+验证：修复根因（不是症状），验证不破坏其他功能</li>
+</ol>
+</div>
+
+<h2>阶段 5：完成分支</h2>
+<div class="card">
+<ol>
+<li>验证所有测试通过</li>
+<li>确定基础分支</li>
+<li>选择：本地合并 / push+PR / 保留 / 丢弃</li>
+<li>执行选择</li>
+<li>清理</li>
+</ol>
+</div>
+
+</section>
+
+<section>
+<h2>核心原则</h2>
+<ul>
+<li><strong>一次一个问题</strong> — 调研阶段每次只问一个</li>
+<li><strong>TDD 始终</strong> — 先写失败测试，删掉测试前写的代码</li>
+<li><strong>YAGNI</strong> — 从所有设计中移除不必要的功能</li>
+<li><strong>DRY</strong> — 不重复</li>
+<li><strong>系统化 > 即兴</strong> — 特别是时间紧迫时</li>
+<li><strong>证据 > 声称</strong> — 验证后再宣布成功</li>
+<li><strong>频繁提交</strong> — 每次测试通过后提交</li>
+</ul>
+</section>
+
+<footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--overlay);color:var(--subtext);font-size:.9rem">
+  <p>📄 <a href="SKILL.md" style="color:var(--blue)">下载原始 SKILL.md</a> | 本地路径: <code>~/.openclaw/workspace/skills/superpowers/SKILL.md</code></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>DevFlow 执行规则 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7;padding:32px;max-width:800px;margin:0 auto}
+h1{color:var(--primary);margin-bottom:8px}h2{margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+h3{margin:18px 0 6px;color:var(--fg)}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:14px;overflow-x:auto;margin:10px 0;font-size:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:#f0edff;padding:2px 6px;border-radius:4px}
+p{margin:8px 0;color:var(--fg2)}ul{margin:8px 0;padding-left:20px;color:var(--fg2)}li{margin:3px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:6px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg);font-weight:600}
+blockquote{background:#f0edff;border-left:4px solid var(--primary);padding:10px 16px;margin:12px 0;border-radius:0 8px 8px 0;color:var(--fg)}
+blockquote p{margin:2px 0}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:4px}
+.badge-p0{background:#ff4757;color:#fff}
+.badge-p1{background:#ffa502;color:#fff}
+.badge-p2{background:#3742fa;color:#fff}
+.badge-p3{background:#747d8c;color:#fff}
+.role-a{color:#ff4757;font-weight:600}
+.role-b{color:#3742fa;font-weight:600}
+.role-c{color:#2ed573;font-weight:600}
+</style></head><body>
+<h1>📋 Agent Mesh DevFlow 执行规则</h1>
+<p style="color:var(--fg2);margin-bottom:24px">双模式协同开发工作流规范 · 2026-06-05 更新</p>
+
+<h2>💡 三角色讨论法（2026-06-05 新增）</h2>
+<p>所有需求分析、优化评估、代码评审，必须先分饰三角色讨论再给方案。</p>
+
+<table><tr><th>角色</th><th>视角</th><th>关注点</th><th>辩论风格</th></tr>
+<tr><td><span class="role-a">A — 系统专家</span></td><td>系统整体</td><td>功能完整性、性能边界、失效模式、时序</td><td>先亮论点，防守反击</td></tr>
+<tr><td><span class="role-b">B — 架构专家</span></td><td>软硬解耦</td><td>层次边界、接口清晰、可移植性</td><td>调解冲突，找折中点</td></tr>
+<tr><td><span class="role-c">C — 开发专家</span></td><td>代码细节</td><td>可读性、简洁性、异常保护、编译安全</td><td>挑代码 Bug，用量化反驳</td></tr></table>
+
+<h3>核心规则：必须相互挑战，不是轮流念稿</h3>
+<ul>
+<li><strong>先亮立场，再轮流转</strong> — A 提观点 → B 或 C 立刻挑战/质疑 → A 防守或修正 → 第三方加入</li>
+<li><strong>可以认输，不能不打</strong> — 被驳倒后优雅地「我让步」比死扛更有用</li>
+<li><strong>Bug 用数据和场景说话</strong> — 说「这是 Bug」时量化和重现条件</li>
+<li><strong>逐轮收敛</strong> — 每一轮围绕一个具体问题，结论要么共识（三票通过）、要么留待决策者拍板</li>
+<li><strong>输出：优先级表</strong> — 每轮结论落入 P0-P3 优先级表，P0 必须全员共识</li>
+</ul>
+
+<h3>典型讨论流程</h3>
+<pre>Round 1: <span class="role-a">A</span>提观点 → <span class="role-c">C</span>质疑 → <span class="role-b">B</span>调解 → 结论
+Round 2: <span class="role-c">C</span>发现Bug → <span class="role-a">A</span>量化影响 → <span class="role-b">B</span>分析根因 → 修复方案
+Round 3: <span class="role-a">A</span>和<span class="role-b">B</span>辩论架构 → <span class="role-c">C</span>提供数据 → A/B折中
+Round 4: <span class="role-c">C</span>挑战<span class="role-a">A</span>的性能担忧 → <span class="role-b">B</span>发现新Bug → 全员共识
+</pre>
+
+<h3>真实案例：ExtFls 异步化改造讨论成果</h3>
+<ul>
+<li><span class="badge badge-p0">P0</span> 写校验剩余字节 Bug — 最后一步固定读 256B 越界比较（<span class="role-c">C</span>发现，<span class="role-a">A</span>确认影响）</li>
+<li><span class="badge badge-p0">P0</span> Immediate Write 与状态机冲突 — 重复发写命令（<span class="role-b">B</span>架构分析发现）</li>
+<li><span class="badge badge-p0">P0</span> Cancel 不中断硬件 — SPI 仍在传输（<span class="role-a">A</span>提出，<span class="role-b">B</span>提出折中方案）</li>
+<li><span class="badge badge-p0">P0</span> WAIT_DONE 无超时 — 硬件挂起永等（<span class="role-a">A</span>坚持，<span class="role-b">B</span>/<span class="role-c">C</span>最终让步）</li>
+<li><span class="badge badge-p1">P1</span> Erase handler break 假跳出 — for 循环内 break 只跳出内层（<span class="role-c">C</span>指出）</li>
+<li><span class="badge badge-p2">P2</span> CompareHandler 未异步化（<span class="role-a">A</span>/<span class="role-b">B</span>建议）</li>
+<li><span class="badge badge-p3">P3</span> 架构优化：拆枚举、下沉 Verify 到 HAL（<span class="role-b">B</span>建议）</li>
+</ul>
+
+<h2>一、执行模式</h2>
+<table><tr><th>模式</th><th>命令</th><th>适用场景</th></tr>
+<tr><td>A. 直接 CLI</td><td><code>hermes -z / qodercli -p</code></td><td>日常开发、快问快答</td></tr>
+<tr><td>B. 后台异步</td><td><code>agent-delegate + task-result</code></td><td>长任务、批量处理</td></tr>
+<tr><td>C. 辅助通信</td><td><code>context-write / context-read</code></td><td>跨 Agent 信息同步</td></tr></table>
+
+<h2>二、模式选择规则</h2>
+<pre>if 任务预估 < 2 分钟 → 模式 A (直接 CLI)
+if 任务预估 > 2 分钟 → 通知用户可选模式 B
+if 需要跨 Agent 接力 → 模式 A/B + C (context 传参)</pre>
+
+<h2>三、7 阶段流水线</h2>
+<p>需求分析(Hermes) → 排期(Hermes) → 架构(QoderCLI) → 编码(QoderCLI) → 测试用例(Hermes) → 测试执行(Hermes) → 部署(OpenClaw)</p>
+
+<h2>四、重试规则</h2>
+<p>每阶段最多执行 3 次。3 次失败后 OpenClaw 接管并输出异常报告。</p>
+
+<h2>五、总结报告</h2>
+<p>全部完成后输出：需求标题、耗时、执行模式、各阶段状态、产出文件、重试记录。</p>
+</body></html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>工作流核心原则 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:24px 0 8px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Noto Sans SC',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/rules/">📋 规则集</a> <span>/</span> 工作流核心原则</div>
+  <h1>📋 工作流核心原则</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-27</span>
+    <span>📋 规范 · 适用 yuleASR-Configurator 开发</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">工作流</span><span class="tag">规范</span><span class="tag">yuleASR</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>本规则定义了 yuleASR-Configurator 项目开发中必须遵守的工作流核心原则，确保文档先行、质量门禁、沟通高效。</p>
+
+  <h2>一、文档先行、代码后行</h2>
+  <p>任何功能开发必须遵循 <strong>先文档、后代码</strong> 的顺序：</p>
+  <ol>
+    <li>先编写/更新设计文档，明确方案和接口</li>
+    <li>文档经评审确认后，再开始编码</li>
+    <li>编码过程中如有方案变更，先改文档再改代码</li>
+  </ol>
+
+  <h2>二、UI 改动前必须先做 HTML demo</h2>
+  <p>任何 UI 层改动（新增页面、修改布局、调整组件）必须：</p>
+  <ol>
+    <li>先制作 HTML 静态 demo</li>
+    <li>将 demo 提交给老板预览确认</li>
+    <li>老板确认后再进行代码实现</li>
+  </ol>
+
+  <h2>三、实现后提供浏览器预览</h2>
+  <p>每次实现完成后，必须提供可访问的浏览器预览：</p>
+  <ul>
+    <li>本地运行 <code>pnpm dev</code> 确认效果</li>
+    <li>截图或分享本地 URL 供评审</li>
+  </ul>
+
+  <h2>四、构建通过才提交</h2>
+  <p>代码提交前必须执行构建验证：</p>
+  <pre><code>pnpm build</code></pre>
+  <ul>
+    <li>构建零错误才允许 git commit</li>
+    <li>构建警告视同错误处理</li>
+  </ul>
+
+  <h2>五、每次修改意见先改文档</h2>
+  <p>接收评审或反馈意见后的处理流程：</p>
+  <ol>
+    <li>先更新设计文档，反映修改意见</li>
+    <li>再根据更新后的文档修改代码</li>
+    <li>最后再次构建验证</li>
+  </ol>
+
+  <h2>执行检查清单</h2>
+  <pre>
+□ 文档已更新
+□ UI demo 已确认（若涉及 UI）
+□ 实现后浏览器预览通过
+□ pnpm build 零错误
+□ 修改意见已反映在文档中
+  </pre>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>
