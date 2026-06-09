@@ -1,0 +1,5 @@
+# yuleAI-Hub
+# 忽略 API Key 泄露
+**/settings.json
+# 但保留模板
+!**/assets/settings.json
