@@ -1,0 +1,13 @@
+model_provider = "deepseek"
+model          = "deepseek-v4-flash"
+model_reasoning_effort = "medium"
+model_catalog_json = "/Users/stefan/codex-proxy/deepseek-catalog.json"
+
+[model_providers.deepseek]
+name     = "DeepSeek (via proxy)"
+base_url = "http://127.0.0.1:3333"
+env_key  = "DEEPSEEK_API_KEY"
+wire_api = "responses"
+
+[projects."/Users/stefan"]
+trust_level = "trusted"
