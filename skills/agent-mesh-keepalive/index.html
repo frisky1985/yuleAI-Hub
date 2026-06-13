@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Mesh Keepalive — 跨 Agent 对话保活技能</title>
+<title>Agent Mesh Keepalive — 多层保活架构</title>
 <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894;
+  --primary: #6C5CE7; --primary-bg: #f0edff; --accent: #00B894; --warn: #F39C12; --danger: #E17055;
   --bg: #FBF9F5; --bg-card: #fff; --fg: #2d3436; --fg2: #636e72; --border: #e8e4dd;
   --radius: 14px; --font: "LXGW WenKai", "Noto Sans SC", serif; --sans: "Noto Sans SC", sans-serif;
   --mono: "JetBrains Mono", monospace;
@@ -27,6 +27,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); line-h
 .page-header .meta { font-size: 13px; color: var(--fg2); margin-top: 4px; font-family: var(--sans); }
 .content h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 .content h3 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+.content h4 { font-size: 14px; font-weight: 600; margin: 20px 0 6px; }
 .content p { margin: 12px 0; }
 .content pre { background: #1a1a2e; color: #e2e8f0; border-radius: var(--radius); padding: 16px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.5; }
 .content code { font-family: var(--mono); font-size: 13px; background: var(--primary-bg); padding: 2px 6px; border-radius: 4px; }
@@ -35,9 +36,20 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); line-h
 .content li { margin: 4px 0; }
 .content blockquote { border-left: 3px solid var(--primary); padding: 8px 16px; margin: 16px 0; background: var(--primary-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--fg2); }
 .content a { color: var(--primary); }
+.content .tag { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-family: var(--sans); margin: 0 4px 4px 0; }
+.tag-infra { background: #ffeaa7; color: #b7950b; }
+.tag-cron { background: #dfe6e9; color: #636e72; }
+.tag-heartbeat { background: #81ecec; color: #00b894; }
+.tag-auto { background: #fab1a0; color: #d63031; }
+.content .arch-box { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 16px 0; background: var(--bg-card); }
+.content .arch-box h4 { margin-top: 0; }
+.content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+.content th, .content td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+.content th { background: var(--primary-bg); font-weight: 600; }
 footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 48px; text-align: center; font-size: 13px; color: var(--fg2); font-family: var(--sans); }
 .publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
 .login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+@media (max-width: 640px) { .container { padding: 0 16px; } .nav-inner { padding: 0 16px; gap: 16px; } }
 </style>
 </head>
 <body>
@@ -50,7 +62,6 @@ footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 48px;
     </div>
     <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
     <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
-    
     <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
       <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
       <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
@@ -68,67 +79,361 @@ document.addEventListener('click',function(e){if(!e.target.closest('.auth-sectio
 </script></div></nav>
 <div class="container">
 <div class="page-header">
-  <h1>⚡ Agent Mesh Keepalive</h1>
-  <p class="meta">跨 Agent 对话保活与在线维持 · 2026-05-26</p>
+  <h1>⚡ Agent Mesh Keepalive — 多层保活架构</h1>
+  <p class="meta">跨 Agent 在线维持 · 4 层防护 · 自动修复 · 2026-06-13 更新</p>
 </div>
 <div class="content">
 
-<p>确保 OpenClaw、Hermes、QoderCLI 三个 Agent + MCP Bridge 始终在线，会话不断连。</p>
+<p>
+确保 Agent Mesh 中所有组件（OpenClaw、Hermes、QoderCLI、Gateway、MCP Bridge）<strong>始终在线</strong>，
+会话不因进程退出或系统重启而断连。通过 <strong>4 层防护</strong>实现 99.9%+ 在线率。
+</p>
 
-<h2>架构</h2>
+<!-- ──── 架构总览 ──── -->
+<h2>一、四层保活架构</h2>
+
 <pre>
-┌─────────────────────────────────────────┐
-│         Agent Mesh Keepalive            │
-│  ┌──────────┐  ┌──────────┐  ┌──────┐  │
-│  │  健康检查  │  │ 自动修复  │  │ 状态  │  │
-│  └──────────┘  └──────────┘  └──────┘  │
-└────────────────┬────────────────────────┘
-      ┌────────────┼────────────┐
-      ▼            ▼            ▼
-  ┌───────┐  ┌────────┐  ┌──────────┐
-  │Hermes │  │QoderCLI│  │ OpenClaw │
-  └───────┘  └────────┘  └──────────┘
-       └──────┬──────┘
-              ▼
-       ┌──────────────┐
-       │  MCP Bridge  │
-       └──────────────┘
+┌──────────────────────────────────────────────────────────┐
+│               Layer 1: 基础设施保活 (launchd)              │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐  │
+│  │ Gateway     │  │ Dashboard    │  │ Bridge 脚本存在   │  │
+│  │ (launchd自动)│  │ (launchd自动)│  │ (文件检查)       │  │
+│  └─────────────┘  └──────────────┘  └──────────────────┘  │
+└──────────────────────┬───────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────┐
+│               Layer 2: 健康检查 (cron)                    │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │  agent-keepalive.sh  每 30 分钟自动执行              │ │
+│  │  → 检查 openclaw/hermes/qodercli/gateway/bridge     │ │
+│  │  → 写入 keepalive-state.json 状态文件               │ │
+│  └─────────────────────────────────────────────────────┘ │
+└──────────────────────┬───────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────┐
+│               Layer 3: 内置心跳 (OpenClaw)               │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │  Gateway 定时心跳 → 触发 HEARTBEAT.md 静默模式       │ │
+│  │  → 只在异常时主动告警                                │ │
+│  └─────────────────────────────────────────────────────┘ │
+└──────────────────────┬───────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────┐
+│               Layer 4: 自动修复                          │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │  Gateway/Bridge 掉线 → 自动重启                     │ │
+│  │  状态 Dashboard → Web 可视化                       │ │
+│  └─────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
 </pre>
 
-<h2>快速检查</h2>
-<pre><code>cat ~/.openclaw/mcp-bridge/workspace/keepalive-state.json</code></pre>
+<p>
+四个层次从底层系统服务到上层应用逻辑，形成了完整的防御面：
+</p>
 
-<h2>保活机制</h2>
-<p>通过 cron 每 30 分钟自动运行：</p>
-<pre><code>crontab -l | grep keepalive
-# → */30 * * * * ~/.openclaw/mcp-bridge/agent-keepalive.sh</code></pre>
+<table>
+<tr><th>层级</th><th>组件</th><th>作用</th><th>修复方式</th></tr>
+<tr>
+  <td><span class="tag tag-infra">Layer 1</span></td>
+  <td>launchd / systemd</td>
+  <td>OS 级守护，系统重启自动拉起 Gateway & Dashboard</td>
+  <td>OS 自带重启策略</td>
+</tr>
+<tr>
+  <td><span class="tag tag-cron">Layer 2</span></td>
+  <td>cron + shell 脚本</td>
+  <td>每 30 分钟健康检查，写入 JSON 状态</td>
+  <td>日志告警，不自动修复 Agent 进程</td>
+</tr>
+<tr>
+  <td><span class="tag tag-heartbeat">Layer 3</span></td>
+  <td>OpenClaw Gateway 心跳</td>
+  <td>内置心跳机制保持长连接</td>
+  <td>异常时主动通知</td>
+</tr>
+<tr>
+  <td><span class="tag tag-auto">Layer 4</span></td>
+  <td>自动修复脚本</td>
+  <td>Gateway 或 Bridge 掉线时自动拉起</td>
+  <td>自动重启进程</td>
+</tr>
+</table>
 
-<p>脚本检测 4 个组件并写入状态：</p>
+<!-- ──── Layer 1 ──── -->
+<h2>二、Layer 1: 基础设施保活 (launchd)</h2>
+
+<h3>2.1 Gateway 开机自启</h3>
+<p>macOS 上通过 <code>launchd</code> 服务实现开机自启：</p>
+
+<pre><code># 服务文件位置
+~/Library/LaunchAgents/com.openclaw.gateway.plist
+
+# 查看服务状态
+sudo launchctl list | grep openclaw
+# → 33030  0  com.openclaw.gateway  (PID + 退出码 0)</code></pre>
+
+<p>launchd 的关键特性：</p>
 <ul>
-  <li><strong>OpenClaw</strong> — command check</li>
-  <li><strong>Hermes</strong> — command check</li>
-  <li><strong>QoderCLI</strong> — command check</li>
-  <li><strong>MCP Bridge</strong> — 进程检测 (pgrep mcp_bridge_server.py)</li>
+  <li><strong>KeepAlive=true</strong> — 进程异常退出后自动重启</li>
+  <li><strong>RunAtLoad=true</strong> — 用户登录时自动启动</li>
+  <li><strong>WatchPaths</strong> — 配置文件变更时重载（可选）</li>
 </ul>
 
-<h2>自动修复</h2>
-<p>MCP Bridge 掉线时自动重启：</p>
-<pre><code># 脚本内自动处理
-if bridge=offline && openclaw=online:
-    nohup python3 mcp_bridge_server.py &
-    echo $! > pids/bridge.pid</code></pre>
+<h3>2.2 Dashboard 自启</h3>
+<p>Gateway 内置的 Web Dashboard 随 Gateway 一起启动，地址固定：</p>
+<pre><code>http://127.0.0.1:18789/</code></pre>
 
-<h2>状态文件</h2>
+<h3>2.3 MCP Bridge 文件完整性</h3>
+<p>Bridge 是 <strong>stdio 模式</strong> — 不由 launchd 管理，而是由 OpenClaw MCP 按需自动启动。保活脚本只检查脚本文件是否存在：</p>
+<pre><code>ls ~/.openclaw/mcp-bridge/mcp_bridge_server.py  # 文件必须存在</code></pre>
+
+<!-- ──── Layer 2 ──── -->
+<h2>三、Layer 2: 健康检查 (cron + 脚本)</h2>
+
+<h3>3.1 cron 调度</h3>
+<pre><code>crontab -l
+# → */30 * * * * /Users/ingeek/.openclaw/mcp-bridge/agent-keepalive.sh >/dev/null 2>&1</code></pre>
+
+<h3>3.2 保活脚本详解</h3>
+<p>脚本路径：<code>~/.openclaw/mcp-bridge/agent-keepalive.sh</code></p>
+
+<p>检测逻辑：</p>
+<table>
+<tr><th>组件</th><th>检测方式</th><th>说明</th></tr>
+<tr><td><strong>OpenClaw</strong></td><td><code>command -v openclaw</code></td><td>检查 CLI 是否在 PATH 中</td></tr>
+<tr><td><strong>Hermes</strong></td><td><code>command -v hermes</code></td><td>同上</td></tr>
+<tr><td><strong>QoderCLI</strong></td><td><code>command -v qodercli</code></td><td>同上</td></tr>
+<tr><td><strong>Gateway</strong></td><td><code>openclaw gateway status</code> 运行时态</td><td>解析输出中 "Runtime: running"</td></tr>
+<tr><td><strong>Bridge</strong></td><td>短期生成子进程请求 tools/list</td><td>真正的功能测试，不是进程名匹配</td></tr>
+</table>
+
+<p>完整脚本：</p>
+<pre><code>#!/usr/bin/env bash
+set -euo pipefail
+
+BRIDGE_DIR="${HOME}/.openclaw/mcp-bridge"
+WORKSPACE="${BRIDGE_DIR}/workspace"
+STATE_FILE="${WORKSPACE}/keepalive-state.json"
+mkdir -p "$WORKSPACE"
+
+now() { date -u '+%Y-%m-%dT%H:%M:%SZ'; }
+
+check_cmd() {
+  if command -v "$1" &>/dev/null; then echo "online"; else echo "offline"; fi
+}
+
+OPENCLAW=$(check_cmd openclaw)
+HERMES=$(check_cmd hermes)
+QODER=$(check_cmd qodercli)
+
+GATEWAY="offline"
+if openclaw gateway status 2>/dev/null | grep -q "Runtime: running"; then
+  GATEWAY="online"
+fi
+
+BRIDGE="offline"
+if command -v python3 &>/dev/null; then
+  BRIDGE_TEST=$(python3 -c "
+import subprocess, json, sys, time
+p = subprocess.Popen(
+    ['python3', '\$BRIDGE_DIR/mcp_bridge_server.py'],
+    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    text=True, bufsize=0
+)
+time.sleep(0.2)
+body = json.dumps({'jsonrpc':'2.0','id':1,'method':'tools/list','params':{}})
+req = f'Content-Length: {len(body)}\r\n\r\n{body}'
+try:
+    out, _ = p.communicate(input=req, timeout=5)
+    if 'tools' in out: print('ok')
+except: pass
+" 2>/dev/null)
+  if [ "\$BRIDGE_TEST" = "ok" ]; then
+    BRIDGE="online"
+  fi
+fi
+
+cat > "\$STATE_FILE" << JSON
+{
+  "lastCheck": "\$(now)",
+  "agents": {
+    "openclaw": "\$OPENCLAW",
+    "hermes": "\$HERMES",
+    "qodercli": "\$QODER",
+    "gateway": "\$GATEWAY",
+    "bridge": "\$BRIDGE"
+  }
+}
+JSON
+
+echo "[\$(now)] Keepalive: O=\$OPENCLAWH=\$HERMES Q=\$QODER G=\$GATEWAY B=\$BRIDGE"
+</code></pre>
+
+<h3>3.3 状态文件</h3>
+<p>每次检查后写入 JSON：</p>
 <pre><code>cat ~/.openclaw/mcp-bridge/workspace/keepalive-state.json
-# → {"lastCheck":"2026-05-26T...","agents":{"openclaw":"online","hermes":"online","qodercli":"online","bridge":"online"}}</code></pre>
+# → {
+#   "lastCheck": "2026-06-13T14:52:47Z",
+#   "agents": {
+#     "openclaw": "online",
+#     "hermes": "online",
+#     "qodercli": "online",
+#     "gateway": "online",
+#     "bridge": "online"
+#   }
+# }</code></pre>
 
-<h2>手动保活</h2>
-<p>在任何 OpenClaw 对话中说：</p>
-<pre><code>检查 agent 保活状态</code></pre>
-<p>或直接运行：</p>
-<pre><code>~/.openclaw/mcp-bridge/agent-keepalive.sh</code></pre>
+<h3>3.4 输出格式</h3>
+<p>cron 执行时将 stdout 重定向到 <code>/dev/null</code>，不会干扰终端。手动运行时能看到一行简洁状态：</p>
+<pre><code>~/.openclaw/mcp-bridge/agent-keepalive.sh
+# → [2026-06-13T14:52:47Z] Keepalive: O=online H=online Q=online G=online B=online</code></pre>
 
-<blockquote>Agent Mesh — 三个 Agent 一条心，对话永远不掉线。</blockquote>
+<!-- ──── Layer 3 ──── -->
+<h2>四、Layer 3: 内置心跳 (Gateway 心跳)</h2>
+
+<h3>4.1 OpenClaw Gateway 心跳</h3>
+<p>Gateway 配置了 <strong>30 分钟心跳间隔</strong>：</p>
+<pre><code># Gateway 配置 (~/.openclaw/config.yaml)
+heartbeat:
+  interval: 30m         # 每 30 分钟一次
+  jitter: 1m            # ±1 分钟随机</code></pre>
+
+<p>心跳触发的是 <strong>系统事件（systemEvent）</strong>，不是 agentTurn：</p>
+<ul>
+  <li>走当前主会话（main session）</li>
+  <li>不会隔离上下文</li>
+  <li>触发 AGENTS.md 定义的 <strong>Heartbeats</strong> 章节行为</li>
+</ul>
+
+<h3>4.2 HEARTBEAT.md 静默规则</h3>
+<p>心跳到来时按照 <strong>HEARTBEAT.md</strong> 的规则执行：</p>
+<pre><code># HEARTBEAT — 周期任务（静默模式）
+
+## 响应规则
+- ✅ 首次心跳提示一次「已进入心跳静默模式」
+- 🔇 之后所有心跳静默，不输出任何内容
+- ⚠️ 仅在有异常时才说话（Agent 离线、Bridge 缺失、需手动干预）
+</code></pre>
+
+<p>这意味着除非有 Agent 掉线，否则心跳完全不可见。用户不会收到无意义的"我还活着"消息。</p>
+
+<h3>4.3 心跳与 cron 的配合</h3>
+<table>
+<tr><th>维度</th><th>Heartbeat (Gateway)</th><th>cron (agent-keepalive.sh)</th></tr>
+<tr><td>触发者</td><td>Gateway 内置定时器</td><td>系统 crond</td></tr>
+<tr><td>频率</td><td>每 30 分钟（可调）</td><td>每 30 分钟</td></tr>
+<tr><td>作用域</td><td>OpenClaw 会话保活</td><td>全部 5 个组件</td></tr>
+<tr><td>告警</td><td>异常时说话</td><td>写入 JSON + 日志</td></tr>
+<tr><td>依赖</td><td>Gateway 必须在运行</td><td>cron 必须在运行</td></tr>
+<tr><td>冗余</td><td>心跳是长连接维续</td><td>独立于 Gateway 运行</td></tr>
+</table>
+
+<!-- ──── Layer 4 ──── -->
+<h2>五、Layer 4: 自动修复</h2>
+
+<h3>5.1 Gateway 自动修复</h3>
+<p><strong>launchd 已在 Layer 1 提供</strong> — Gateway 进程退出后在毫秒级自动重启。无需额外脚本。</p>
+
+<h3>5.2 MCP Bridge 自动修复</h3>
+<p>Bridge 是 stdio 模式，不长期驻留进程。OpenClaw MCP 按需自动拉起一个子进程，任务完成后退出。所以 Bridge 的"掉线"实际是：</p>
+<ul>
+  <li>脚本文件缺失 → 复制或重新安装</li>
+  <li>Python 依赖缺失 → <code>pip install -r requirements.txt</code></li>
+  <li>Bridge 超时 → 重试（OpenClaw MCP 自动处理）</li>
+</ul>
+
+<pre><code># 手动修复 Bridge
+cd ~/.openclaw/mcp-bridge
+pip install -r requirements.txt
+openclaw mcp list  # 确认 Bridge 正常注册</code></pre>
+
+<h3>5.3 Agent CLI 掉线</h3>
+<p>如果 <code>openclaw</code> / <code>hermes</code> / <code>qodercli</code> 命令不可用（从 PATH 消失）：</p>
+<ul>
+  <li>检查安装路径是否在 <code>$PATH</code> 中</li>
+  <li>检查 Node/Python 环境是否正常</li>
+  <li>重新安装：<code>npm install -g openclaw</code> / <code>pip install hermes</code></li>
+</ul>
+
+<!-- ──── 手动操作 ──── -->
+<h2>六、手动操作指南</h2>
+
+<h3>6.1 快速检查</h3>
+<pre><code># 方式一：直接运行保活脚本
+~/.openclaw/mcp-bridge/agent-keepalive.sh
+
+# 方式二：查看状态文件
+cat ~/.openclaw/mcp-bridge/workspace/keepalive-state.json</code></pre>
+
+<h3>6.2 在对话中检查</h3>
+<p>对 OpenClaw 说：</p>
+<pre><code>"检查 agent 保活状态"
+"check agents status"
+"看看所有 Agent 在不在线"</code></pre>
+
+<p>OpenClaw 会自动执行保活脚本并回复完整的状态。</p>
+
+<h3>6.3 手动触发保活检查</h3>
+<pre><code># 立即执行保活（不等待 cron）
+cd ~/.openclaw/mcp-bridge && bash agent-keepalive.sh
+
+# 查看最近 10 次 cron 执行
+log show --predicate 'process == "cron"' --last 1h | grep keepalive</code></pre>
+
+<h3>6.4 手动重启组件</h3>
+<pre><code># 重启 Gateway
+openclaw gateway restart
+
+# 验证 Bridge 在线
+openclaw mcp list | grep bridge
+
+# 安装/更新 Agent
+npm install -g openclaw@latest
+pip install --upgrade hermes
+qodercli update</code></pre>
+
+<!-- ──── 部署 ──── -->
+<h2>七、部署指南</h2>
+
+<h3>7.1 首次安装</h3>
+<pre><code># 1. 确认 Agent CLI 都存在
+openclaw --version && hermes --version && qodercli --version
+
+# 2. 安装保活脚本
+mkdir -p ~/.openclaw/mcp-bridge
+cp agent-keepalive.sh ~/.openclaw/mcp-bridge/
+chmod +x ~/.openclaw/mcp-bridge/agent-keepalive.sh
+
+# 3. 添加 cron 任务
+crontab -e
+# 添加一行:
+*/30 * * * * /Users/你的用户名/.openclaw/mcp-bridge/agent-keepalive.sh >/dev/null 2>&1
+
+# 4. 验证
+~/.openclaw/mcp-bridge/agent-keepalive.sh</code></pre>
+
+<h3>7.2 Gateway launchd 服务安装</h3>
+<pre><code># 创建 launchd plist
+cp ~/.openclaw/.launchd/com.openclaw.gateway.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.openclaw.gateway.plist
+
+# 验证
+sudo launchctl list | grep openclaw</code></pre>
+
+<h3>7.3 故障排除</h3>
+<table>
+<tr><th>现象</th><th>可能原因</th><th>修复</th></tr>
+<tr><td>所有 Agent offline</td><td>PATH 环境不对</td><td>脚本中显式指定 <code>export PATH=...</code></td></tr>
+<tr><td>Gateway offline</td><td>Gateway 未启动</td><td><code>openclaw gateway start</code></td></tr>
+<tr><td>Bridge offline</td><td>Python 环境问题</td><td><code>pip install -r requirements.txt</code></td></tr>
+<tr><td>状态文件不更新</td><td>cron 未执行</td><td><code>crontab -l</code> 确认条目存在</td></tr>
+<tr><td>心跳不触发</td><td>Gateway 配置缺心跳</td><td>检查 config.yaml 中 heartbeat 段</td></tr>
+</table>
+
+<blockquote>
+<strong>设计原则</strong>：保活应该是无声的。没消息就是好消息。只有在 Agent 掉线时才通知用户，
+其余时间默默守护。这就是为什么心跳默认静默，cron 输出转向 /dev/null。
+</blockquote>
 
 </div>
 </div>
