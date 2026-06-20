@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yuleAI-Hub — AI 工具配置 &amp; 修复方案集散地</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+<style>
+:root {
+  --primary: #6C5CE7;
+  --primary-hover: #5A4BD1;
+  --primary-light: rgba(108,92,231,0.08);
+  --primary-glow: rgba(108,92,231,0.12);
+  --secondary: #00B894;
+  --accent: #FDCB6E;
+  --bg: #F5F6FA;
+  --bg-card: #FFFFFF;
+  --fg: #1a1a2e;
+  --fg-secondary: #5a5d7a;
+  --fg-muted: #9497AD;
+  --border: #E6E8F0;
+  --border-light: #F0F1F8;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+  --font: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  --nav-height: 56px;
+  --max-width: 1100px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #8B7CF7;
+    --bg: #0D1117;
+    --bg-card: #161B22;
+    --fg: #E6EDF3;
+    --fg-secondary: #8B949E;
+    --fg-muted: #586069;
+    --border: #30363D;
+    --border-light: #21262D;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow: 0 2px 8px rgba(0,0,0,0.35);
+    --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+  }
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--fg);
+  line-height:1.6; font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.hero {
+  background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
+  padding: 40px 0 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-120px; right:-80px;
+  width:350px; height:350px; border-radius:50%;
+  background:rgba(255,255,255,0.06);
+}
+.hero-inner { max-width:var(--max-width); margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+.hero h1 {
+  font-size:28px; font-weight:700; letter-spacing:-0.3px;
+  color:#fff; display:inline;
+}
+.hero .sub {
+  display:inline; font-size:14px;
+  color:rgba(255,255,255,0.75); margin-left:10px;
+}
+.hero .stats {
+  display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;
+}
+.hero .stats span {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:4px 12px; background:rgba(255,255,255,0.1);
+  border-radius:var(--radius-full);
+  font-size:12px; color:rgba(255,255,255,0.85);
+}
+.hero .stats .num { font-weight:700; }
+.container { max-width:var(--max-width); margin:0 auto; padding:0 24px; }
+
+.section { margin:28px 0; }
+.section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px;
+}
+.section-header h2 { font-size:16px; font-weight:600; }
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:12px;
+}
+@media(max-width:600px){ .grid{grid-template-columns:1fr} }
+
+.card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:18px;
+  text-decoration:none; color:var(--fg);
+  display:flex; flex-direction:column;
+  box-shadow:var(--shadow-sm);
+  transition:all 0.2s ease;
+}
+.card:hover {
+  border-color:var(--primary);
+  box-shadow:var(--shadow-hover);
+  transform:translateY(-2px);
+}
+.card h3 { font-size:15px; font-weight:600; margin-bottom:6px; transition:color 0.2s; }
+.card:hover h3 { color:var(--primary); }
+.card .desc { font-size:12px; color:var(--fg-secondary); line-height:1.5; flex:1; }
+.card .tags { display:flex; gap:4px; margin-top:10px; flex-wrap:wrap; }
+.card .tag {
+  padding:2px 8px; border-radius:4px;
+  background:var(--primary-light); color:var(--primary);
+  font-size:10px; font-weight:600;
+}
+.card .status {
+  margin-top:10px; padding-top:10px;
+  border-top:1px solid var(--border-light);
+  font-size:11px; color:var(--fg-muted);
+}
+
+footer {
+  border-top:1px solid var(--border);
+  padding:24px 0; margin-top:40px;
+  background:var(--bg-card);
+}
+footer .inner {
+  max-width:var(--max-width); margin:0 auto; padding:0 24px;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:12px;
+  font-size:12px; color:var(--fg-muted);
+}
+footer a { color:var(--fg-muted); text-decoration:none; transition:color 0.2s; }
+footer a:hover { color:var(--primary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>🧠 yuleAI-Hub</h1>
+    <span class="sub">AI 工具配置 &amp; 修复方案集散地</span>
+    <div class="stats" id="stats"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="section-header">
+      <h2>📦 方案列表</h2>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <span>🧠 yuleAI-Hub · AI 工具配置 &amp; 修复方案集散地</span>
+    <a href="https://github.com/frisky1985/yuleAI-Hub" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+var solutions = [
+  { name:"claude-code-deepseek", title:"Claude Code + DeepSeek V4", desc:"Claude Code 接入 DeepSeek V4，免 Anthropic 账号", tags:["Claude","DeepSeek","配置"], status:"✅ 已验证" },
+  { name:"codex-cli-deepseek", title:"Codex CLI + DeepSeek V4", desc:"Codex CLI 接入 DeepSeek V4，免 OpenAI 账号，代理翻译 API", tags:["Codex","DeepSeek","代理"], status:"✅ 2026-06-12" },
+  { name:"yuleosh-benchmark", title:"yuleOSH 对标分析", desc:"yuleOSH 对标分析：dSPACE vs Vector，7条战略建议 + 专家视角", tags:["yuleOSH","对标","战略"], status:"✅ 2026-06-12" },
+  { name:"openclaw-feishu-bot-setup", title:"OpenClaw 飞书机器人", desc:"OpenClaw 飞书机器人 + 公网隧道搭建全流程", tags:["OpenClaw","飞书","隧道"], status:"✅ 2026-06-12" },
+  { name:"openclaw-claude-complete-guide", title:"OpenClaw + Claude 全链路", desc:"OpenClaw + Claude Code + DeepSeek 全链路配置指南", tags:["OpenClaw","Claude","全链路"], status:"✅ 已验证" }
+];
+
+var statsDiv = document.getElementById('stats');
+statsDiv.innerHTML = '<span><span class="num">' + solutions.length + '</span> 个方案</span>' +
+  '<span><span class="num">' + new Set(solutions.map(function(s){return s.status})).size + '</span> 种状态</span>';
+
+var grid = document.getElementById('grid');
+var html = '';
+for (var i = 0; i < solutions.length; i++) {
+  var s = solutions[i];
+  var tagHtml = '';
+  for (var j = 0; j < s.tags.length; j++) {
+    tagHtml += '<span class="tag">' + s.tags[j] + '</span>';
+  }
+  html += '<a href="./' + s.name + '/" class="card">' +
+    '<h3>' + s.title + '</h3>' +
+    '<div class="desc">' + s.desc + '</div>' +
+    '<div class="tags">' + tagHtml + '</div>' +
+    '<div class="status">' + s.status + '</div>' +
+  '</a>';
+}
+grid.innerHTML = html;
+</script>
+</body>
+</html>
