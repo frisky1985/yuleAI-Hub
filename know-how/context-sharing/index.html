@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>跨 Agent 上下文共享方案 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:24px 0 8px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:\'Noto Sans SC\',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">首页</a> <span>/</span> <a href="/know-how/">Know-How</a> <span>/</span> 上下文共享</div>
+  <h1>跨 Agent 上下文共享方案</h1>
+  <p class="page-meta">2026-05-24</p>
+  <div class="page-tags">
+    <span class="tag">上下文</span><span class="tag">MCP</span><span class="tag">协同</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>多个 Agent 协同工作时，最关键的痛点是如何共享上下文信息——A Agent 的分析结果，B Agent 需要能读到。</p>
+  <p>💡 想要快速操作？参考 <a href="/skills/context-sharing/">⚡ 上下文共享技巧</a> 的速查版。</p>
+
+  <h2>方案：MCP Bridge context-read/write</h2>
+
+  <p>MCP Bridge 提供了两个工具来实现上下文共享：</p>
+
+  <h3>写入上下文</h3>
+  <pre><code># Agent A 写入分析结果
+agent-chat(hermes, "用 context-write 把代码审查结果存起来，key=code_review_result")
+
+# 或直接在对话中说
+"帮我用 context-write，key=db_schema, value={\"users\":\"id,name,email\"}"</code></pre>
+
+  <h3>读取上下文</h3>
+  <pre><code># Agent B 读取上下文
+"用 context-read 查一下 code_review_result 是什么"
+
+# 读取全部上下文
+"用 context-read"</code></pre>
+
+  <h2>适用场景</h2>
+  <ul>
+    <li><strong>代码审查接力</strong> — Hermes 分析代码 → 存结果 → OpenClaw 读结果做决策</li>
+    <li><strong>项目状态同步</strong> — 一个 Agent 更新了项目配置，其他 Agent 能读到</li>
+    <li><strong>多步骤流水线</strong> — 每个步骤的结果存入上下文，下一步骤读取</li>
+  </ul>
+
+  <h2>注意事项</h2>
+  <ul>
+    <li>上下文存储在 MCP Bridge 工作区的 <code>context.json</code> 文件中</li>
+    <li>所有连接到同一个 Bridge 的 Agent 共享同一份上下文</li>
+    <li>上下文是持久化的，重启 Bridge 后仍然存在</li>
+  </ul>
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Git 提交规范 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:24px 0 8px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:\'Noto Sans SC\',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-container">
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">🏠 首页</a> <span>/</span> <a href="/rules/">📋 规则集</a> <span>/</span> Git 提交规范</div>
+  <h1>📋 Git 提交规范</h1>
+  <div class="page-meta">
+    <span>📅 2026-05-26</span>
+    <span>📋 规范 · 适用 yuleAI-Hub 仓库</span>
+  </div>
+  <div class="page-tags">
+    <span class="tag">Git</span><span class="tag">规范</span><span class="tag">提交</span>
+  </div>
+</div>
+
+<div class="content">
+  <p>统一的 Git 提交信息让项目历史清晰可读。本规范参考 Conventional Commits 标准，结合中文项目特点做了适配。</p>
+
+  <h2>提交格式</h2>
+  <pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+
+[optional body]</code></pre>
+
+  <h2>常用类型</h2>
+  <table>
+    <tr><th>Type</th><th>说明</th><th>示例</th></tr>
+    <tr><td><code>feat</code></td><td>新功能/新内容</td><td><code>feat(knowledge): 新增 MCP 协议基础文章</code></td></tr>
+    <tr><td><code>fix</code></td><td>修复</td><td><code>fix(nav): 修复移动端菜单不关闭的问题</code></td></tr>
+    <tr><td><code>docs</code></td><td>文档更新</td><td><code>docs: 更新 README 站点结构说明</code></td></tr>
+    <tr><td><code>style</code></td><td>样式/设计变更</td><td><code>style: 调整卡片 hover 阴影效果</code></td></tr>
+    <tr><td><code>refactor</code></td><td>重构</td><td><code>refactor(layout): 抽离搜索组件</code></td></tr>
+    <tr><td><code>chore</code></td><td>杂项</td><td><code>chore: 清理空目录</code></td></tr>
+  </table>
+
+  <h2>Scope 范围</h2>
+  <table>
+    <tr><th>Scope</th><th>说明</th></tr>
+    <tr><td><code>knowledge</code></td><td>知识库相关</td></tr>
+    <tr><td><code>knowhow</code></td><td>Know-How 文章</td></tr>
+    <tr><td><code>skill</code></td><td>技能库</td></tr>
+    <tr><td><code>rule</code></td><td>规则集</td></tr>
+    <tr><td><code>tool</code></td><td>工具配置</td></tr>
+    <tr><td><code>project</code></td><td>项目文档</td></tr>
+    <tr><td><code>nav</code></td><td>导航/布局</td></tr>
+    <tr><td><code>css</code></td><td>样式</td></tr>
+    <tr><td><code>search</code></td><td>搜索索引</td></tr>
+  </table>
+
+  <h2>注意事项</h2>
+  <ul>
+    <li>subject 使用中文，简洁描述做了什么</li>
+    <li>不要超过 72 个字符</li>
+    <li>动词开头（新增/修复/更新/删除/重构）</li>
+    <li>一次提交只做一件事</li>
+  </ul>
+
+  <h2>示例</h2>
+  <pre><code>feat(knowledge): 新增 MCP 协议基础文章
+
+介绍 MCP 的核心概念：Tools、Resources、Prompts，
+以及 JSON-RPC 通信流程。
+
+docs: 更新 README 站点结构
+
+feat(skill): 新增上下文共享技巧
+
+fix(nav): 修复移动端搜索框样式异常
+
+chore: 清理 unused 目录</code></pre>
+
+</div>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>关于 yuleAI-Hub — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C5CE7;--primary-bg:#f0edff;--bg:#FBF9F5;--bg-card:#fff;--fg:#2d3436;--fg2:#636e72;--border:#e8e4dd;--radius:14px;--font:"LXGW WenKai","Noto Sans SC",serif;--sans:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.8;padding:32px;max-width:860px;margin:0 auto}
+a{color:var(--primary)} h1{color:var(--primary);margin-bottom:16px} h2{margin:24px 0 8px}
+pre{background:#1a1a2e;color:#e2e8f0;border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--primary-bg);padding:2px 6px;border-radius:4px}
+pre code{background:0 0;padding:0;color:inherit}
+.publish-btn{padding:6px 16px;border-radius:8px;background:var(--accent);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.publish-btn:hover{background:#00a381}
+.login-btn{padding:6px 16px;border-radius:8px;background:var(--primary);color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}.login-btn:hover{background:#5b4ed4}
+</style></head><body><nav class="nav"><div class="nav-inner"><a href="/" class="logo"><span class="logo-icon">YL</span> yuleAI-Hub</a><div class="nav-links"><a href="/">首页</a><a href="/knowledge/">知识库</a><a href="/know-how/">Know-How</a><a href="/skills/">技能</a><a href="/tools/">工具</a><a href="/about/">关于</a></div>
+    <div class="auth-section" style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:\'Noto Sans SC\',sans-serif">
+    <div id="userMenu" style="display:none;position:relative">
+      <span id="userAvatar" style="width:30px;height:30px;border-radius:50%;background:#6C5CE7;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer" onclick="td()"></span>
+    </div>
+    <a href="/publish.html" class="publish-btn" style="padding:6px 16px;border-radius:8px;background:#00B894;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">发布</a>
+    <a href="/auth/login.html" id="loginBtn" class="login-btn" style="padding:6px 16px;border-radius:8px;background:#6C5CE7;color:#fff!important;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap">登录</a>
+    
+    <div id="userDropdown" style="display:none;position:absolute;top:56px;right:32px;background:#fff;border:1px solid #e5e8ed;border-radius:10px;padding:6px;min-width:120px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:200">
+      <div style="padding:6px 10px;font-size:12px;color:#1d2129" id="userName"></div>
+      <hr style="border:none;border-top:1px solid #e5e8ed;margin:2px 0">
+      <a href="/pending.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">📝 我的发布</a>
+      <a href="/publish.html" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px">✏️ 发布</a>
+      <a href="#" style="display:block;padding:6px 10px;text-decoration:none;color:#6b7785;font-size:12px;border-radius:4px" onclick="lo()">🚪 退出</a>
+    </div>
+  </div>
+</div>
+<script>
+function td(){document.getElementById('userDropdown').style.display=document.getElementById('userDropdown').style.display==='none'?'block':'none'}
+function lo(){localStorage.removeItem('yule_current_user');location.reload()}
+(function(){var u=JSON.parse(localStorage.getItem('yule_current_user')||'null');if(u){document.getElementById('loginBtn').style.display='none';document.getElementById('userMenu').style.display='block';document.getElementById('userAvatar').textContent=(u.name||u.email)[0].toUpperCase();document.getElementById('userName').textContent=u.name||u.email}})();
+document.addEventListener('click',function(e){if(!e.target.closest('.auth-section')){var d=document.getElementById('userDropdown');if(d)d.style.display='none'}});
+</script></div></nav>
+<div class="page-header">
+  <div class="bc"><a href="/">首页</a> <span>/</span> 关于</div>
+  <h1>关于 yuleAI-Hub</h1>
+</div>
+
+<div class="content">
+  <p><strong>yuleAI-Hub</strong> 是 YL 的 AI Agent 知识花园——记录和分享在日常使用 OpenClaw、Hermes、QoderCLI 等 Agent 过程中的实践经验和 Know-How。</p>
+
+  <ul>
+    <li>Agent 配置技巧和最佳实践</li>
+    <li>跨 Agent 协同方案（MCP Bridge）</li>
+    <li>工具集成和 MCP 服务器配置</li>
+    <li>踩坑记录和性能优化</li>
+    <li>项目架构和部署笔记</li>
+  </ul>
+
+  <h2>技术栈</h2>
+  <ul>
+    <li>纯静态站点，GitHub Pages 托管</li>
+    <li>零框架依赖，即写即用</li>
+    <li>自动适配深色模式</li>
+    <li>客户端全文搜索</li>
+  </ul>
+
+  <blockquote>独学而无友，则孤陋而寡闻。</blockquote>
+
+  <p>欢迎提交 PR 或 Issue 来分享你的 Know-How！</p>
+  <p><a href="https://github.com/frisky1985/yuleAI-Hub">GitHub 仓库 →</a></p>
+</div>
+<footer style="border-top:1px solid #e8e4dd;padding:24px 0;margin-top:48px;text-align:center;font-size:13px;color:#636e72;font-family:'Noto Sans SC',sans-serif"><p>yuleAI-Hub — 紫 · 绿松 · 暖金</p></footer></body></html>

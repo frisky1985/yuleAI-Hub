@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded PC Test Patterns — yuleAI 知识库</title>
+    <link rel="icon" href="https://frisky1985.github.io/yuleAI-Hub/assets/img/yl-logo.svg">
+    <link rel="stylesheet" href="https://frisky1985.github.io/yuleAI-Hub/assets/css/style.css">
+    <style>
+        .pattern-card { background: #f8f6ff; border-left: 4px solid #6C5CE7; padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .pattern-card h4 { margin: 0 0 0.3rem; color: #6C5CE7; }
+        .pattern-card p { margin: 0; color: #555; font-size: 0.95rem; }
+        .meta-tag { display: inline-block; background: #6C5CE7; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; margin: 0.3rem 0.3rem 0 0; }
+        .result-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .result-table th, .result-table td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+        .result-table th { background: #6C5CE7; color: #fff; }
+        .result-table tr:nth-child(even) { background: #f9f9f9; }
+        .green { color: #00B894; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav class="nav-wrapper">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="https://frisky1985.github.io/yuleAI-Hub/" class="logo-link">
+                    <div class="yl-logo">YL</div>
+                    <span class="site-name">yuleAI</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="https://frisky1985.github.io/yuleAI-Hub/know-how/">Know-How</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/skills/">Skills</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/knowledge/">知识</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/tools/">工具</a>
+                <a href="https://frisky1985.github.io/yuleAI-Hub/about/">关于</a>
+            </div>
+        </div>
+    </nav>
+    <main class="content" style="max-width: 840px; margin: 2rem auto; padding: 0 1rem;">
+        <h1>嵌入式 PC 端测试模式</h1>
+        <p class="subtitle">NP 平台实践中提炼的可复用模式与规则</p>
+
+        <h2>一、架构概述</h2>
+        <p>嵌入式 MCU 软件无硬件依赖测试的核心挑战：<strong>所有硬件寄存器、中断、RTOS 调用必须在 PC 端模拟</strong>。NP 平台的实践中总结了 6 种测试模式。</p>
+
+        <pre style="background:#1a1a2e; color:#e0e0e0; padding:1rem; border-radius:8px; overflow-x:auto; font-size:0.9rem;">
+                    <span style="color:#00B894;">┌─────────────────────────────────────┐</span>
+                    <span style="color:#00B894;">│          Application Code           │</span>
+                    <span style="color:#00B894;">│  (被测模块)                          │</span>
+                    <span style="color:#00B894;">└──────────┬──────────────────────────┘</span>
+                    <span style="color:#00B894;">           │ 依赖</span>
+                    <span style="color:#00B894;">           ▼</span>
+                    <span style="color:#6C5CE7;">┌─────────────────────────────────────┐</span>
+                    <span style="color:#6C5CE7;">│        Platform Mock Headers        │</span>
+                    <span style="color:#6C5CE7;">│  Std_Types.h  Global_Cfg.h  Os.h   │</span>
+                    <span style="color:#6C5CE7;">│  Usart.h   pc_test_fix.h           │</span>
+                    <span style="color:#6C5CE7;">│  HAL Function Table (mcu_hal.h)     │</span>
+                    <span style="color:#6C5CE7;">└─────────────────────────────────────┘</span>
+        </pre>
+
+        <h2>二、六大测试模式</h2>
+
+        <div class="pattern-card">
+            <h4>模式 1: 回调注入 (Callback Injection)</h4>
+            <p><span class="meta-tag">Wdg</span></p>
+            <p>将时间源、硬件访问等外部依赖通过函数指针注入，测试使用 mock 回调。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+// Wdg.h — 外部时间源通过回调注入
+void Wdg_Init(const Wdg_ConfigType* configs, uint8_t count,
+              uint32_t (*getTimeMs)(void));
+// 测试: mock 时间控制
+static uint32_t mock_time_ms = 0;
+static uint32_t Mock_GetTimeMs(void) { return mock_time_ms; }</pre>
+        </div>
+
+        <div class="pattern-card">
+            <h4>模式 2: 函数表 Mock (Function Table / VTable)</h4>
+            <p><span class="meta-tag">HAL Mock</span></p>
+            <p>用函数指针 struct 替代直接硬件调用。MCU 实现和 PC mock 通过同一接口契约切换。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+typedef struct {
+    void (*Init)(void);
+    uint32_t (*GetSystemClock)(void);
+    void (*PerformReset)(void);
+} Mcu_HalOps;
+
+extern const Mcu_HalOps Mcu_Hal;  // 链接时选择实现</pre>
+        </div>
+
+        <div class="pattern-card">
+            <h4>模式 3: 手动 Mock + Call Counter (Manual Mocking)</h4>
+            <p><span class="meta-tag">MemMgr, StateM</span></p>
+            <p>手工编写 mock 头文件和实现，每个 mock 函数维护 <code>callCount</code>。比 CMock 轻量，无 Ruby 依赖。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+// mock_config.c
+uint32_t Mock_CheckEvent_callCount = 0;
+uint32_t Mock_ActiveAction_flag = 0;
+
+// 测试: 验证回调是否被正确调用
+StateM_MainFunction();
+TEST_ASSERT(Mock_CheckEvent_callCount > 0);</pre>
+        </div>
+
+        <div class="pattern-card">
+            <h4>模式 4: 属性擦除 (Attribute Stripping)</h4>
+            <p><span class="meta-tag">pc_test_fix.h</span></p>
+            <p>嵌入式 <code>__attribute__((section("...")))</code> 在 Mach-O 上不兼容。通过 <code>-include pc_test_fix.h</code> 全局擦除。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+// pc_test_fix.h — force-included before all sources
+#pragma clang diagnostic ignored "-Wattributes"
+#define __attribute__(x)  /* empty */</pre>
+        </div>
+
+        <div class="pattern-card">
+            <h4>模式 5: 累积状态容忍 (State Accumulation Tolerance)</h4>
+            <p><span class="meta-tag">StateM</span></p>
+            <p>Unity 测试共享进程空间，静态全局变量会跨 case 累积。使用<strong>行为级断言</strong>而非绝对计数值。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+// 坏的: 依赖绝对计数值
+for (int i=0; i&lt;9; i++) {
+    StateM_MainFunction();
+    TEST_ASSERT(status & bit);  // 计时器跨 case 累积
+}
+
+// 好的: 行为级断言
+int active = 0;
+for (int i=0; i&lt;15; i++) {
+    StateM_MainFunction();
+    if (status & bit) active++;
+}
+TEST_ASSERT(active > 0);  // 至少有时活跃</pre>
+        </div>
+
+        <div class="pattern-card">
+            <h4>模式 6: 构建时源码修正 (Build-Time Source Patching)</h4>
+            <p><span class="meta-tag">MemMgr (heap_4.c)</span></p>
+            <p>公司 SDK 内部有架构依赖 (如 <code>portPOINTER_SIZE_TYPE uint32_t</code> 在 ARM64 指针截断)，用 <code>add_custom_command</code> 在 CMake 构建时 sed 修正。</p>
+            <pre style="background:#2d2d44; color:#ccc; padding:0.8rem; border-radius:6px; font-size:0.85rem;">
+# CMakeLists.txt — 构建时生成修复版
+add_custom_command(
+    COMMAND sed 's/portPOINTER_SIZE_TYPE uint32_t/portPOINTER_SIZE_TYPE uintptr_t/'
+    "${CMAKE_CURRENT_BINARY_DIR}/heap_4_fixed.c")</pre>
+        </div>
+
+        <h2>三、测试结果总表</h2>
+        <table class="result-table">
+            <tr>
+                <th>模块</th>
+                <th>测试数</th>
+                <th>行覆盖</th>
+                <th>关键技巧</th>
+            </tr>
+            <tr>
+                <td>NoInit</td>
+                <td>21</td>
+                <td class="green">100%</td>
+                <td>属性擦除 + 位操作验证</td>
+            </tr>
+            <tr>
+                <td>LibPrint</td>
+                <td>19</td>
+                <td class="green">—</td>
+                <td>UART 累计缓冲区 mock</td>
+            </tr>
+            <tr>
+                <td>MemMgr</td>
+                <td>15</td>
+                <td class="green">—</td>
+                <td>构建时 sed 修正 + delta 断言</td>
+            </tr>
+            <tr>
+                <td>StateM</td>
+                <td>15</td>
+                <td class="green">—</td>
+                <td>累积状态容忍 + 行为断言</td>
+            </tr>
+            <tr>
+                <td>Wdg</td>
+                <td>27</td>
+                <td class="green">98%</td>
+                <td>回调注入 + 三态转换</td>
+            </tr>
+            <tr>
+                <td>McuHal</td>
+                <td>15</td>
+                <td class="green">—</td>
+                <td>函数表模式验证</td>
+            </tr>
+            <tr style="font-weight:bold; background:#f0edff;">
+                <td>总计</td>
+                <td>112</td>
+                <td class="green">✅ 全绿</td>
+                <td>6 种测试模式</td>
+            </tr>
+        </table>
+
+        <h2>四、适用场景与准则</h2>
+        <ul>
+            <li><strong>PC 端可测性</strong>：所有依赖必须通过接口注入，不能直接调用硬件寄存器</li>
+            <li><strong>Mock 合约原则</strong>：mock 需记录 callCount，验证调用次数而非副作用</li>
+            <li><strong>零硬件假设</strong>：测试不得依赖特定 MCU 特性（如寄存器复位值）</li>
+            <li><strong>渐进重构</strong>：先加测试覆盖，再重构代码，不改行为</li>
+            <li><strong>编译双验证</strong>：PC 端功能测试 + ARM 端编译检查</li>
+        </ul>
+
+        <h2>五、相关链接</h2>
+        <ul>
+            <li><a href="https://frisky1985.github.io/yuleAI-Hub/know-how/np-test-infra/">NP 测试基建指南</a></li>
+            <li><a href="https://frisky1985.github.io/yuleAI-Hub/know-how/optimal-pipeline/">最优流水线模式</a></li>
+            <li><a href="https://frisky1985.github.io/yuleAI-Hub/skills/agent-mesh-skills/">Agent 协作技能清单</a></li>
+        </ul>
+
+        <p style="color:#999; font-size:0.85rem; margin-top:2rem;">最后更新: 2026-06-03 | 源自 NP 平台测试实践</p>
+    </main>
+</body>
+</html>

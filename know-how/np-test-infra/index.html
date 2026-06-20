@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NP 嵌入式 C 测试基建 — PC 端单元测试实战</title>
+  <link rel="stylesheet" href="/yuleAI-Hub/assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/yuleAI-Hub/" class="logo">🏠 YL</a>
+      <div class="nav-links">
+        <a href="/yuleAI-Hub/know-how/">Know-How</a>
+        <a href="/yuleAI-Hub/skills/">Skills</a>
+        <a href="/yuleAI-Hub/tools/">Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>NP 嵌入式 C 工程 PC 端测试基建</h1>
+    <p class="meta">平台: macOS ARM64 · HiSilicon Hi2827A · FreeRTOS · AUTOSAR</p>
+
+    <section>
+      <h2>背景</h2>
+      <p>NP 平台是 HiSilicon Hi2827A (Cortex-M) 无线 MCU 上的嵌入式 C 项目，约 6400+ 源文件、2.2GB。</p>
+      <p>不能依赖硬件做测试。所有验证在 PC (macOS ARM64 / Linux x86_64) 上完成，ARM 交叉编译仅用于编译检查。</p>
+    </section>
+
+    <section>
+      <h2>架构概览</h2>
+      <pre>
+tests/
+├── CMakeLists.txt               # 顶层 CMake
+├── cmake/
+│   └── FetchUnity.cmake         # Unity 框架自动下载（file(DOWNLOAD) 替代 git clone）
+├── platform_mock/               # PC mock 头文件
+│   ├── Std_Types.h              # AUTOSAR 标准类型 mock
+│   ├── Global_Cfg.h             # 项目配置 mock（所有特性开关 OFF）
+│   ├── pc_test_fix.h            # 嵌入式语法兼容修复
+│   ├── Os.h                     # FreeRTOS tick mock
+│   └── Usart.h                  # UART 输出捕获 mock
+├── modules/                     # 各模块测试
+│   ├── CMakeLists.txt
+│   ├── NoInit/                  # ✓ 21 tests, 100% 行/函数覆盖
+│   ├── LibPrint/                # ✓ 19 tests
+│   └── MemMgr/                  # ✓ 15 tests
+└── scripts/
+    └── run_valgrind.sh          # 内存检查脚本
+      </pre>
+    </section>
+
+    <section>
+      <h2>Mock 策略</h2>
+      <p><strong>手工 mock</strong>（不使用 CMock/CMockery）：</p>
+      <p>Ruby 环境未安装，且 Flatform 已有 Makefile+Unity 手工 mock 先例（PlatOTA/test/）。</p>
+      <ul>
+        <li><strong>Std_Types.h</strong>: AUTOSAR 类型 (uint8~uint64, Std_ReturnType), 纯 stdint/stdbool, 无 SDK 头</li>
+        <li><strong>Global_Cfg.h</strong>: 最小配置集, 所有 GLOBAL_CFG_* 设为 STD_OFF 或默认值</li>
+        <li><strong>pc_test_fix.h</strong>: 兼容性修复 — 剥离 <code>__attribute__((section(...)))</code>, 映射 MSVC <code>*_s</code> 函数到 C99 等价</li>
+        <li><strong>Os.h</strong>: FreeRTOS tick 模拟 — <code>GetCounterValue()</code> 返回测试可控的 Mock_TickCount</li>
+        <li><strong>Usart.h</strong>: UART 输出捕获 — 累积 buffer 模式 (append, 不覆盖), 测试可检查发送内容</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>编译兼容性问题</h2>
+      <p>无需修复源文件，在 mock 层解决：</p>
+      <table>
+        <tr><th>#</th><th>问题</th><th>解决方案</th></tr>
+        <tr><td>1</td><td><code>__attribute__((section(".share_ram")))</code> 在 Mach-O 上无效</td><td><code>pc_test_fix.h</code> 中 <code>#define __attribute__(x)</code></td></tr>
+        <tr><td>2</td><td>MSVC <code>snprintf_s</code>/<code>vsprintf_s</code> (Annex K) 在 macOS 不支持</td><td>宏映射到 C99 <code>snprintf</code>/<code>vsnprintf</code></td></tr>
+        <tr><td>3</td><td>heap_4.c 用 <code>uint32_t</code> 存指针 → ARM64 截断</td><td>sed 在构建时替换为 <code>uintptr_t</code></td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Sanitizer 配置</h2>
+      <p>通过 CMake 选项全局启用：</p>
+      <ul>
+        <li><strong>ASan</strong> (AddressSanitizer): 堆/栈缓冲区溢出, use-after-free</li>
+        <li><strong>UBSan</strong> (UndefinedBehaviorSanitizer): 整数溢出, 除零, 未定义行为</li>
+        <li><strong>gcov</strong>: 行覆盖 + 分支覆盖, lcov 生成 HTML 报告</li>
+      </ul>
+      <p>Valgrind 在 macOS ARM64 不可用, 替代为 Clang 内置 ASan。</p>
+    </section>
+
+    <section>
+      <h2>测试结果</h2>
+      <table>
+        <tr><th>模块</th><th>测试数</th><th>行覆盖</th><th>函数覆盖</th><th>状态</th></tr>
+        <tr><td>NoInit</td><td>21</td><td>100%</td><td>100%</td><td>✅</td></tr>
+        <tr><td>LibPrint</td><td>19</td><td>-</td><td>-</td><td>✅</td></tr>
+        <tr><td>MemMgr</td><td>15</td><td>-</td><td>-</td><td>✅</td></tr>
+        <tr><td colspan="5">总计 55 测试, 0 失败</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>快速开始</h2>
+      <pre><code>cmake -S . -B build
+cmake --build build --target run-all-tests
+./tests/scripts/run_valgrind.sh</code></pre>
+    </section>
+  </main>
+</body>
+</html>

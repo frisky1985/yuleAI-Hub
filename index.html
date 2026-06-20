@@ -3,144 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>yuleAI-Hub — AI 工具配置 &amp; 修复方案集散地</title>
+<title>yuleAI-Hub — AI Agent 知识花园</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
 <style>
 :root {
-  --primary: #6C5CE7;
-  --primary-hover: #5A4BD1;
-  --primary-light: rgba(108,92,231,0.08);
-  --primary-glow: rgba(108,92,231,0.12);
-  --secondary: #00B894;
-  --accent: #FDCB6E;
-  --bg: #F5F6FA;
-  --bg-card: #FFFFFF;
-  --fg: #1a1a2e;
-  --fg-secondary: #5a5d7a;
-  --fg-muted: #9497AD;
-  --border: #E6E8F0;
-  --border-light: #F0F1F8;
+  --primary: #6C5CE7; --primary-light: rgba(108,92,231,0.08);
+  --secondary: #00B894; --accent: #FDCB6E;
+  --bg: #F5F6FA; --bg-card: #FFFFFF;
+  --fg: #1a1a2e; --fg-secondary: #5a5d7a; --fg-muted: #9497AD;
+  --border: #E6E8F0; --border-light: #F0F1F8;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
   --shadow: 0 2px 8px rgba(0,0,0,0.06);
   --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-full: 9999px;
-  --font: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-  --nav-height: 56px;
+  --radius: 10px; --radius-lg: 14px; --radius-full: 9999px;
+  --font: "Noto Sans SC",-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
   --max-width: 1100px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #8B7CF7;
-    --bg: #0D1117;
-    --bg-card: #161B22;
-    --fg: #E6EDF3;
-    --fg-secondary: #8B949E;
-    --fg-muted: #586069;
-    --border: #30363D;
-    --border-light: #21262D;
+    --primary: #8B7CF7; --bg: #0D1117; --bg-card: #161B22;
+    --fg: #E6EDF3; --fg-secondary: #8B949E; --fg-muted: #586069;
+    --border: #30363D; --border-light: #21262D;
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
     --shadow: 0 2px 8px rgba(0,0,0,0.35);
     --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
   }
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--fg);
-  line-height:1.6; font-size:14px;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-}
-.hero {
-  background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 100%);
-  padding: 40px 0 28px;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content:''; position:absolute; top:-120px; right:-80px;
-  width:350px; height:350px; border-radius:50%;
-  background:rgba(255,255,255,0.06);
-}
-.hero-inner { max-width:var(--max-width); margin:0 auto; padding:0 24px; position:relative; z-index:1; }
-.hero h1 {
-  font-size:28px; font-weight:700; letter-spacing:-0.3px;
-  color:#fff; display:inline;
-}
-.hero .sub {
-  display:inline; font-size:14px;
-  color:rgba(255,255,255,0.75); margin-left:10px;
-}
-.hero .stats {
-  display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;
-}
-.hero .stats span {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:4px 12px; background:rgba(255,255,255,0.1);
-  border-radius:var(--radius-full);
-  font-size:12px; color:rgba(255,255,255,0.85);
-}
-.hero .stats .num { font-weight:700; }
-.container { max-width:var(--max-width); margin:0 auto; padding:0 24px; }
-
-.section { margin:28px 0; }
-.section-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:14px;
-}
-.section-header h2 { font-size:16px; font-weight:600; }
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-  gap:12px;
-}
-@media(max-width:600px){ .grid{grid-template-columns:1fr} }
-
-.card {
-  background:var(--bg-card); border:1px solid var(--border);
-  border-radius:var(--radius-lg); padding:18px;
-  text-decoration:none; color:var(--fg);
-  display:flex; flex-direction:column;
-  box-shadow:var(--shadow-sm);
-  transition:all 0.2s ease;
-}
-.card:hover {
-  border-color:var(--primary);
-  box-shadow:var(--shadow-hover);
-  transform:translateY(-2px);
-}
-.card h3 { font-size:15px; font-weight:600; margin-bottom:6px; transition:color 0.2s; }
-.card:hover h3 { color:var(--primary); }
-.card .desc { font-size:12px; color:var(--fg-secondary); line-height:1.5; flex:1; }
-.card .tags { display:flex; gap:4px; margin-top:10px; flex-wrap:wrap; }
-.card .tag {
-  padding:2px 8px; border-radius:4px;
-  background:var(--primary-light); color:var(--primary);
-  font-size:10px; font-weight:600;
-}
-.card .status {
-  margin-top:10px; padding-top:10px;
-  border-top:1px solid var(--border-light);
-  font-size:11px; color:var(--fg-muted);
-}
-
-footer {
-  border-top:1px solid var(--border);
-  padding:24px 0; margin-top:40px;
-  background:var(--bg-card);
-}
-footer .inner {
-  max-width:var(--max-width); margin:0 auto; padding:0 24px;
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:12px;
-  font-size:12px; color:var(--fg-muted);
-}
-footer a { color:var(--fg-muted); text-decoration:none; transition:color 0.2s; }
-footer a:hover { color:var(--primary); }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.6;font-size:14px;-webkit-font-smoothing:antialiased;min-height:100vh}
+.hero{background:linear-gradient(135deg,#6C5CE7 0%,#a29bfe 100%);padding:36px 0 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-120px;right:-80px;width:350px;height:350px;border-radius:50%;background:rgba(255,255,255,0.06)}
+.hero-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.hero h1{font-size:26px;font-weight:700;color:#fff;display:inline}
+.hero .sub{display:inline;font-size:13px;color:rgba(255,255,255,0.75);margin-left:10px}
+.hero .stats{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.hero .stats span{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;background:rgba(255,255,255,0.1);border-radius:var(--radius-full);font-size:11px;color:rgba(255,255,255,0.85)}
+.hero .stats .num{font-weight:700}
+.container{max-width:var(--max-width);margin:0 auto;padding:0 24px}
+.section{margin:24px 0}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-header h2{font-size:15px;font-weight:600}
+.section-header .count{font-size:12px;color:var(--fg-muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;text-decoration:none;color:var(--fg);display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:all 0.2s ease}
+.card:hover{border-color:var(--primary);box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.card .cat-tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;display:inline-block;margin-bottom:6px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:4px;transition:color 0.2s}
+.card:hover h3{color:var(--primary)}
+.card .desc{font-size:12px;color:var(--fg-secondary);line-height:1.5;flex:1}
+.card .tags{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap}
+.card .tag{padding:1px 6px;border-radius:3px;background:var(--primary-light);color:var(--primary);font-size:10px;font-weight:500}
+.card .status{margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light);font-size:11px;color:var(--fg-muted)}
+footer{border-top:1px solid var(--border);padding:20px 0;margin-top:36px;background:var(--bg-card)}
+footer .inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--fg-muted)}
+footer a{color:var(--fg-muted);text-decoration:none}
+footer a:hover{color:var(--primary)}
 </style>
 </head>
 <body>
@@ -148,115 +66,167 @@ footer a:hover { color:var(--primary); }
 <div class="hero">
   <div class="hero-inner">
     <h1>🧠 yuleAI-Hub</h1>
-    <span class="sub">AI 工具配置 &amp; 修复方案集散地</span>
+    <span class="sub">AI Agent 知识花园</span>
     <div class="stats" id="stats"></div>
   </div>
 </div>
 
-<div class="container">
-  <div class="section">
-    <div class="section-header">
-      <h2>📦 方案列表</h2>
-    </div>
-    <div class="grid" id="grid"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <h2>⚡ 技能库</h2>
-      <span style="font-size:12px;color:var(--fg-muted)">18 个 Hermes Skills</span>
-    </div>
-    <div class="grid" id="skillGrid"></div>
-  </div>
-</div>
+<div class="container" id="content"></div>
 
 <footer>
   <div class="inner">
-    <span>🧠 yuleAI-Hub · AI 工具配置 &amp; 修复方案集散地</span>
+    <span>🧠 yuleAI-Hub · AI Agent 知识花园</span>
     <a href="https://github.com/frisky1985/yuleAI-Hub" target="_blank">GitHub</a>
   </div>
 </footer>
 
 <script>
-var solutions = [
-  { name:"claude-code-deepseek", title:"Claude Code + DeepSeek V4", desc:"Claude Code 接入 DeepSeek V4，免 Anthropic 账号", tags:["Claude","DeepSeek","配置"], status:"✅ 已验证" },
-  { name:"codex-cli-deepseek", title:"Codex CLI + DeepSeek V4", desc:"Codex CLI 接入 DeepSeek V4，免 OpenAI 账号，代理翻译 API", tags:["Codex","DeepSeek","代理"], status:"✅ 2026-06-12" },
-  { name:"yuleosh-benchmark", title:"yuleOSH 对标分析", desc:"yuleOSH 对标分析：dSPACE vs Vector，7条战略建议 + 专家视角", tags:["yuleOSH","对标","战略"], status:"✅ 2026-06-12" },
-  { name:"openclaw-feishu-bot-setup", title:"OpenClaw 飞书机器人", desc:"OpenClaw 飞书机器人 + 公网隧道搭建全流程", tags:["OpenClaw","飞书","隧道"], status:"✅ 2026-06-12" },
-  { name:"openclaw-claude-complete-guide", title:"OpenClaw + Claude 全链路", desc:"OpenClaw + Claude Code + DeepSeek 全链路配置指南", tags:["OpenClaw","Claude","全链路"], status:"✅ 已验证" }
-];
-
-var statsDiv = document.getElementById('stats');
-statsDiv.innerHTML = '<span><span class="num">' + solutions.length + '</span> 个方案</span>' +
-  '<span><span class="num">' + new Set(solutions.map(function(s){return s.status})).size + '</span> 种状态</span>';
-
-var grid = document.getElementById('grid');
-var html = '';
-for (var i = 0; i < solutions.length; i++) {
-  var s = solutions[i];
-  var tagHtml = '';
-  for (var j = 0; j < s.tags.length; j++) {
-    tagHtml += '<span class="tag">' + s.tags[j] + '</span>';
+var sections = [
+  {
+    id: "solutions", title: "📦 配置方案",
+    items: [
+      {name:"claude-code-deepseek", title:"Claude Code + DeepSeek V4", desc:"Claude Code 接入 DeepSeek V4，免 Anthropic 账号", tags:["Claude","DeepSeek"], cat:"方案"},
+      {name:"codex-cli-deepseek", title:"Codex CLI + DeepSeek V4", desc:"Codex CLI 接入 DeepSeek V4，代理翻译 API", tags:["Codex","DeepSeek"], cat:"方案"},
+      {name:"yuleosh-benchmark", title:"yuleOSH 对标分析", desc:"dSPACE vs Vector 对标分析报告", tags:["yuleOSH","对标"], cat:"方案"},
+      {name:"openclaw-feishu-bot-setup", title:"OpenClaw 飞书机器人", desc:"飞书机器人 + 公网隧道搭建全流程", tags:["OpenClaw","飞书"], cat:"方案"},
+      {name:"openclaw-claude-complete-guide", title:"OpenClaw + Claude 全链路", desc:"OpenClaw + Claude Code + DeepSeek 全链路配置", tags:["OpenClaw","Claude"], cat:"方案"}
+    ]
+  },
+  {
+    id: "knowledge", title: "📚 知识库", base: "/knowledge/",
+    items: [
+      {name:"agent-architecture-patterns", title:"Agent 架构模式", desc:"AI Agent 常见的架构模式与选型指南", tags:["架构","模式"]},
+      {name:"agent-mesh-architecture", title:"Agent Mesh 架构", desc:"跨 Agent 协同网络架构设计文档", tags:["Agent Mesh","MCP"]},
+      {name:"mcp-protocol-basics", title:"MCP 协议基础", desc:"Model Context Protocol 核心概念与工作原理", tags:["MCP","协议"]}
+    ]
+  },
+  {
+    id: "knowhow", title: "📖 Know-How", base: "/know-how/",
+    items: [
+      {name:"agent-mesh", title:"Agent Mesh 协同网络搭建", desc:"OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作", tags:["MCP","协同"]},
+      {name:"claude-code-deepseek", title:"Claude Code + DeepSeek", desc:"Claude Code 接入 DeepSeek V4 原生配置", tags:["Claude","DeepSeek"]},
+      {name:"context-sharing", title:"跨 Agent 上下文共享", desc:"通过 context-read/write 实现信息共享", tags:["上下文","MCP"]},
+      {name:"deepseek-optimization", title:"DeepSeek API 优化", desc:"API 调用优化、超时处理和 fallback 配置", tags:["DeepSeek","优化"]},
+      {name:"embedded-test-patterns", title:"嵌入式测试模式", desc:"嵌入式项目的测试策略与模式", tags:["嵌入式","测试"]},
+      {name:"embedded-verify-helpers", title:"嵌入式验证助手", desc:"嵌入式验证的辅助工具和方法", tags:["嵌入式","验证"]},
+      {name:"gateway-deployment", title:"Gateway 部署", desc:"Hermes Gateway 部署和 Keepalive 整合", tags:["Gateway","部署"]},
+      {name:"gh-pages-deploy", title:"GitHub Pages 部署", desc:"静态站点部署到 GitHub Pages 的完整指南", tags:["GitHub Pages","部署"]},
+      {name:"hermes-tips", title:"Hermes 使用技巧", desc:"Hermes 日常技巧、Web搜索、代码执行和踩坑", tags:["Hermes","技巧"]},
+      {name:"np-test-infra", title:"NP 测试基础设施", desc:"NP 测试框架和基础设施搭建指南", tags:["NP","测试"]},
+      {name:"openclaw-getting-started", title:"OpenClaw 入门", desc:"OpenClaw 基本概念、配置和日常使用", tags:["OpenClaw","入门"]},
+      {name:"optimal-pipeline", title:"最优流水线", desc:"AI Agent 开发流水线的最佳实践", tags:["流水线","最佳实践"]}
+    ]
+  },
+  {
+    id: "skills", title: "⚡ 技能库", base: "/skills/",
+    catColors: {
+      superpowers:"Superpowers", anthropic:"Anthropic", harness:"Harness",
+      openspec:"OpenSpec", ponytail:"Ponytail"
+    },
+    items: [
+      {name:"brainstorming",title:"Brainstorming",desc:"将创意转化为设计和规格",tags:["规划","设计"],cat:"superpowers"},
+      {name:"writing-plans",title:"Writing Plans",desc:"编写可执行实现计划",tags:["规划"],cat:"superpowers"},
+      {name:"executing-plans",title:"Executing Plans",desc:"按计划逐步编码",tags:["执行"],cat:"superpowers"},
+      {name:"subagent-driven-development",title:"Subagent Dev",desc:"子代理分治大型任务",tags:["代理"],cat:"superpowers"},
+      {name:"requesting-code-review",title:"Request Review",desc:"提交前安全检查",tags:["审查"],cat:"superpowers"},
+      {name:"receiving-code-review",title:"Receive Review",desc:"处理审查反馈",tags:["审查"],cat:"superpowers"},
+      {name:"finishing-a-development-branch",title:"Finishing Branch",desc:"完成分支标准流程",tags:["Git"],cat:"superpowers"},
+      {name:"dispatching-parallel-agents",title:"Parallel Agents",desc:"并行派分子任务",tags:["并行"],cat:"superpowers"},
+      {name:"skill-creator",title:"Skill Creator",desc:"创建 Hermes Skills",tags:["创作"],cat:"anthropic"},
+      {name:"harness-engineering",title:"Harness Eng",desc:"OpenAI 驭缰工程范式",tags:["约束"],cat:"harness"},
+      {name:"openspec-proposal",title:"OpenSpec Proposal",desc:"SDD 变更提案",tags:["规范"],cat:"openspec"},
+      {name:"openspec-apply",title:"OpenSpec Apply",desc:"按提案实现代码",tags:["规范"],cat:"openspec"},
+      {name:"openspec-archive",title:"OpenSpec Archive",desc:"完成变更并归档",tags:["规范"],cat:"openspec"},
+      {name:"ponytail",title:"Ponytail",desc:"懒人高级开发模式",tags:["YAGNI"],cat:"ponytail"},
+      {name:"ponytail-review",title:"Ponytail Review",desc:"审查过度工程化",tags:["审查"],cat:"ponytail"},
+      {name:"ponytail-audit",title:"Ponytail Audit",desc:"审计代码臃肿度",tags:["审计"],cat:"ponytail"},
+      {name:"ponytail-debt",title:"Ponytail Debt",desc:"追踪技术债务",tags:["债务"],cat:"ponytail"},
+      {name:"ponytail-help",title:"Ponytail Help",desc:"模式快速参考",tags:["参考"],cat:"ponytail"}
+    ]
+  },
+  {
+    id: "rules", title: "📋 规则集", base: "/rules/",
+    items: [
+      {name:"agent-collaboration", title:"Agent 协同规则", desc:"多 Agent 协作的基本约定", tags:["协同","规范"]},
+      {name:"agent-mesh-devflow", title:"Agent Mesh DevFlow", desc:"三 Agent 协同开发工作流规则", tags:["DevFlow","协同"]},
+      {name:"heartbeat-silent", title:"Heartbeat 静默", desc:"心跳检测静默规则", tags:["心跳","监控"]},
+      {name:"navbar-design-pattern", title:"导航栏设计模式", desc:"站点导航栏设计规范", tags:["UI","规范"]},
+      {name:"qodercli-doc-workflow", title:"QoderCLI 文档流程", desc:"QoderCLI 文档编写工作流", tags:["文档","流程"]},
+      {name:"workflow-principles", title:"工作流原则", desc:"AI Agent 协同工作流基本原则", tags:["工作流","原则"]},
+      {name:"git-commit-convention", title:"Git 提交规范", desc:"Conventional Commits 规范", tags:["Git","规范"]}
+    ]
+  },
+  {
+    id: "projects", title: "📁 项目", base: "/projects/",
+    items: [
+      {name:"agent-mesh-architecture", title:"Agent Mesh 架构", desc:"跨 Agent 协同网络项目架构", tags:["Agent Mesh","MCP"]},
+      {name:"yuleASR-Configurator", title:"yuleASR 配置器", desc:"yuleASR 语音识别配置工具", tags:["ASR","配置"]}
+    ]
   }
-  html += '<a href="./' + s.name + '/" class="card">' +
-    '<h3>' + s.title + '</h3>' +
-    '<div class="desc">' + s.desc + '</div>' +
-    '<div class="tags">' + tagHtml + '</div>' +
-    '<div class="status">' + s.status + '</div>' +
-  '</a>';
-}
-grid.innerHTML = html;
-
-// Skills
-var skills = [
-  { name:"brainstorming", title:"Brainstorming", desc:"将创意转化为设计和规格说明", tags:["规划","设计"], cat:"superpowers" },
-  { name:"writing-plans", title:"Writing Plans", desc:"编写可执行的实现计划", tags:["规划","实现"], cat:"superpowers" },
-  { name:"executing-plans", title:"Executing Plans", desc:"按实现计划逐步执行编码", tags:["执行","编码"], cat:"superpowers" },
-  { name:"subagent-driven-development", title:"Subagent Driven Dev", desc:"通过子代理分治完成大型开发任务", tags:["代理","分治"], cat:"superpowers" },
-  { name:"requesting-code-review", title:"Requesting Code Review", desc:"提交代码审查前的安全检查", tags:["审查","安全"], cat:"superpowers" },
-  { name:"receiving-code-review", title:"Receiving Code Review", desc:"接收并处理代码审查反馈", tags:["审查","反馈"], cat:"superpowers" },
-  { name:"finishing-a-development-branch", title:"Finishing a Branch", desc:"完成开发分支的标准流程", tags:["Git","流程"], cat:"superpowers" },
-  { name:"dispatching-parallel-agents", title:"Dispatching Parallel Agents", desc:"并行派分子任务给多个 Agent", tags:["并行","代理"], cat:"superpowers" },
-  { name:"skill-creator", title:"Skill Creator", desc:"创建和定制 Hermes Agent Skills", tags:["技能","创作"], cat:"anthropic" },
-  { name:"harness-engineering", title:"Harness Engineering", desc:"OpenAI 驭缰工程：设计约束而非代码", tags:["约束","工程化"], cat:"harness" },
-  { name:"openspec-proposal", title:"OpenSpec Proposal", desc:"Spec-Driven Development — 创建变更提案", tags:["规范","提案"], cat:"openspec" },
-  { name:"openspec-apply", title:"OpenSpec Apply", desc:"按规范提案实现代码", tags:["规范","实现"], cat:"openspec" },
-  { name:"openspec-archive", title:"OpenSpec Archive", desc:"完成变更并归档到规范仓库", tags:["规范","归档"], cat:"openspec" },
-  { name:"ponytail", title:"Ponytail", desc:"懒人高级开发模式：最少代码，最大效率", tags:["极简","YAGNI"], cat:"ponytail" },
-  { name:"ponytail-review", title:"Ponytail Review", desc:"审查 diff 是否过度工程化", tags:["审查","极简"], cat:"ponytail" },
-  { name:"ponytail-audit", title:"Ponytail Audit", desc:"审计仓库代码臃肿度", tags:["审计","极简"], cat:"ponytail" },
-  { name:"ponytail-debt", title:"Ponytail Debt", desc:"跟踪标记的技术债务", tags:["债务","跟踪"], cat:"ponytail" },
-  { name:"ponytail-help", title:"Ponytail Help", desc:"Ponytail 模式快速参考", tags:["参考","极简"], cat:"ponytail" }
 ];
 
-var catColors = {
-  superpowers: { bg:'rgba(108,92,231,0.1)', c:'#6C5CE7', label:'Superpowers' },
-  anthropic:   { bg:'rgba(0,184,148,0.1)', c:'#00B894', label:'Anthropic' },
-  harness:     { bg:'rgba(253,203,110,0.15)', c:'#B8860B', label:'Harness' },
-  openspec:    { bg:'rgba(54,179,216,0.1)', c:'#36B3D8', label:'OpenSpec' },
-  ponytail:    { bg:'rgba(255,107,107,0.1)', c:'#FF6B6B', label:'Ponytail' }
+var catStyle = {
+  superpowers: "background:rgba(108,92,231,0.1);color:#6C5CE7",
+  anthropic: "background:rgba(0,184,148,0.1);color:#00B894",
+  harness: "background:rgba(253,203,110,0.15);color:#B8860B",
+  openspec: "background:rgba(54,179,216,0.1);color:#36B3D8",
+  ponytail: "background:rgba(255,107,107,0.1);color:#FF6B6B",
+  方案: "background:rgba(0,184,148,0.1);color:#00B894"
 };
 
-var skillGrid = document.getElementById('skillGrid');
-var shtml = '';
-for (var i = 0; i < skills.length; i++) {
-  var s = skills[i];
-  var cc = catColors[s.cat] || {bg:'var(--primary-light)', c:'var(--primary)', label:s.cat};
-  shtml += '<a href="./skills/' + s.name + '/" class="card">' +
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
-      '<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:' + cc.bg + ';color:' + cc.c + '">' + cc.label + '</span>' +
-    '</div>' +
-    '<h3>' + s.title + '</h3>' +
-    '<div class="desc">' + s.desc + '</div>' +
-    '<div class="tags">' + s.tags.map(function(t){return '<span class="tag">' + t + '</span>'}).join('') + '</div>' +
-  '</a>';
-}
-skillGrid.innerHTML = shtml;
+var totalItems = 0;
+var contentDiv = document.getElementById('content');
+var allHtml = '';
 
-// Update stats
-statsDiv.innerHTML = '<span><span class="num">' + solutions.length + '</span> 个方案</span>' +
-  '<span><span class="num">' + skills.length + '</span> 个技能</span>' +
-  '<span><span class="num">5</span> 个来源</span>';
+for (var si = 0; si < sections.length; si++) {
+  var sec = sections[si];
+  totalItems += sec.items.length;
+
+  var cardHtml = '';
+  for (var i = 0; i < sec.items.length; i++) {
+    var item = sec.items[i];
+    var itemCat = item.cat || '';
+    var catLabel = (sec.catColors && sec.catColors[itemCat]) || itemCat || '';
+    var catStyleStr = catStyle[itemCat] || '';
+
+    // Build tag html
+    var tagHtml = '';
+    for (var j = 0; j < item.tags.length; j++) {
+      tagHtml += '<span class="tag">' + item.tags[j] + '</span>';
+    }
+
+    // Category badge
+    var badgeHtml = '';
+    if (catLabel) {
+      badgeHtml = '<span class="cat-tag" style="' + catStyleStr + '">' + catLabel + '</span>';
+    }
+
+    // Url
+    var url = (sec.base || '/skills/') + item.name + '/';
+    if (sec.id === 'solutions') url = '/' + item.name + '/';
+
+    cardHtml += '<a href="' + url + '" class="card">' +
+      badgeHtml +
+      '<h3>' + item.title + '</h3>' +
+      '<div class="desc">' + item.desc + '</div>' +
+      '<div class="tags">' + tagHtml + '</div>' +
+    '</a>';
+  }
+
+  allHtml += '<div class="section">' +
+    '<div class="section-header"><h2>' + sec.title + '</h2><span class="count">' + sec.items.length + '</span></div>' +
+    '<div class="grid">' + cardHtml + '</div></div>';
+}
+contentDiv.innerHTML = allHtml;
+
+// Stats
+document.getElementById('stats').innerHTML =
+  '<span><span class="num">' + sections[0].items.length + '</span> 配置方案</span>' +
+  '<span><span class="num">' + sections[1].items.length + '</span> 知识库</span>' +
+  '<span><span class="num">' + sections[2].items.length + '</span> Know-How</span>' +
+  '<span><span class="num">' + sections[3].items.length + '</span> 技能</span>' +
+  '<span><span class="num">' + sections[4].items.length + '</span> 规则</span>' +
+  '<span><span class="num">' + sections[5].items.length + '</span> 项目</span>';
 </script>
 </body>
 </html>

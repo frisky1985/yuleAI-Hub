@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>QoderCLI 能力总览 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--primary:#0984E3;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7;padding:32px;max-width:900px;margin:0 auto}
+h1{color:var(--primary);margin-bottom:8px;font-size:24px}
+h2{margin:28px 0 8px;font-size:16px;padding-bottom:4px;border-bottom:1px solid var(--border);color:var(--primary)}
+p{margin:8px 0;color:var(--fg2);font-size:14px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:6px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg);font-weight:600;color:var(--fg2)}
+.tag{display:inline-block;padding:1px 8px;border-radius:4px;background:#e8f4fd;color:var(--primary);font-size:11px;margin:1px}
+</style></head><body>
+<h1>🔧 QoderCLI 能力总览</h1>
+<p style="margin-bottom:4px">架构设计 + 编码</p>
+<p style="margin-bottom:20px;font-size:13px">配置: ~/.qoder/settings.json · 版本: 1.0.5</p>
+
+<h2>📋 核心能力</h2>
+<table><tr><th>能力</th><th>说明</th><th>使用方式</th></tr>
+<tr><td>架构设计</td><td>系统架构方案设计</td><td>qodercli -p "设计架构"</td></tr>
+<tr><td>代码开发</td><td>编码实现功能</td><td>qodercli -p "实现功能"</td></tr>
+<tr><td>UI 排版</td><td>HTML/CSS 页面优化</td><td>qodercli -p "优化页面"</td></tr>
+<tr><td>文件分析</td><td>代码和文件对比分析</td><td>qodercli -p "分析代码"</td></tr>
+</table>
+
+<h2>🔗 已连接的 MCP</h2>
+<p>mcp-bridge — 跨 Agent 通信</p>
+
+<h2>⚙ 配置</h2>
+<pre>
+plugins: qoder-computer-use (禁用)
+permissions:
+  trustDirectories:
+    - /Users/ingeek
+</pre>
+</body></html>

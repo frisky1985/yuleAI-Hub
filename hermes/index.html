@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Hermes 能力总览 — yuleAI-Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--primary:#E17055;--bg:#f5f6fa;--bg-card:#fff;--fg:#1d2129;--fg2:#6b7785;--border:#e5e8ed;--radius:12px;--font:"Noto Sans SC",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.7;padding:32px;max-width:900px;margin:0 auto}
+h1{color:var(--primary);margin-bottom:8px;font-size:24px}
+h2{margin:28px 0 8px;font-size:16px;padding-bottom:4px;border-bottom:1px solid var(--border);color:var(--primary)}
+p{margin:8px 0;color:var(--fg2);font-size:14px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:6px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg);font-weight:600;color:var(--fg2)}
+.tag{display:inline-block;padding:1px 8px;border-radius:4px;background:#fdf0ed;color:var(--primary);font-size:11px;margin:1px}
+</style></head><body>
+<h1>📖 Hermes 能力总览</h1>
+<p style="margin-bottom:4px">需求分析 + 测试</p>
+<p style="margin-bottom:20px;font-size:13px">配置: ~/.hermes/config.yaml · WebUI: http://localhost:8787</p>
+
+<h2>📋 核心能力</h2>
+<table><tr><th>能力</th><th>说明</th><th>使用方式</th></tr>
+<tr><td>需求分析</td><td>分析复杂需求，输出需求文档</td><td>hermes -z "分析需求" --yolo</td></tr>
+<tr><td>排期制定</td><td>基于需求制定开发排期</td><td>hermes -z "制定排期" --yolo</td></tr>
+<tr><td>测试用例</td><td>为代码创建测试用例</td><td>hermes -z "创建测试" --yolo</td></tr>
+<tr><td>测试执行</td><td>执行测试并输出报告</td><td>hermes -z "执行测试" --yolo</td></tr>
+<tr><td>Web 搜索</td><td>联网搜索信息</td><td>hermes -z "搜索..." --yolo</td></tr>
+<tr><td>MCP 服务</td><td>暴露 Hermes 能力给其他 Agent</td><td>hermes mcp serve</td></tr>
+</table>
+
+<h2>🔗 已连接的 MCP</h2>
+<p>mcp-bridge — 跨 Agent 通信</p>
+
+<h2>⚙ 配置</h2>
+<pre>
+model: deepseek/deepseek-v4-flash
+toolsets: hermes-cli
+mcp_servers:
+  qodercli-bridge: python3 mcp_bridge_server.py
+</pre>
+</body></html>

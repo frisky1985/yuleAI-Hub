@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最优 Agent 流水线 — OpenSpec SDD + TDD + Harness Engineering | yuleAI-Hub</title>
+<meta name="description" content="将 OpenSpec 规范的 SDD、TDD 测试驱动和 Harness Engineering 自循环融合为单一最优流水线">
+<link rel="canonical" href="https://frisky1985.github.io/yuleAI-Hub/know-how/optimal-pipeline/">
+<style>
+:root {
+  --primary: #6C5CE7;
+  --teal: #00B894;
+  --gold: #FDCB6E;
+  --bg: #0D0D1A;
+  --card: #1A1A2E;
+  --text: #E0E0E0;
+  --muted: #888;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "LXGW WenKai", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+nav {
+  background: var(--card);
+  border-bottom: 1px solid rgba(108,92,231,0.2);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-inner a:not(.logo) {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.nav-inner a:not(.logo):hover { color: var(--teal); }
+.container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+.hero {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  background: linear-gradient(135deg, var(--primary), var(--teal), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+.hero p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+h2 {
+  color: var(--teal);
+  font-size: 1.5rem;
+  margin: 3rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(0,184,148,0.2);
+}
+h3 {
+  color: var(--gold);
+  font-size: 1.15rem;
+  margin: 2rem 0 0.8rem;
+}
+h4 {
+  color: var(--primary);
+  margin: 1.5rem 0 0.5rem;
+}
+p, li { color: var(--text); margin-bottom: 0.6rem; }
+ul, ol { padding-left: 1.5rem; margin-bottom: 1.2rem; }
+code {
+  background: rgba(108,92,231,0.15);
+  color: #A78BFA;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+pre {
+  background: var(--card);
+  border: 1px solid rgba(108,92,231,0.15);
+  border-radius: 8px;
+  padding: 1.2rem;
+  overflow-x: auto;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.card {
+  background: var(--card);
+  border: 1px solid rgba(108,92,231,0.12);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+.pipeline-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid rgba(108,92,231,0.12);
+  border-radius: 10px;
+  margin: 1rem 0 2rem;
+}
+.phase-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+}
+.phase-num {
+  background: linear-gradient(135deg, var(--primary), var(--teal));
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.phase-label {
+  color: var(--gold);
+  font-weight: 600;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+.phase-desc {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.phase-agent {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-left: auto;
+  text-align: right;
+  min-width: 100px;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+@media (max-width: 720px) {
+  .two-col { grid-template-columns: 1fr; }
+  .phase-desc, .phase-agent { display: none; }
+  .phase-label { min-width: auto; }
+}
+.meta {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+.tag {
+  display: inline-block;
+  background: rgba(108,92,231,0.2);
+  color: var(--primary);
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin: 0.2rem;
+}
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem 1.5rem;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(108,92,231,0.1);
+  margin-top: 4rem;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+<a href="/yuleAI-Hub/" class="logo">YL</a>
+<a href="/yuleAI-Hub/know-how/">Know-How</a>
+<a href="/yuleAI-Hub/skills/">Skills</a>
+<a href="/yuleAI-Hub/agents/">Agents</a>
+<a href="/yuleAI-Hub/tools/">Tools</a>
+</div>
+</nav>
+
+<div class="container">
+
+<div class="hero">
+<h1>最优 Agent 流水线</h1>
+<p>将 OpenSpec 规范的 SDD、TDD 测试驱动和 Harness Engineering 自循环融合为单一最优流水线</p>
+</div>
+
+<p class="meta">
+  <span class="tag">SDD</span>
+  <span class="tag">TDD</span>
+  <span class="tag">Harness Engineering</span>
+  <span class="tag">Agent Mesh</span>
+  <span class="tag">OpenSpec</span>
+</p>
+
+<h2>🎯 三方法结合</h2>
+
+<p>三个方法论各有所长，结合后形成完整的开发闭环：</p>
+
+<div class="two-col">
+<div class="card">
+<h3>📐 OpenSpec (SDD)</h3>
+<p><strong>优势：</strong>规范优先，需求、场景、接口、质量四位一体</p>
+<ul>
+<li><code>openspec/</code> 目录结构，specs 是源真值</li>
+<li>Delta-based：每个 change 只记录差异</li>
+<li>GIVEN/WHEN/THEN 场景驱动测试设计</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>🔄 TDD</h3>
+<p><strong>优势：</strong>测试即契约，红/绿/重构循环保证质量</p>
+<ul>
+<li>测试从 spec 场景推导（而非开发者直觉）</li>
+<li>RED → GREEN → REFACTOR 每个任务循环</li>
+<li>验证即回归测试集</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>🤖 Harness Engineering</h3>
+<p><strong>优势：</strong>自主 ITR 循环，agent 直接对话</p>
+<ul>
+<li>Implementer → Tester → Reviewer 自治循环</li>
+<li>Message bus 文件收件箱，agent 间零中间人</li>
+<li>Post-loop 自改进</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>🧠 OpenClaw</h3>
+<p><strong>优势：</strong>编排层，注入上下文、管理子 agent</p>
+<ul>
+<li>8 阶段流水线编排</li>
+<li>所有 artifact 结构化管理</li>
+<li>最终摘要报告压缩输出</li>
+</ul>
+</div>
+</div>
+
+<h2>🏗️ 流水线总览</h2>
+
+<div class="pipeline-visual">
+
+<div class="phase-row">
+<span class="phase-num">0</span>
+<span class="phase-label">Init & Context</span>
+<span class="phase-desc">创建 OpenSpec change，设定目标，建立 agent 上下文</span>
+<span class="phase-agent">Orchestrator</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">1</span>
+<span class="phase-label">Explore & Brainstorm</span>
+<span class="phase-desc">研究员探索代码库 → 架构师出 2-3 方案 → 推荐最优</span>
+<span class="phase-agent">Researcher → Architect</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">2</span>
+<span class="phase-label">SDD Spec Authoring</span>
+<span class="phase-desc">需求 (FR/NFR) + GIVEN/WHEN/THEN 场景 + 接口定义 + 质量标准</span>
+<span class="phase-agent">Architect → Tester → Architect → Reviewer</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">3</span>
+<span class="phase-label">Design & Contracts</span>
+<span class="phase-desc">模块级架构设计 + 每个模块的输入/输出/不变式契约</span>
+<span class="phase-agent">Architect</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">4</span>
+<span class="phase-label">Task Decomposition</span>
+<span class="phase-desc">任务分解，每个任务标注覆盖的 spec 需求编号</span>
+<span class="phase-agent">Planner</span>
+</div>
+
+<div class="phase-row" style="background:rgba(0,184,148,0.08); border-radius:6px;">
+<span class="phase-num">5</span>
+<span class="phase-label" style="color:var(--teal)">SDD→TDD Implement</span>
+<span class="phase-desc"><strong style="color:var(--gold)">核心阶段：</strong>每个任务 SDD 推导测试 → TDD 红/绿/重构 → 质量门禁</span>
+<span class="phase-agent">Tester→Impl→Reviewer</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">6</span>
+<span class="phase-label">Verification</span>
+<span class="phase-desc">OpenSpec 三维验证：完整性、正确性、一致性</span>
+<span class="phase-agent">Reviewer</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">7</span>
+<span class="phase-label">Sync & Archive</span>
+<span class="phase-desc">spec deltas 合并到源真值，归档 change</span>
+<span class="phase-agent">Orchestrator</span>
+</div>
+
+<div class="phase-row" style="opacity:0.7">
+<span class="phase-num">8</span>
+<span class="phase-label">Final Report</span>
+<span class="phase-desc">压缩式摘要：统计 + 验证结果 + 任务状态</span>
+<span class="phase-agent">Orchestrator</span>
+</div>
+
+</div>
+
+<h2>📐 核心创新：SDD→TDD 追溯链</h2>
+
+<p>传统 TDD 的测试来自开发者直觉。SDD→TDD 中，测试从 <strong>spec 场景</strong>推导：</p>
+
+<pre>
+需求 FR-003: "系统应在 200ms 内响应查询"
+  ↓
+场景: "用户查询存在的数据"
+  GIVEN 数据库中有 100 条记录
+  WHEN 用户查询"keyword"
+  THEN 系统返回匹配结果，耗时 &lt;200ms
+  ↓
+SDD 推导测试:
+  Test: query_existing_data_performance
+  Setup: 插入 100 条记录
+  Input: "keyword"
+  Expect: 返回结果 &lt;200ms
+  ↓
+TDD RED: 写测试（预期失败，因为实现不存在）
+TDD GREEN: 实现最小代码通过测试
+TDD REFACTOR: 清理、保持 spec 合规</pre>
+
+<h2>🔧 实现架构</h2>
+
+<div class="card">
+<h3>AI Agent 消息总线</h3>
+<pre>
+~/.openclaw/mcp-bridge/
+├── agent-messenger.py        ← 文件收件箱消息系统
+├── harness-orchestrator.py   ← 8 阶段流水线编排
+├── openspec/                 ← OpenSpec 规范目录
+│   ├── specs/                ← 源真值
+│   │   ├── requirements/
+│   │   ├── scenarios/
+│   │   ├── interfaces/
+│   │   └── quality/
+│   ├── changes/              ← 修改
+│   │   ├── current/          ← 当前 change
+│   │   └── archive/          ← 归档
+│   └── archive/
+└── workspace/
+    ├── messages/queue/       ← 文件收件箱
+    │   ├── architect/
+    │   ├── researcher/
+    │   ├── planner/
+    │   ├── implementer/
+    │   ├── tester/
+    │   └── reviewer/
+    └── orchestrator-state.json</pre>
+</div>
+
+<h3>Agent 对话模式</h3>
+<p>Agent 之间通过文件收件箱直接对话，编排器只负责推进阶段：</p>
+<pre>
+# Architect 发送消息给 Researcher
+python3 agent-messenger.py send architect researcher "探索代码库" \
+  "请分析 xxx 模块的现有接口"
+
+# Researcher 回复方向消息
+python3 agent-messenger.py send researcher architect "探索结果" \
+  "发现 xxx 模块缺少错误处理..."
+
+# 编排器检查进度，推进到下一阶段
+python3 harness-orchestrator.py phase spec</pre>
+
+<h2>📊 关键技术指标</h2>
+
+<ul>
+<li><strong>追溯性</strong>：每个测试可追溯到 spec 场景，每个实现可追溯到需求编号</li>
+<li><strong>并行度</strong>：无依赖的任务可并行执行（message bus 天然支持）</li>
+<li><strong>自主度</strong>：Implementer→Tester→Reviewer 自治循环，编排器只在阶段间介入</li>
+<li><strong>增量性</strong>：OpenSpec delta-based，只记录变化部分</li>
+<li><strong>可验证</strong>：3D 验证（完整性/正确性/一致性）+ spec 驱动的质量标准</li>
+</ul>
+
+<h2>📖 使用方法</h2>
+
+<h3>启动完整流水线</h3>
+<pre>cd ~/.openclaw/mcp-bridge
+python3 harness-orchestrator.py run "你的项目目标"</pre>
+
+<h3>单阶段运行</h3>
+<pre>python3 harness-orchestrator.py phase init "目标"
+python3 harness-orchestrator.py phase explore
+python3 harness-orchestrator.py phase spec
+python3 harness-orchestrator.py phase design
+python3 harness-orchestrator.py phase tasks
+python3 harness-orchestrator.py phase implement
+python3 harness-orchestrator.py phase verify
+python3 harness-orchestrator.py phase archive
+python3 harness-orchestrator.py phase report</pre>
+
+<h3>查看状态</h3>
+<pre>python3 harness-orchestrator.py status</pre>
+
+<h3>重置（开始新 cycle）</h3>
+<pre>python3 harness-orchestrator.py reset</pre>
+
+<h2>📝 与之前 DevFlow 的关系</h2>
+
+<p>之前的 DevFlow 2.0（7 阶段 DevOps 流水线）依然可用，但本次升级将 Agent 协作从 <strong>编排器中介</strong> 升级为 <strong>Agent 直接对话（Harness Engineering + Superpowers）</strong>，并引入 OpenSpec 作为规范层。</p>
+
+<p>三者的关系：</p>
+<ul>
+<li><strong>OpenSpec</strong> = 规范层（需求→场景→接口→质量，spec is truth）</li>
+<li><strong>SDD→TDD</strong> = 开发方法（从规范推导测试，红/绿/重构实现）</li>
+<li><strong>Harness Engineering</strong> = 执行层（agent 自主 ITR 循环，message bus 通信）</li>
+<li><strong>Agent Mesh</strong> = 基础设施（文件收件箱 + 消息路由 + QoderCLI agent 绑定）</li>
+</ul>
+
+<p style="text-align:center;margin-top:3rem;color:var(--muted)">
+  最后更新: 2026-06-02<br>
+  Standards: Agent Mesh v2 / OpenSpec 0.2.2 / Harness Engineering
+</p>
+
+</div>
+
+<footer>
+<p>yuleAI-Hub · 知识分享站 · Plan A</p>
+</footer>
+
+</body>
+</html>
