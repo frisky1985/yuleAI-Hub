@@ -160,6 +160,14 @@ footer a:hover { color:var(--primary); }
     </div>
     <div class="grid" id="grid"></div>
   </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>⚡ 技能库</h2>
+      <span style="font-size:12px;color:var(--fg-muted)">18 个 Hermes Skills</span>
+    </div>
+    <div class="grid" id="skillGrid"></div>
+  </div>
 </div>
 
 <footer>
@@ -198,6 +206,57 @@ for (var i = 0; i < solutions.length; i++) {
   '</a>';
 }
 grid.innerHTML = html;
+
+// Skills
+var skills = [
+  { name:"brainstorming", title:"Brainstorming", desc:"将创意转化为设计和规格说明", tags:["规划","设计"], cat:"superpowers" },
+  { name:"writing-plans", title:"Writing Plans", desc:"编写可执行的实现计划", tags:["规划","实现"], cat:"superpowers" },
+  { name:"executing-plans", title:"Executing Plans", desc:"按实现计划逐步执行编码", tags:["执行","编码"], cat:"superpowers" },
+  { name:"subagent-driven-development", title:"Subagent Driven Dev", desc:"通过子代理分治完成大型开发任务", tags:["代理","分治"], cat:"superpowers" },
+  { name:"requesting-code-review", title:"Requesting Code Review", desc:"提交代码审查前的安全检查", tags:["审查","安全"], cat:"superpowers" },
+  { name:"receiving-code-review", title:"Receiving Code Review", desc:"接收并处理代码审查反馈", tags:["审查","反馈"], cat:"superpowers" },
+  { name:"finishing-a-development-branch", title:"Finishing a Branch", desc:"完成开发分支的标准流程", tags:["Git","流程"], cat:"superpowers" },
+  { name:"dispatching-parallel-agents", title:"Dispatching Parallel Agents", desc:"并行派分子任务给多个 Agent", tags:["并行","代理"], cat:"superpowers" },
+  { name:"skill-creator", title:"Skill Creator", desc:"创建和定制 Hermes Agent Skills", tags:["技能","创作"], cat:"anthropic" },
+  { name:"harness-engineering", title:"Harness Engineering", desc:"OpenAI 驭缰工程：设计约束而非代码", tags:["约束","工程化"], cat:"harness" },
+  { name:"openspec-proposal", title:"OpenSpec Proposal", desc:"Spec-Driven Development — 创建变更提案", tags:["规范","提案"], cat:"openspec" },
+  { name:"openspec-apply", title:"OpenSpec Apply", desc:"按规范提案实现代码", tags:["规范","实现"], cat:"openspec" },
+  { name:"openspec-archive", title:"OpenSpec Archive", desc:"完成变更并归档到规范仓库", tags:["规范","归档"], cat:"openspec" },
+  { name:"ponytail", title:"Ponytail", desc:"懒人高级开发模式：最少代码，最大效率", tags:["极简","YAGNI"], cat:"ponytail" },
+  { name:"ponytail-review", title:"Ponytail Review", desc:"审查 diff 是否过度工程化", tags:["审查","极简"], cat:"ponytail" },
+  { name:"ponytail-audit", title:"Ponytail Audit", desc:"审计仓库代码臃肿度", tags:["审计","极简"], cat:"ponytail" },
+  { name:"ponytail-debt", title:"Ponytail Debt", desc:"跟踪标记的技术债务", tags:["债务","跟踪"], cat:"ponytail" },
+  { name:"ponytail-help", title:"Ponytail Help", desc:"Ponytail 模式快速参考", tags:["参考","极简"], cat:"ponytail" }
+];
+
+var catColors = {
+  superpowers: { bg:'rgba(108,92,231,0.1)', c:'#6C5CE7', label:'Superpowers' },
+  anthropic:   { bg:'rgba(0,184,148,0.1)', c:'#00B894', label:'Anthropic' },
+  harness:     { bg:'rgba(253,203,110,0.15)', c:'#B8860B', label:'Harness' },
+  openspec:    { bg:'rgba(54,179,216,0.1)', c:'#36B3D8', label:'OpenSpec' },
+  ponytail:    { bg:'rgba(255,107,107,0.1)', c:'#FF6B6B', label:'Ponytail' }
+};
+
+var skillGrid = document.getElementById('skillGrid');
+var shtml = '';
+for (var i = 0; i < skills.length; i++) {
+  var s = skills[i];
+  var cc = catColors[s.cat] || {bg:'var(--primary-light)', c:'var(--primary)', label:s.cat};
+  shtml += '<a href="./skills/' + s.name + '/" class="card">' +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+      '<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:' + cc.bg + ';color:' + cc.c + '">' + cc.label + '</span>' +
+    '</div>' +
+    '<h3>' + s.title + '</h3>' +
+    '<div class="desc">' + s.desc + '</div>' +
+    '<div class="tags">' + s.tags.map(function(t){return '<span class="tag">' + t + '</span>'}).join('') + '</div>' +
+  '</a>';
+}
+skillGrid.innerHTML = shtml;
+
+// Update stats
+statsDiv.innerHTML = '<span><span class="num">' + solutions.length + '</span> 个方案</span>' +
+  '<span><span class="num">' + skills.length + '</span> 个技能</span>' +
+  '<span><span class="num">5</span> 个来源</span>';
 </script>
 </body>
 </html>
