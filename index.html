@@ -6,59 +6,59 @@
 <title>yuleAI-Hub — AI Agent 知识花园</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
 <style>
-:root {
-  --primary: #6C5CE7; --primary-light: rgba(108,92,231,0.08);
-  --secondary: #00B894; --accent: #FDCB6E;
-  --bg: #F5F6FA; --bg-card: #FFFFFF;
-  --fg: #1a1a2e; --fg-secondary: #5a5d7a; --fg-muted: #9497AD;
-  --border: #E6E8F0; --border-light: #F0F1F8;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
-  --radius: 10px; --radius-lg: 14px; --radius-full: 9999px;
-  --font: "Noto Sans SC",-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
-  --max-width: 1100px;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #8B7CF7; --bg: #0D1117; --bg-card: #161B22;
-    --fg: #E6EDF3; --fg-secondary: #8B949E; --fg-muted: #586069;
-    --border: #30363D; --border-light: #21262D;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-    --shadow: 0 2px 8px rgba(0,0,0,0.35);
-    --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
-  }
-}
+:root{--primary:#6C5CE7;--primary-light:rgba(108,92,231,0.08);--secondary:#00B894;--bg:#F5F6FA;--bg-card:#FFFFFF;--fg:#1a1a2e;--fg-secondary:#5a5d7a;--fg-muted:#9497AD;--border:#E6E8F0;--shadow:0 1px 3px rgba(0,0,0,0.04);--shadow-hover:0 8px 24px rgba(0,0,0,0.1);--radius:10px;--radius-lg:14px;--font:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;--max-width:1000px}
+@media(prefers-color-scheme:dark){:root{--primary:#8B7CF7;--bg:#0D1117;--bg-card:#161B22;--fg:#E6EDF3;--fg-secondary:#8B949E;--fg-muted:#586069;--border:#30363D;--shadow:0 1px 2px rgba(0,0,0,0.3);--shadow-hover:0 8px 24px rgba(0,0,0,0.5)}}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.6;font-size:14px;-webkit-font-smoothing:antialiased;min-height:100vh}
-.hero{background:linear-gradient(135deg,#6C5CE7 0%,#a29bfe 100%);padding:36px 0 24px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-120px;right:-80px;width:350px;height:350px;border-radius:50%;background:rgba(255,255,255,0.06)}
-.hero-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;position:relative;z-index:1}
-.hero h1{font-size:26px;font-weight:700;color:#fff;display:inline}
-.hero .sub{display:inline;font-size:13px;color:rgba(255,255,255,0.75);margin-left:10px}
-.hero .stats{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
-.hero .stats span{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;background:rgba(255,255,255,0.1);border-radius:var(--radius-full);font-size:11px;color:rgba(255,255,255,0.85)}
-.hero .stats .num{font-weight:700}
-.container{max-width:var(--max-width);margin:0 auto;padding:0 24px}
-.section{margin:24px 0}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.section-header h2{font-size:15px;font-weight:600}
-.section-header .count{font-size:12px;color:var(--fg-muted)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#6C5CE7,#a29bfe);padding:32px 0 0;position:relative}
+.hero-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px}
+.hero h1{font-size:24px;font-weight:700;color:#fff;margin-bottom:2px}
+.hero p{font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:18px}
+
+/* Tab Bar */
+.tab-bar{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar .tab{padding:9px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);cursor:pointer;border-radius:8px 8px 0 0;transition:all 0.2s;white-space:nowrap;border:none;background:transparent;font-family:inherit}
+.tab-bar .tab:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.tab-bar .tab.active{color:var(--fg);background:var(--bg);font-weight:600}
+.tab-bar .tab .count{font-size:11px;opacity:0.7;margin-left:3px}
+
+/* Container */
+.container{max-width:var(--max-width);margin:0 auto;padding:24px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* Grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
 @media(max-width:600px){.grid{grid-template-columns:1fr}}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;text-decoration:none;color:var(--fg);display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:all 0.2s ease}
+
+/* Card */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;text-decoration:none;color:var(--fg);display:flex;flex-direction:column;box-shadow:var(--shadow);transition:all 0.2s}
 .card:hover{border-color:var(--primary);box-shadow:var(--shadow-hover);transform:translateY(-2px)}
-.card .cat-tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;display:inline-block;margin-bottom:6px}
-.card h3{font-size:14px;font-weight:600;margin-bottom:4px;transition:color 0.2s}
+.card h3{font-size:13px;font-weight:600;margin-bottom:3px;transition:color 0.2s}
 .card:hover h3{color:var(--primary)}
-.card .desc{font-size:12px;color:var(--fg-secondary);line-height:1.5;flex:1}
-.card .tags{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap}
-.card .tag{padding:1px 6px;border-radius:3px;background:var(--primary-light);color:var(--primary);font-size:10px;font-weight:500}
-.card .status{margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light);font-size:11px;color:var(--fg-muted)}
-footer{border-top:1px solid var(--border);padding:20px 0;margin-top:36px;background:var(--bg-card)}
-footer .inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--fg-muted)}
-footer a{color:var(--fg-muted);text-decoration:none}
-footer a:hover{color:var(--primary)}
+.card .desc{font-size:11px;color:var(--fg-secondary);line-height:1.4;flex:1}
+.card .tags{display:flex;gap:3px;margin-top:6px;flex-wrap:wrap}
+.card .tag{padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500}
+
+/* List (Know-How & Skills) */
+.list{display:flex;flex-direction:column;gap:5px}
+.list-item{display:flex;align-items:center;padding:9px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--fg);gap:10px;transition:all 0.15s;box-shadow:var(--shadow)}
+.list-item:hover{background:rgba(108,92,231,0.03);border-color:var(--primary)}
+.list-item .li-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.list-item .li-info{flex:1;min-width:0}
+.list-item .li-info .li-title{font-size:13px;font-weight:600}
+.list-item .li-info .li-desc{font-size:11px;color:var(--fg-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-item .li-tags{display:flex;gap:3px;flex-shrink:0}
+.list-item .li-tags span{padding:1px 5px;border-radius:3px;font-size:9px;font-weight:500;white-space:nowrap}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:20px 0;margin-top:20px;background:var(--bg-card)}
+.footer-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--fg-muted)}
+.footer a{color:var(--fg-muted);text-decoration:none}
+.footer a:hover{color:var(--primary)}
 </style>
 </head>
 <body>
@@ -66,167 +66,122 @@ footer a:hover{color:var(--primary)}
 <div class="hero">
   <div class="hero-inner">
     <h1>🧠 yuleAI-Hub</h1>
-    <span class="sub">AI Agent 知识花园</span>
-    <div class="stats" id="stats"></div>
+    <p>AI Agent 知识花园 · 知识库 / Know-How / 技能 / 规则 / 项目</p>
+    <div class="tab-bar" id="tabBar">
+      <button class="tab active" data-panel="sol">📦 方案 <span class="count">5</span></button>
+      <button class="tab" data-panel="kb">📚 知识库 <span class="count">3</span></button>
+      <button class="tab" data-panel="kh">📖 Know-How <span class="count">12</span></button>
+      <button class="tab" data-panel="sk">⚡ 技能 <span class="count">18</span></button>
+      <button class="tab" data-panel="rl">📋 规则 <span class="count">7</span></button>
+      <button class="tab" data-panel="pj">📁 项目 <span class="count">2</span></button>
+    </div>
   </div>
 </div>
 
-<div class="container" id="content"></div>
+<div class="container">
 
-<footer>
-  <div class="inner">
-    <span>🧠 yuleAI-Hub · AI Agent 知识花园</span>
-    <a href="https://github.com/frisky1985/yuleAI-Hub" target="_blank">GitHub</a>
+  <!-- 📦 方案 -->
+  <div class="panel active" id="panel-sol">
+    <div class="grid">
+      <a class="card" href="/claude-code-deepseek/"><h3>🔧 Claude Code + DeepSeek V4</h3><div class="desc">Claude Code 接入 DeepSeek V4，免 Anthropic 账号</div><div class="tags"><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">Claude</span><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">DeepSeek</span></div></a>
+      <a class="card" href="/codex-cli-deepseek/"><h3>🔧 Codex CLI + DeepSeek V4</h3><div class="desc">Codex CLI 接入 DeepSeek V4，代理翻译 API</div><div class="tags"><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">Codex</span><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">DeepSeek</span></div></a>
+      <a class="card" href="/yuleosh-benchmark/"><h3>🔧 yuleOSH 对标分析</h3><div class="desc">dSPACE vs Vector 对标分析报告</div><div class="tags"><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">yuleOSH</span></div></a>
+      <a class="card" href="/openclaw-feishu-bot-setup/"><h3>🔧 OpenClaw 飞书机器人</h3><div class="desc">飞书机器人 + 公网隧道搭建全流程</div><div class="tags"><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">OpenClaw</span><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">飞书</span></div></a>
+      <a class="card" href="/openclaw-claude-complete-guide/"><h3>🔧 OpenClaw + Claude 全链路</h3><div class="desc">OpenClaw + Claude Code + DeepSeek 全链路配置</div><div class="tags"><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">OpenClaw</span><span class="tag" style="background:rgba(0,184,148,0.1);color:var(--secondary)">Claude</span></div></a>
+    </div>
   </div>
-</footer>
+
+  <!-- 📚 知识库 -->
+  <div class="panel" id="panel-kb">
+    <div class="grid">
+      <a class="card" href="/knowledge/agent-architecture-patterns/"><h3>📚 Agent 架构模式</h3><div class="desc">AI Agent 常见的架构模式与选型指南</div><div class="tags"><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">架构</span><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">模式</span></div></a>
+      <a class="card" href="/knowledge/agent-mesh-architecture/"><h3>📚 Agent Mesh 架构</h3><div class="desc">跨 Agent 协同网络架构设计文档</div><div class="tags"><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">Agent Mesh</span><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">MCP</span></div></a>
+      <a class="card" href="/knowledge/mcp-protocol-basics/"><h3>📚 MCP 协议基础</h3><div class="desc">Model Context Protocol 核心概念与工作原理</div><div class="tags"><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">MCP</span><span class="tag" style="background:rgba(108,92,231,0.1);color:var(--primary)">协议</span></div></a>
+    </div>
+  </div>
+
+  <!-- 📖 Know-How -->
+  <div class="panel" id="panel-kh">
+    <div class="list">
+      <a class="list-item" href="/know-how/agent-mesh/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">Agent Mesh 协同网络搭建</div><div class="li-desc">OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">MCP</span><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">协同</span></div></a>
+      <a class="list-item" href="/know-how/claude-code-deepseek/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">Claude Code + DeepSeek</div><div class="li-desc">Claude Code 接入 DeepSeek V4 原生配置</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">Claude</span><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">DeepSeek</span></div></a>
+      <a class="list-item" href="/know-how/context-sharing/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">跨 Agent 上下文共享</div><div class="li-desc">通过 context-read/write 实现信息共享</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">上下文</span><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">MCP</span></div></a>
+      <a class="list-item" href="/know-how/deepseek-optimization/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">DeepSeek API 优化</div><div class="li-desc">API 调用优化、超时处理和 fallback 配置</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">DeepSeek</span></div></a>
+      <a class="list-item" href="/know-how/embedded-test-patterns/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">嵌入式测试模式</div><div class="li-desc">嵌入式项目的测试策略与模式</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">嵌入式</span></div></a>
+      <a class="list-item" href="/know-how/embedded-verify-helpers/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">嵌入式验证助手</div><div class="li-desc">嵌入式验证的辅助工具和方法</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">嵌入式</span></div></a>
+      <a class="list-item" href="/know-how/gateway-deployment/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">Gateway 部署</div><div class="li-desc">Hermes Gateway 部署和 Keepalive 整合</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">Gateway</span></div></a>
+      <a class="list-item" href="/know-how/gh-pages-deploy/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">GitHub Pages 部署</div><div class="li-desc">静态站点部署到 GitHub Pages 的完整指南</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">GitHub Pages</span></div></a>
+      <a class="list-item" href="/know-how/hermes-tips/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">Hermes 使用技巧</div><div class="li-desc">Hermes 日常技巧、Web 搜索、代码执行和踩坑</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">Hermes</span></div></a>
+      <a class="list-item" href="/know-how/np-test-infra/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">NP 测试基础设施</div><div class="li-desc">NP 测试框架和基础设施搭建指南</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">NP</span></div></a>
+      <a class="list-item" href="/know-how/openclaw-getting-started/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">OpenClaw 入门</div><div class="li-desc">OpenClaw 基本概念、配置和日常使用</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">OpenClaw</span></div></a>
+      <a class="list-item" href="/know-how/optimal-pipeline/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">📖</div><div class="li-info"><div class="li-title">最优流水线</div><div class="li-desc">AI Agent 开发流水线的最佳实践</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">流水线</span></div></a>
+    </div>
+  </div>
+
+  <!-- ⚡ 技能 -->
+  <div class="panel" id="panel-sk">
+    <div class="list">
+      <a class="list-item" href="/skills/brainstorming/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Brainstorming</div><div class="li-desc">将创意转化为设计和规格</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/writing-plans/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Writing Plans</div><div class="li-desc">编写可执行实现计划</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/executing-plans/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Executing Plans</div><div class="li-desc">按计划逐步编码</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/subagent-driven-development/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Subagent Dev</div><div class="li-desc">子代理分治大型任务</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/requesting-code-review/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Request Review</div><div class="li-desc">提交前安全检查</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/receiving-code-review/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Receive Review</div><div class="li-desc">处理审查反馈</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/finishing-a-development-branch/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Finishing Branch</div><div class="li-desc">完成分支标准流程</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/dispatching-parallel-agents/"><div class="li-icon" style="background:rgba(108,92,231,0.1)">⚡</div><div class="li-info"><div class="li-title">Parallel Agents</div><div class="li-desc">并行派分子任务</div></div><div class="li-tags"><span style="background:rgba(108,92,231,0.1);color:var(--primary)">Superpowers</span></div></a>
+      <a class="list-item" href="/skills/skill-creator/"><div class="li-icon" style="background:rgba(0,184,148,0.1)">⚡</div><div class="li-info"><div class="li-title">Skill Creator</div><div class="li-desc">创建 Hermes Skills</div></div><div class="li-tags"><span style="background:rgba(0,184,148,0.1);color:var(--secondary)">Anthropic</span></div></a>
+      <a class="list-item" href="/skills/harness-engineering/"><div class="li-icon" style="background:rgba(253,203,110,0.15)">⚡</div><div class="li-info"><div class="li-title">Harness Eng</div><div class="li-desc">OpenAI 驭缰工程范式</div></div><div class="li-tags"><span style="background:rgba(253,203,110,0.15);color:#B8860B">Harness</span></div></a>
+      <a class="list-item" href="/skills/openspec-proposal/"><div class="li-icon" style="background:rgba(54,179,216,0.1)">⚡</div><div class="li-info"><div class="li-title">OpenSpec Proposal</div><div class="li-desc">SDD 变更提案</div></div><div class="li-tags"><span style="background:rgba(54,179,216,0.1);color:#36B3D8">OpenSpec</span></div></a>
+      <a class="list-item" href="/skills/openspec-apply/"><div class="li-icon" style="background:rgba(54,179,216,0.1)">⚡</div><div class="li-info"><div class="li-title">OpenSpec Apply</div><div class="li-desc">按提案实现代码</div></div><div class="li-tags"><span style="background:rgba(54,179,216,0.1);color:#36B3D8">OpenSpec</span></div></a>
+      <a class="list-item" href="/skills/openspec-archive/"><div class="li-icon" style="background:rgba(54,179,216,0.1)">⚡</div><div class="li-info"><div class="li-title">OpenSpec Archive</div><div class="li-desc">完成变更并归档</div></div><div class="li-tags"><span style="background:rgba(54,179,216,0.1);color:#36B3D8">OpenSpec</span></div></a>
+      <a class="list-item" href="/skills/ponytail/"><div class="li-icon" style="background:rgba(255,107,107,0.1)">⚡</div><div class="li-info"><div class="li-title">Ponytail</div><div class="li-desc">懒人高级开发模式</div></div><div class="li-tags"><span style="background:rgba(255,107,107,0.1);color:#FF6B6B">Ponytail</span></div></a>
+      <a class="list-item" href="/skills/ponytail-review/"><div class="li-icon" style="background:rgba(255,107,107,0.1)">⚡</div><div class="li-info"><div class="li-title">Ponytail Review</div><div class="li-desc">审查过度工程化</div></div><div class="li-tags"><span style="background:rgba(255,107,107,0.1);color:#FF6B6B">Ponytail</span></div></a>
+      <a class="list-item" href="/skills/ponytail-audit/"><div class="li-icon" style="background:rgba(255,107,107,0.1)">⚡</div><div class="li-info"><div class="li-title">Ponytail Audit</div><div class="li-desc">审计代码臃肿度</div></div><div class="li-tags"><span style="background:rgba(255,107,107,0.1);color:#FF6B6B">Ponytail</span></div></a>
+      <a class="list-item" href="/skills/ponytail-debt/"><div class="li-icon" style="background:rgba(255,107,107,0.1)">⚡</div><div class="li-info"><div class="li-title">Ponytail Debt</div><div class="li-desc">追踪技术债务</div></div><div class="li-tags"><span style="background:rgba(255,107,107,0.1);color:#FF6B6B">Ponytail</span></div></a>
+      <a class="list-item" href="/skills/ponytail-help/"><div class="li-icon" style="background:rgba(255,107,107,0.1)">⚡</div><div class="li-info"><div class="li-title">Ponytail Help</div><div class="li-desc">模式快速参考</div></div><div class="li-tags"><span style="background:rgba(255,107,107,0.1);color:#FF6B6B">Ponytail</span></div></a>
+    </div>
+  </div>
+
+  <!-- 📋 规则 -->
+  <div class="panel" id="panel-rl">
+    <div class="grid">
+      <a class="card" href="/rules/agent-collaboration/"><h3>📋 Agent 协同规则</h3><div class="desc">多 Agent 协作的基本约定</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">协同</span><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">规范</span></div></a>
+      <a class="card" href="/rules/agent-mesh-devflow/"><h3>📋 Agent Mesh DevFlow</h3><div class="desc">三 Agent 协同开发工作流规则</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">DevFlow</span></div></a>
+      <a class="card" href="/rules/git-commit-convention/"><h3>📋 Git 提交规范</h3><div class="desc">Conventional Commits 规范</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">Git</span></div></a>
+      <a class="card" href="/rules/heartbeat-silent/"><h3>📋 Heartbeat 静默</h3><div class="desc">心跳检测静默规则</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">心跳</span></div></a>
+      <a class="card" href="/rules/navbar-design-pattern/"><h3>📋 导航栏设计模式</h3><div class="desc">站点导航栏设计规范</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">UI</span></div></a>
+      <a class="card" href="/rules/qodercli-doc-workflow/"><h3>📋 QoderCLI 文档流程</h3><div class="desc">QoderCLI 文档编写工作流</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">文档</span></div></a>
+      <a class="card" href="/rules/workflow-principles/"><h3>📋 工作流原则</h3><div class="desc">AI Agent 协同工作流基本原则</div><div class="tags"><span class="tag" style="background:rgba(253,203,110,0.15);color:#B8860B">工作流</span></div></a>
+    </div>
+  </div>
+
+  <!-- 📁 项目 -->
+  <div class="panel" id="panel-pj">
+    <div class="grid">
+      <a class="card" href="/projects/agent-mesh-architecture/"><h3>📁 Agent Mesh 架构</h3><div class="desc">跨 Agent 协同网络项目架构</div><div class="tags"><span class="tag" style="background:rgba(54,179,216,0.1);color:#36B3D8">Agent Mesh</span></div></a>
+      <a class="card" href="/projects/yuleASR-Configurator/"><h3>📁 yuleASR 配置器</h3><div class="desc">yuleASR 语音识别配置工具</div><div class="tags"><span class="tag" style="background:rgba(54,179,216,0.1);color:#36B3D8">ASR</span></div></a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <span>🧠 yuleAI-Hub · AI Agent 知识花园</span>
+    <a href="https://github.com/frisky1985/yuleAI-Hub">GitHub</a>
+  </div>
+</div>
 
 <script>
-var sections = [
-  {
-    id: "solutions", title: "📦 配置方案",
-    items: [
-      {name:"claude-code-deepseek", title:"Claude Code + DeepSeek V4", desc:"Claude Code 接入 DeepSeek V4，免 Anthropic 账号", tags:["Claude","DeepSeek"], cat:"方案"},
-      {name:"codex-cli-deepseek", title:"Codex CLI + DeepSeek V4", desc:"Codex CLI 接入 DeepSeek V4，代理翻译 API", tags:["Codex","DeepSeek"], cat:"方案"},
-      {name:"yuleosh-benchmark", title:"yuleOSH 对标分析", desc:"dSPACE vs Vector 对标分析报告", tags:["yuleOSH","对标"], cat:"方案"},
-      {name:"openclaw-feishu-bot-setup", title:"OpenClaw 飞书机器人", desc:"飞书机器人 + 公网隧道搭建全流程", tags:["OpenClaw","飞书"], cat:"方案"},
-      {name:"openclaw-claude-complete-guide", title:"OpenClaw + Claude 全链路", desc:"OpenClaw + Claude Code + DeepSeek 全链路配置", tags:["OpenClaw","Claude"], cat:"方案"}
-    ]
-  },
-  {
-    id: "knowledge", title: "📚 知识库", base: "/knowledge/",
-    items: [
-      {name:"agent-architecture-patterns", title:"Agent 架构模式", desc:"AI Agent 常见的架构模式与选型指南", tags:["架构","模式"]},
-      {name:"agent-mesh-architecture", title:"Agent Mesh 架构", desc:"跨 Agent 协同网络架构设计文档", tags:["Agent Mesh","MCP"]},
-      {name:"mcp-protocol-basics", title:"MCP 协议基础", desc:"Model Context Protocol 核心概念与工作原理", tags:["MCP","协议"]}
-    ]
-  },
-  {
-    id: "knowhow", title: "📖 Know-How", base: "/know-how/",
-    items: [
-      {name:"agent-mesh", title:"Agent Mesh 协同网络搭建", desc:"OpenClaw、Hermes、QoderCLI 通过 MCP Bridge 协作", tags:["MCP","协同"]},
-      {name:"claude-code-deepseek", title:"Claude Code + DeepSeek", desc:"Claude Code 接入 DeepSeek V4 原生配置", tags:["Claude","DeepSeek"]},
-      {name:"context-sharing", title:"跨 Agent 上下文共享", desc:"通过 context-read/write 实现信息共享", tags:["上下文","MCP"]},
-      {name:"deepseek-optimization", title:"DeepSeek API 优化", desc:"API 调用优化、超时处理和 fallback 配置", tags:["DeepSeek","优化"]},
-      {name:"embedded-test-patterns", title:"嵌入式测试模式", desc:"嵌入式项目的测试策略与模式", tags:["嵌入式","测试"]},
-      {name:"embedded-verify-helpers", title:"嵌入式验证助手", desc:"嵌入式验证的辅助工具和方法", tags:["嵌入式","验证"]},
-      {name:"gateway-deployment", title:"Gateway 部署", desc:"Hermes Gateway 部署和 Keepalive 整合", tags:["Gateway","部署"]},
-      {name:"gh-pages-deploy", title:"GitHub Pages 部署", desc:"静态站点部署到 GitHub Pages 的完整指南", tags:["GitHub Pages","部署"]},
-      {name:"hermes-tips", title:"Hermes 使用技巧", desc:"Hermes 日常技巧、Web搜索、代码执行和踩坑", tags:["Hermes","技巧"]},
-      {name:"np-test-infra", title:"NP 测试基础设施", desc:"NP 测试框架和基础设施搭建指南", tags:["NP","测试"]},
-      {name:"openclaw-getting-started", title:"OpenClaw 入门", desc:"OpenClaw 基本概念、配置和日常使用", tags:["OpenClaw","入门"]},
-      {name:"optimal-pipeline", title:"最优流水线", desc:"AI Agent 开发流水线的最佳实践", tags:["流水线","最佳实践"]}
-    ]
-  },
-  {
-    id: "skills", title: "⚡ 技能库", base: "/skills/",
-    catColors: {
-      superpowers:"Superpowers", anthropic:"Anthropic", harness:"Harness",
-      openspec:"OpenSpec", ponytail:"Ponytail"
-    },
-    items: [
-      {name:"brainstorming",title:"Brainstorming",desc:"将创意转化为设计和规格",tags:["规划","设计"],cat:"superpowers"},
-      {name:"writing-plans",title:"Writing Plans",desc:"编写可执行实现计划",tags:["规划"],cat:"superpowers"},
-      {name:"executing-plans",title:"Executing Plans",desc:"按计划逐步编码",tags:["执行"],cat:"superpowers"},
-      {name:"subagent-driven-development",title:"Subagent Dev",desc:"子代理分治大型任务",tags:["代理"],cat:"superpowers"},
-      {name:"requesting-code-review",title:"Request Review",desc:"提交前安全检查",tags:["审查"],cat:"superpowers"},
-      {name:"receiving-code-review",title:"Receive Review",desc:"处理审查反馈",tags:["审查"],cat:"superpowers"},
-      {name:"finishing-a-development-branch",title:"Finishing Branch",desc:"完成分支标准流程",tags:["Git"],cat:"superpowers"},
-      {name:"dispatching-parallel-agents",title:"Parallel Agents",desc:"并行派分子任务",tags:["并行"],cat:"superpowers"},
-      {name:"skill-creator",title:"Skill Creator",desc:"创建 Hermes Skills",tags:["创作"],cat:"anthropic"},
-      {name:"harness-engineering",title:"Harness Eng",desc:"OpenAI 驭缰工程范式",tags:["约束"],cat:"harness"},
-      {name:"openspec-proposal",title:"OpenSpec Proposal",desc:"SDD 变更提案",tags:["规范"],cat:"openspec"},
-      {name:"openspec-apply",title:"OpenSpec Apply",desc:"按提案实现代码",tags:["规范"],cat:"openspec"},
-      {name:"openspec-archive",title:"OpenSpec Archive",desc:"完成变更并归档",tags:["规范"],cat:"openspec"},
-      {name:"ponytail",title:"Ponytail",desc:"懒人高级开发模式",tags:["YAGNI"],cat:"ponytail"},
-      {name:"ponytail-review",title:"Ponytail Review",desc:"审查过度工程化",tags:["审查"],cat:"ponytail"},
-      {name:"ponytail-audit",title:"Ponytail Audit",desc:"审计代码臃肿度",tags:["审计"],cat:"ponytail"},
-      {name:"ponytail-debt",title:"Ponytail Debt",desc:"追踪技术债务",tags:["债务"],cat:"ponytail"},
-      {name:"ponytail-help",title:"Ponytail Help",desc:"模式快速参考",tags:["参考"],cat:"ponytail"}
-    ]
-  },
-  {
-    id: "rules", title: "📋 规则集", base: "/rules/",
-    items: [
-      {name:"agent-collaboration", title:"Agent 协同规则", desc:"多 Agent 协作的基本约定", tags:["协同","规范"]},
-      {name:"agent-mesh-devflow", title:"Agent Mesh DevFlow", desc:"三 Agent 协同开发工作流规则", tags:["DevFlow","协同"]},
-      {name:"heartbeat-silent", title:"Heartbeat 静默", desc:"心跳检测静默规则", tags:["心跳","监控"]},
-      {name:"navbar-design-pattern", title:"导航栏设计模式", desc:"站点导航栏设计规范", tags:["UI","规范"]},
-      {name:"qodercli-doc-workflow", title:"QoderCLI 文档流程", desc:"QoderCLI 文档编写工作流", tags:["文档","流程"]},
-      {name:"workflow-principles", title:"工作流原则", desc:"AI Agent 协同工作流基本原则", tags:["工作流","原则"]},
-      {name:"git-commit-convention", title:"Git 提交规范", desc:"Conventional Commits 规范", tags:["Git","规范"]}
-    ]
-  },
-  {
-    id: "projects", title: "📁 项目", base: "/projects/",
-    items: [
-      {name:"agent-mesh-architecture", title:"Agent Mesh 架构", desc:"跨 Agent 协同网络项目架构", tags:["Agent Mesh","MCP"]},
-      {name:"yuleASR-Configurator", title:"yuleASR 配置器", desc:"yuleASR 语音识别配置工具", tags:["ASR","配置"]}
-    ]
-  }
-];
-
-var catStyle = {
-  superpowers: "background:rgba(108,92,231,0.1);color:#6C5CE7",
-  anthropic: "background:rgba(0,184,148,0.1);color:#00B894",
-  harness: "background:rgba(253,203,110,0.15);color:#B8860B",
-  openspec: "background:rgba(54,179,216,0.1);color:#36B3D8",
-  ponytail: "background:rgba(255,107,107,0.1);color:#FF6B6B",
-  方案: "background:rgba(0,184,148,0.1);color:#00B894"
-};
-
-var totalItems = 0;
-var contentDiv = document.getElementById('content');
-var allHtml = '';
-
-for (var si = 0; si < sections.length; si++) {
-  var sec = sections[si];
-  totalItems += sec.items.length;
-
-  var cardHtml = '';
-  for (var i = 0; i < sec.items.length; i++) {
-    var item = sec.items[i];
-    var itemCat = item.cat || '';
-    var catLabel = (sec.catColors && sec.catColors[itemCat]) || itemCat || '';
-    var catStyleStr = catStyle[itemCat] || '';
-
-    // Build tag html
-    var tagHtml = '';
-    for (var j = 0; j < item.tags.length; j++) {
-      tagHtml += '<span class="tag">' + item.tags[j] + '</span>';
-    }
-
-    // Category badge
-    var badgeHtml = '';
-    if (catLabel) {
-      badgeHtml = '<span class="cat-tag" style="' + catStyleStr + '">' + catLabel + '</span>';
-    }
-
-    // Url
-    var url = (sec.base || '/skills/') + item.name + '/';
-    if (sec.id === 'solutions') url = '/' + item.name + '/';
-
-    cardHtml += '<a href="' + url + '" class="card">' +
-      badgeHtml +
-      '<h3>' + item.title + '</h3>' +
-      '<div class="desc">' + item.desc + '</div>' +
-      '<div class="tags">' + tagHtml + '</div>' +
-    '</a>';
-  }
-
-  allHtml += '<div class="section">' +
-    '<div class="section-header"><h2>' + sec.title + '</h2><span class="count">' + sec.items.length + '</span></div>' +
-    '<div class="grid">' + cardHtml + '</div></div>';
-}
-contentDiv.innerHTML = allHtml;
-
-// Stats
-document.getElementById('stats').innerHTML =
-  '<span><span class="num">' + sections[0].items.length + '</span> 配置方案</span>' +
-  '<span><span class="num">' + sections[1].items.length + '</span> 知识库</span>' +
-  '<span><span class="num">' + sections[2].items.length + '</span> Know-How</span>' +
-  '<span><span class="num">' + sections[3].items.length + '</span> 技能</span>' +
-  '<span><span class="num">' + sections[4].items.length + '</span> 规则</span>' +
-  '<span><span class="num">' + sections[5].items.length + '</span> 项目</span>';
+var tabs = document.querySelectorAll('.tab');
+tabs.forEach(function(t){
+  t.addEventListener('click', function(){
+    tabs.forEach(function(t2){t2.classList.remove('active')});
+    this.classList.add('active');
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('panel-' + this.getAttribute('data-panel')).classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
